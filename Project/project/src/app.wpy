@@ -2332,6 +2332,10 @@
     clip: auto;
 }
 
+page {
+    background: #f7f7f7;
+}
+
 .container {
     height: 100%;
     padding-top: 62px;
@@ -2352,6 +2356,7 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
+            'pages/order/order',
             'pages/shoppingCart/shoppingCart',
             'pages/index/index',
             'pages/index/category/category',

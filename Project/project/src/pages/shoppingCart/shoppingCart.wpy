@@ -1,6 +1,5 @@
 <style lang="less">
 page {
-    background: #f7f7f7;
     padding-bottom: 90rpx;
 }
 
@@ -425,7 +424,7 @@ page {
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
                 <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" class="shoppingCart-recommend-img">
+                    <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img">
                         <view class="shoppingCart-recommend-name">{{item.name}}</view>
                         <view class="shoppingCart-recommend-price">￥{{item.price}}</view>
                         <view class="shoppingCart-recommend-btn">
@@ -443,7 +442,7 @@ page {
             </view>
             <view class="shoppingCart-settle-price">
                 <view class="price-total">合计:
-                    <text>￥{{total + deliver.freight}}</text>
+                    <text>￥{{priceFinal}}</text>
                 </view>
                 <view class="price-freight">运费￥{{deliver.freight}}</view>
             </view>
@@ -525,6 +524,12 @@ export default class ShoppingCart extends wepy.page {
             }
         ]
     };
+
+    computed = {
+      priceFinal () {
+        return this.total + this.deliver.freight
+      }
+    }
 
     methods = {
         navToProduct(product, event) {

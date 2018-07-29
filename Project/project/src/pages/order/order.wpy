@@ -1,0 +1,353 @@
+<style lang="less">
+.order-block {
+    width: 750rpx;
+    margin-top: 20rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.order-info {
+    padding: 35rpx 30rpx 30rpx 30rpx;
+}
+
+.order-address {
+    width: 690rpx;
+    height: 45rpx;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text {
+        font-size: 22rpx;
+        line-height: 30rpx;
+        color: #ffffff;
+        background: #ea4141;
+        margin: 7rpx 0 7rpx 10rpx;
+        padding: 0 10rpx;
+        border-radius: 5rpx;
+        vertical-align: top;
+        display: inline-block;
+    }
+}
+
+.order-shopkeeper {
+    width: 690rpx;
+    height: 45rpx;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    margin-top: 10rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #bfbfbf;
+}
+
+.order-item {
+    width: 720rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+    text {
+        height: 90rpx;
+        font-size: 28rpx;
+        line-height: 90rpx;
+        box-sizing: border-box;
+        float: right;
+    }
+}
+
+.order-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.order-product, .order-total, .order-final {
+    padding-left: 30rpx;
+}
+
+.order-product-deliver text {
+    color: #ea4141;
+}
+
+.order-product-items {
+    width: 720rpx;
+    height: 140rpx;
+    padding: 20rpx 30rpx 20rpx 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.order-product-label {
+    height: 30rpx;
+    font-size: 22rpx;
+    line-height: 30rpx;
+    color: #ffffff;
+    background: #e87573;
+    padding: 0 10rpx;
+    border-radius: 0 5rpx 5rpx 0;
+    display: inline-block;
+    position: absolute;
+    left: -30rpx;
+    top: 10rpx;
+}
+
+.order-product-img {
+    width: 100rpx;
+    height: 100rpx;
+    margin-right: 20rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.order-product-count {
+    font-size: 26rpx;
+    line-height: 100rpx;
+    float: right;
+    .fa {
+        color: #999999;
+        font-size: 40rpx;
+        margin-left: 10rpx;
+    }
+}
+
+.order-product-status {
+    color: #999999;
+    text {
+        color: #000000;
+    }
+}
+
+.order-total-redPacket text {
+    color: #ea4141;
+    .fa {
+        color: #999999;
+        font-size: 40rpx;
+        margin-left: 10rpx;
+    }
+}
+
+.order-pay{
+    width: 750rpx;
+    height: 90rpx;
+    font-size: 30rpx;
+    line-height: 90rpx;
+    padding-left: 30rpx;
+    background: #ffffff;
+    border-top: 1rpx solid #f2f2f2;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+}
+
+.order-pay-total{
+    display: inline-block;
+    text{
+        color: #ea4141;
+    }
+}
+
+.order-pay-btn{
+    width: 260rpx;
+    height: 90rpx;
+    text-align: center;
+    color: #ffffff;
+    background: #ea4141;
+    vertical-align: top;
+    float: right;
+}
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="填写订单" isChildPage="y"></navBar>
+        <view class="order-block order-info">
+            <view class="order-address">{{address}} {{shop.name}}
+                <text>{{deliver.name}}</text>
+            </view>
+            <view class="order-shopkeeper">{{shop.keeper}} {{shop.phone}}</view>
+        </view>
+        <repeat for="{{product}}" key="type">
+            <view class="order-block order-product">
+                <view class="order-product-deliver order-item">送达时间
+                    <text>{{item.sendTime}}</text>
+                </view>
+                <view class="order-product-items">
+                    <view wx:if="{{index > 0}}" class="order-product-label">{{index == 1 ? '预售款':'拼团中'}}</view>
+                    <repeat for="{{item.list}}" key="id" item="listItem">
+                        <image src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img">
+                    </repeat>
+                    <view class="order-product-count">共{{item.list.length}}件
+                        <i class="fa fa-angle-right"></i>
+                    </view>
+                </view>
+                <block wx:if="{{index == 2}}">
+                    <repeat for="{{item.list}}" key="id" item="listItem">
+                        <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
+                            <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text>
+                        </view>
+                    </repeat>
+                </block>
+            </view>
+        </repeat>
+        <view class="order-block order-total">
+            <view class="order-item">商品总价
+                <text>￥{{subtotal}}</text>
+            </view>
+            <view class="order-item order-total-redPacket">商品总价
+                <text>{{redPacket.count}}元</text>
+            </view>
+            <view class="order-item">商品实付
+                <text>￥{{total}}</text>
+            </view>
+        </view>
+        <view class="order-block order-final">
+            <view class="order-item">余额支付（余额￥{{remain}}）
+                <text>￥{{remain}}</text>
+            </view>
+            <view class="order-item">还需支付
+                <text>￥{{totalFinal}}</text>
+            </view>
+        </view>
+        <view class="order-pay">
+            <view class="order-pay-total">合计:<text>￥{{total}}</text></view>
+            <view class="order-pay-btn">去支付</view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class Coupon extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {
+        address: '春树馆街小区',
+        shop: {
+            name: '果多美门店',
+            keeper: '小鱼',
+            phone: '13000000000'
+        },
+        deliver: {
+            name: '门店自提',
+            freight: 0
+        },
+        redPacket: {
+            id: '000001',
+            count: 5
+        },
+        remain: 8.88,
+        product: [
+            {
+                type: 'normal',
+                sendTime: '7月16号',
+                list: [
+                    {
+                        id: '000001',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    },
+                    {
+                        id: '00002',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0
+                    }
+                ]
+            },
+            {
+                type: 'preSale',
+                sendTime: '7月16号',
+                list: [
+                    {
+                        id: '000003',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    },
+                    {
+                        id: '00004',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0
+                    }
+                ]
+            },
+            {
+                type: 'group',
+                sendTime: '7月16号',
+                list: [
+                    {
+                        id: '000005',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2,
+                        people: 7,
+                        maxpeople: 10
+                    },
+                    {
+                        id: '00006',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0,
+                        people: 3,
+                        maxpeople: 10
+                    }
+                ]
+            }
+        ],
+        subtotal: 0
+    };
+
+    computed = {
+        total() {
+            return this.subtotal - this.redPacket.count;
+        },
+
+        totalFinal(){
+            return this.subtotal - this.redPacket.count - this.remain;
+        }
+    };
+
+    methods = {};
+
+    updateTotal() {
+        var self = this;
+        var total = 0;
+        self.subtotal = 0;
+        self.product.forEach((item, index) => {
+            item.list.forEach(element => {
+                total += element.price * 100;
+                self.$apply();
+            });
+        });
+        self.subtotal = total / 100;
+        self.$apply();
+    }
+
+    events = {};
+
+    onLoad() {
+        var self = this;
+        self.updateTotal();
+    }
+}
+</script>

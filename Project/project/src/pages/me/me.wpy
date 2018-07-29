@@ -1,0 +1,26 @@
+<style lang="less">
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="放心优选"></navBar>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class Me extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {};
+
+    methods = {};
+
+    events = {};
+
+    onLoad() {}
+}
+</script>

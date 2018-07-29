@@ -1,0 +1,392 @@
+<style lang="less">
+page {
+    background: #f7f7f7;
+    padding-bottom: 90rpx;
+}
+
+.product-image {
+    width: 750rpx;
+    height: 400rpx;
+    background: #fdedeb;
+    position: relative;
+}
+
+.product-image-scroll,
+.product-image-item,
+.product-image-img {
+    width: 750rpx;
+    height: 400rpx;
+}
+
+.product-image-index {
+    width: 55rpx;
+    height: 55rpx;
+    font-size: 24rpx;
+    line-height: 55rpx;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    position: absolute;
+    right: 30rpx;
+    bottom: 15rpx;
+}
+
+.product-intro {
+    width: 750rpx;
+    height: 235rpx;
+    padding: 15rpx 25rpx 30rpx 25rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.product-intro-name {
+    font-size: 32rpx;
+    line-height: 45rpx;
+}
+
+.product-intro-desc {
+    color: #959595;
+    font-size: 26rpx;
+    line-height: 35rpx;
+}
+
+.product-intro-price {
+    color: #e51c23;
+    font-size: 26rpx;
+    line-height: 35rpx;
+    margin-top: 30rpx;
+}
+
+.product-intro-label {
+    color: #ffbb00;
+    font-size: 32rpx;
+    line-height: 45rpx;
+    vertical-align: top;
+    display: inline-block;
+    text {
+        width: 100rpx;
+        height: 25rpx;
+        margin: 10rpx 0;
+        color: #ffffff;
+        font-size: 22rpx;
+        line-height: 25rpx;
+        text-align: center;
+        background: #ffbb00;
+        display: inline-block;
+    }
+}
+
+.product-intro-soldCount {
+    color: #bfbfbf;
+    font-size: 26rpx;
+    line-height: 45rpx;
+    margin-left: 15rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-recommend {
+    margin-top: 20rpx;
+    padding-top: 35rpx;
+    padding-bottom: 20rpx;
+    background: #ffffff;
+}
+
+.product-recommend-title {
+    font-size: 34rpx;
+    line-height: 45rpx;
+    padding-left: 30rpx;
+}
+
+.product-recommend-content {
+    width: 750rpx;
+    height: 425rpx;
+    margin-top: 40rpx;
+    white-space: nowrap;
+}
+
+.product-recommend-item {
+    width: 300rpx;
+    height: 425rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+}
+
+.product-recommend-item:first-child {
+    margin-left: 10rpx;
+}
+
+.product-recommend-img {
+    width: 240rpx;
+    height: 240rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.product-recommend-name {
+    width: 240rpx;
+    margin-top: 45rpx;
+    font-size: 28rpx;
+    line-height: 35rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-recommend-price {
+    margin-top: 60rpx;
+    font-size: 32rpx;
+    line-height: 35rpx;
+}
+
+.product-recommend-btn {
+    width: 45rpx;
+    height: 45rpx;
+    color: #ffffff;
+    font-size: 26rpx;
+    line-height: 45rpx;
+    text-align: center;
+    background: #e51c23;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 45rpx;
+}
+
+.product-detail {
+    margin-top: 20rpx;
+    padding: 35rpx 30rpx 20rpx 30rpx;
+    background: #ffffff;
+}
+
+.product-detail-title {
+    font-size: 34rpx;
+    line-height: 45rpx;
+}
+
+.product-detail-content {
+    margin-top: 35rpx;
+    text {
+        color: #959595;
+        font-size: 32rpx;
+        line-height: 45rpx;
+    }
+    image {
+        width: 690rpx;
+        background: #fdedeb;
+        margin-top: 20rpx;
+    }
+}
+
+.product-btn {
+    width: 750rpx;
+    height: 90rpx;
+    border-top: 1rpx solid #e3e3e3;
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+}
+
+.product-btn-shoppingCart {
+    width: 150rpx;
+    height: 90rpx;
+    background: #ffffff;
+    text-align: center;
+    padding-top: 5rpx;
+    box-sizing: border-box;
+    display: inline-block;
+    text {
+        font-size: 24rpx;
+        line-height: 30rpx;
+        display: block;
+    }
+}
+
+.product-btn-addToCart,
+.product-btn-purchase {
+    width: 300rpx;
+    height: 90rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 90rpx;
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-btn-addToCart {
+    background: #fe807e;
+}
+
+.product-btn-purchase {
+    background: #ea4141;
+}
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="商品详情" isChildPage="y"></navBar>
+        <view class="product-image">
+            <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
+                <repeat for="{{product.image}}" key="index">
+                    <swiper-item class="product-image-item">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="product-image-img">
+                    </swiper-item>
+                </repeat>
+            </swiper>
+            <view class="product-image-index">{{curImage + 1}}/{{product.image.length}}</view>
+        </view>
+        <view class="product-intro">
+            <view class="product-intro-name">{{product.name}}</view>
+            <view class="product-intro-desc">{{product.desc}}</view>
+            <view class="product-intro-price">￥{{product.price}}</view>
+            <view class="product-intro-label">￥{{product.labelPrice}}
+                <text>{{product.label}}</text>
+            </view>
+            <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
+        </view>
+        <view class="product-recommend">
+            <view class="product-recommend-title">推荐搭配商品</view>
+            <scroll-view scroll-x="true" class="product-recommend-content">
+                <repeat for="{{product.recommend}}" key="id">
+                    <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
+                        <image src="{{item.imgUrl}}" class="product-recommend-img">
+                            <view class="product-recommend-name">{{item.name}}</view>
+                            <view class="product-recommend-price">￥{{item.price}}</view>
+                            <view class="product-recommend-btn">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            </view>
+                    </view>
+                </repeat>
+            </scroll-view>
+        </view>
+        <view class="product-detail">
+            <view class="product-detail-title">规格</view>
+            <view class="product-detail-content">
+                <text>{{product.detail.text}}</text>
+                <repeat for="{{product.detail.imgList}}">
+                    <image mode="widthFix" src="{{item.imgUrl}}">
+                </repeat>
+            </view>
+        </view>
+        <view class="product-btn">
+            <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <text>购物车</text>
+            </view>
+            <view class="product-btn-addToCart">加入购物车</view>
+            <view class="product-btn-purchase">立即购买</view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class Product extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {
+        curImage: 0,
+        productID: '',
+        product: {
+            id: '000001',
+            name: '日式纯棉色织条纹围裙',
+            desc: '100%全棉，双层加厚',
+            price: 49,
+            labelPrice: 39.2,
+            label: '会员专享',
+            soldCount: 10785,
+            detail: {
+                text: '重量：\n\n包装：\n\n保质期：\n\n贮存方法：\n',
+                imgList: [
+                    {
+                        imgUrl: ''
+                    },
+                    {
+                        imgUrl: ''
+                    }
+                ]
+            },
+            image: [
+                {
+                    imgUrl: '',
+                    url: ''
+                },
+                {
+                    imgUrl: '',
+                    url: ''
+                },
+                {
+                    imgUrl: '',
+                    url: ''
+                },
+                {
+                    imgUrl: '',
+                    url: ''
+                },
+                {
+                    imgUrl: '',
+                    url: ''
+                }
+            ],
+            recommend: [
+                {
+                    id: '000001',
+                    name: '韩国制造，花洒替代品',
+                    price: 39.2,
+                    imgUrl: ''
+                },
+                {
+                    id: '000002',
+                    name: '韩国制造，花洒替代品',
+                    price: 39.2,
+                    imgUrl: ''
+                },
+                {
+                    id: '000003',
+                    name: '韩国制造，花洒替代品',
+                    price: 39.2,
+                    imgUrl: ''
+                },
+                {
+                    id: '000004',
+                    name: '韩国制造，花洒替代品',
+                    price: 39.2,
+                    imgUrl: ''
+                }
+            ]
+        }
+    };
+
+    methods = {
+        imageChange(e) {
+            this.curImage = e.detail.current;
+            this.$apply();
+        },
+        
+        navToProduct(product, event) {
+            wx.navigateTo({
+                url: '/pages/product/product?id=' + product
+            });
+        },
+
+        navToShoppingCart(){
+            wx.navigateTo({
+                url: '/pages/shoppingCart/shoppingCart?isChild=y'
+            });
+        }
+    };
+
+    events = {};
+
+    onLoad(options) {
+        this.productID = options.id;
+        this.$apply();
+    }
+}
+</script>

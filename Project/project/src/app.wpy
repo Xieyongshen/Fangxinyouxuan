@@ -2356,13 +2356,15 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
-            'pages/order/order',
-            'pages/shoppingCart/shoppingCart',
             'pages/index/index',
             'pages/index/category/category',
             'pages/coupon/coupon',
+            'pages/shoppingCart/shoppingCart',
             'pages/me/me',
-            'pages/product/product'
+            'pages/product/product',
+            'pages/order/order',
+            'pages/order/productList/productList',
+            'pages/redPacket/redPacket'
         ],
         window: {
             navigationBarTextStyle: 'black',

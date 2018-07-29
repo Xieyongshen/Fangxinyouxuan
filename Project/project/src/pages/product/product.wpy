@@ -275,7 +275,7 @@ page {
                 <text>购物车</text>
             </view>
             <view class="product-btn-addToCart">加入购物车</view>
-            <view class="product-btn-purchase">立即购买</view>
+            <navigator url="../order/order" class="product-btn-purchase">立即购买</navigator>
         </view>
     </view>
 </template>
@@ -375,7 +375,7 @@ export default class Product extends wepy.page {
         },
 
         navToShoppingCart(){
-            wx.navigateTo({
+            wx.switchTab({
                 url: '/pages/shoppingCart/shoppingCart?isChild=y'
             });
         }

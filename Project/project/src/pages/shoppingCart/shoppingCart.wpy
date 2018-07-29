@@ -16,17 +16,34 @@ page {
     }
 }
 
-.shoppingCart-product {
+.shoppingCart-block {
     width: 750rpx;
     margin-top: 20rpx;
-    padding-left: 30rpx;
     box-sizing: border-box;
     background: #ffffff;
 }
 
-.shoppingCart-product-manage {
+.shoppingCart-product {
+    padding-left: 30rpx;
+}
+
+.shoppingCart-item {
     width: 720rpx;
     height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+    text {
+        height: 90rpx;
+        font-size: 28rpx;
+        line-height: 90rpx;
+        box-sizing: border-box;
+        float: right;
+    }
+}
+
+.shoppingCart-item:not(:last-child) {
     border-bottom: 1rpx solid #f2f2f2;
 }
 
@@ -182,26 +199,15 @@ page {
 }
 
 .shoppingCart-redPacket {
-    width: 750rpx;
-    height: 90rpx;
-    font-size: 28rpx;
+    padding-left: 30rpx;
+}
+
+.shoppingCart-redPacket .fa {
+    color: #999999;
+    font-size: 40rpx;
     line-height: 90rpx;
-    margin-top: 20rpx;
-    padding: 0 30rpx;
-    box-sizing: border-box;
-    background: #ffffff;
-}
-
-.shoppingCart-redPacket-title {
-    display: inline-block;
-}
-
-.shoppingCart-redPacket-status {
+    margin-left: 10rpx;
     float: right;
-    .fa {
-        font-size: 40rpx;
-        margin-left: 10rpx;
-    }
 }
 
 .status-false {
@@ -213,37 +219,11 @@ page {
 }
 
 .shoppingCart-result {
-    width: 750rpx;
-    height: 181rpx;
-    margin-top: 20rpx;
     padding-left: 30rpx;
-    background: #ffffff;
-    box-sizing: border-box;
-}
-
-.shoppingCart-result-total,
-.shoppingCart-result-deliver {
-    width: 720rpx;
-    height: 90rpx;
-    font-size: 28rpx;
-    line-height: 90rpx;
-    padding-right: 30rpx;
-    box-sizing: border-box;
-    text {
-        float: right;
-    }
-}
-
-.shoppingCart-result-total {
-    border-bottom: 1rpx solid #f2f2f2;
 }
 
 .shoppingCart-recommend {
-    width: 750rpx;
-    margin-top: 20rpx;
     padding: 35rpx 20rpx 0 20rpx;
-    background: #ffffff;
-    box-sizing: border-box;
 }
 
 .shoppingCart-recommend-title {
@@ -367,8 +347,8 @@ page {
             <i class="fa fa-map-marker" aria-hidden="true"></i>
             <text class="shop-name">{{shopChoose}}</text>
         </view>
-        <view class="shoppingCart-product">
-            <view class="shoppingCart-product-manage">
+        <view class="shoppingCart-block shoppingCart-product">
+            <view class="shoppingCart-item shoppingCart-product-manage">
                 <view class="shoppingCart-product-selectAll">
                     <view class="select-choose {{chooseAll == true?'select-confirm':'select-cancel'}}" @tap="chooseAll">
                         <i wx:if="{{chooseAll == true}}" class="fa fa-check" aria-hidden="true"></i>
@@ -405,22 +385,25 @@ page {
                 <text>小计：</text>￥{{subtotal}}
             </view>
         </view>
-        <view class="shoppingCart-redPacket">
-            <view class="shoppingCart-redPacket-title">红包</view>
-            <view class="shoppingCart-redPacket-status {{redPacket.count == 0 ? 'status-false' : 'status-true'}}">
-                {{redPacket.count == 0 ? '无可使用红包' : redPacket.count + '元'}}
-                <i class="fa fa-angle-right"></i>
+        <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
+            <view class="shoppingCart-item">
+                红包
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                <text class="{{redPacket.count == 0 ? 'status-false' : 'status-true'}}">
+                    <block wx:if="{{redPacket.count == 0}}">无可使用红包</block>
+                    <block wx:else>{{redPacket.count}}元</block>
+                </text>
             </view>
-        </view>
-        <view class="shoppingCart-result">
-            <view class="shoppingCart-result-total">商品实付
+        </navigator>
+        <view class="shoppingCart-block shoppingCart-result">
+            <view class="shoppingCart-item shoppingCart-result-total">商品实付
                 <text>￥{{total}}</text>
             </view>
-            <view class="shoppingCart-result-deliver">配送方式
+            <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
                 <text>{{deliver.name}}</text>
             </view>
         </view>
-        <view class="shoppingCart-recommend">
+        <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
                 <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
@@ -446,7 +429,7 @@ page {
                 </view>
                 <view class="price-freight">运费￥{{deliver.freight}}</view>
             </view>
-            <view class="shoppingCart-settle-btn">去结算</view>
+            <navigator url="../order/order" class="shoppingCart-settle-btn">去结算</navigator>
         </view>
     </view>
 </template>
@@ -526,10 +509,10 @@ export default class ShoppingCart extends wepy.page {
     };
 
     computed = {
-      priceFinal () {
-        return this.total + this.deliver.freight
-      }
-    }
+        priceFinal() {
+            return this.total + this.deliver.freight;
+        }
+    };
 
     methods = {
         navToProduct(product, event) {
@@ -591,7 +574,7 @@ export default class ShoppingCart extends wepy.page {
 
     onLoad(option) {
         var self = this;
-        if(option.isChild != null){
+        if (option.isChild != null) {
             self.isChildPage = option.isChild;
             self.$apply();
         }

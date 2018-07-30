@@ -342,7 +342,7 @@ page {
 </style>
 <template>
     <view class="container">
-        <navBar navTitle="放心优选" :isChildPage.sync="isChildPage"></navBar>
+        <navBar navTitle="放心优选"></navBar>
         <view class="shoppingCart-shop">
             <i class="fa fa-map-marker" aria-hidden="true"></i>
             <text class="shop-name">{{shopChoose}}</text>
@@ -444,7 +444,6 @@ export default class ShoppingCart extends wepy.page {
     };
 
     data = {
-        isChildPage: 'n',
         shopChoose: '春树馆街小区',
         discount: {
             count: 120,
@@ -574,10 +573,6 @@ export default class ShoppingCart extends wepy.page {
 
     onLoad(option) {
         var self = this;
-        if (option.isChild != null) {
-            self.isChildPage = option.isChild;
-            self.$apply();
-        }
         self.product.forEach(element => {
             self.isChoosen.push(true);
             self.$apply();

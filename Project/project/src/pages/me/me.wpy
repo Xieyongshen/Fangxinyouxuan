@@ -1,8 +1,160 @@
 <style lang="less">
+.navBar {
+    background: transparent;
+    color: white;
+    background: #f15655;
+}
+
+.me-header {
+    width: 750rpx;
+    height: 465rpx;
+    background: #f15655;
+    position: relative;
+}
+
+.me-invite {
+    color: #ffffff;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    position: absolute;
+    top: 10rpx;
+    left: 30rpx;
+}
+
+.me-userinfo {
+    width: 750rpx;
+    height: 240rpx;
+    margin-bottom: 65rpx;
+    padding-top: 15rpx;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.me-userinfo-avatar {
+    width: 160rpx;
+    height: 160rpx;
+    border: 5rpx solid #ffffff;
+    border-radius: 50%;
+    background: #d4d5d2;
+    box-sizing: border-box;
+}
+
+.me-userinfo-name {
+    width: 750rpx;
+    height: 40rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 40rpx;
+    text-align: center;
+    box-sizing: border-box;
+    display: block;
+}
+
+.me-order {
+    width: 670rpx;
+    height: 160rpx;
+    margin: 0 40rpx;
+    padding: 0 5rpx;
+    border-radius: 10rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.me-order-item {
+    width: 165rpx;
+    height: 160rpx;
+    padding: 20rpx 0;
+    text-align: center;
+    box-sizing: border-box;
+    display: inline-block;
+    .fa {
+        font-size: 40rpx;
+        line-height: 70rpx;
+        display: block;
+    }
+    text {
+        font-size: 26rpx;
+        line-height: 50rpx;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+    }
+}
+
+.me-manage {
+    width: 750rpx;
+    margin-top: 20rpx;
+    padding-left: 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.me-manage-item {
+    width: 720rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+    .fa {
+        color: #999999;
+        font-size: 40rpx;
+        line-height: 90rpx;
+        float: right;
+    }
+}
+
+.me-manage-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.navigator-hover {
+    background: #ffffff;
+}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="放心优选"></navBar>
+        <view class="me-header">
+            <view class="me-invite">邀请好友</view>
+            <view class="me-userinfo">
+                <image src="{{userInfo.avatar}}" class="me-userinfo-avatar">
+                    <view class="me-userinfo-name">{{userInfo.name}}</view>
+            </view>
+            <view class="me-order">
+                <view class="me-order-item">
+                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                    <text>待付款</text>
+                </view>
+                <view class="me-order-item">
+                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                    <text>待收货</text>
+                </view>
+                <view class="me-order-item">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <text>待成团</text>
+                </view>
+                <view class="me-order-item">
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <text>全部订单</text>
+                </view>
+            </view>
+            <view class="me-manage">
+                <view class="me-manage-item">
+                    我的余额
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </view>
+                <navigator url="../redPacket/redPacket" class="me-manage-item">
+                    我的红包
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </navigator>
+                <view class="me-manage-item">
+                    我的优惠券
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -15,7 +167,12 @@ export default class Me extends wepy.page {
         navBar: NavBar
     };
 
-    data = {};
+    data = {
+        userInfo: {
+            name: '小鱼',
+            avatar: ''
+        }
+    };
 
     methods = {};
 

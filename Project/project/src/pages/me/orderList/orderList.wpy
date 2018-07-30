@@ -1,0 +1,106 @@
+<style lang="less">
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="全部订单" isChildPage="y"></navBar>
+        <view class="orderList-type"></view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class OrderList extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {
+        orderList: [
+            {
+                id: '000001',
+                remain: 8.88,
+                total: 247.6,
+                product: [
+                    {
+                        type: 'normal',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000001',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2
+                            },
+                            {
+                                id: '00002',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0
+                            }
+                        ]
+                    },
+                    {
+                        type: 'preSale',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000003',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2
+                            },
+                            {
+                                id: '00004',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0
+                            }
+                        ]
+                    },
+                    {
+                        type: 'group',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000005',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2,
+                                people: 7,
+                                maxpeople: 10
+                            },
+                            {
+                                id: '00006',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0,
+                                people: 3,
+                                maxpeople: 10
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    methods = {};
+
+    events = {};
+
+    onLoad() {}
+}
+</script>

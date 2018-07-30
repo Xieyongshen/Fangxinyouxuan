@@ -82,11 +82,11 @@ page {
 }
 
 .shoppingCart-product-tip {
+    max-width: 550rpx;
     height: 90rpx;
     color: #ea4141;
     font-size: 26rpx;
     line-height: 90rpx;
-    margin-right: 30rpx;
     float: right;
     text {
         max-width: 500rpx;
@@ -94,6 +94,7 @@ page {
         text-overflow: ellipsis;
         white-space: nowrap;
         display: inline-block;
+        float: none;
     }
     .fa {
         color: #bfbfbf;
@@ -356,7 +357,7 @@ page {
                     <text>全选</text>
                 </view>
                 <view class="shoppingCart-product-tip">
-                    <text>满{{discount.count}}减{{discount.minus}}，还差{{discount.count - subtotal}}，去凑单</text>
+                    <text>满{{discount.count}}减{{discount.minus}}<block wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</block></text>
                     <i class="fa fa-angle-right"></i>
                 </view>
             </view>
@@ -508,8 +509,21 @@ export default class ShoppingCart extends wepy.page {
     };
 
     computed = {
+        total() {
+            if (this.subtotal >= this.discount.count)
+                return (
+                    this.subtotal - this.redPacket.count - this.discount.minus
+                );
+            else return this.subtotal - this.redPacket.count;
+        },
+
         priceFinal() {
             return this.total + this.deliver.freight;
+        },
+
+        difference() {
+            var dif = this.discount.count * 100 - this.subtotal * 100;
+            return dif / 100;
         }
     };
 
@@ -557,15 +571,15 @@ export default class ShoppingCart extends wepy.page {
 
     updateTotal() {
         var self = this;
+        var total = 0;
         self.subtotal = 0;
-        self.isChoosen.forEach((item, index) => {
-            if (item == true) {
-                self.subtotal +=
-                    self.product[index].price * self.product[index].count;
+        self.product.forEach((item, index) => {
+            if (self.isChoosen[index]) {
+                total += item.price * 100;
                 self.$apply();
             }
         });
-        self.total = self.subtotal;
+        self.subtotal = total / 100;
         self.$apply();
     }
 

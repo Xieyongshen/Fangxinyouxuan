@@ -1,36 +1,292 @@
 <style lang="less">
+.orderDetail-header,
+.orderDetail-product,
+.orderDetail-pay,
+.orderDetail-detail {
+    width: 750rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
 
+.orderDetail-status {
+    width: 690rpx;
+    height: 145rpx;
+    font-size: 32rpx;
+    line-height: 145rpx;
+    text-align: center;
+    border-bottom: 1rpx solid #f2f2f2;
+    .fa {
+        color: #999999;
+        font-size: 35rpx;
+    }
+}
+
+.orderDetail-shop {
+    width: 690rpx;
+    height: 120rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    text {
+        font-size: 26rpx;
+        line-height: 80rpx;
+        vertical-align: top;
+        display: inline-block;
+    }
+}
+
+.orderDetail-shop-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 20rpx;
+    border-radius: 50%;
+    background: #fdedeb;
+}
+
+.orderDetail-shop-phone {
+    width: 36rpx;
+    height: 36rpx;
+    font-size: 30rpx;
+    line-height: 36rpx;
+    text-align: center;
+    margin: 21rpx 0;
+    border: 1rpx solid #434343;
+    border-radius: 50%;
+    float: right;
+}
+
+.orderDetail-product,
+.orderDetail-pay,
+.orderDetail-detail {
+    margin-top: 20rpx;
+}
+
+.orderDetail-item {
+    width: 690rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    text {
+        float: right;
+    }
+}
+
+.orderDetail-majorInfo {
+    color: #f5333f;
+}
+
+.orderDetail-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.orderDetail-product-list {
+    width: 690rpx;
+    height: 140rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+}
+
+.orderDetail-product-img {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.orderDetail-product-img:not(:first-child) {
+    margin-left: 20rpx;
+}
+
+.orderDetail-product-count {
+    font-size: 26rpx;
+    line-height: 100rpx;
+    float: right;
+    .fa {
+        color: #999999;
+        font-size: 35rpx;
+        margin-left: 10rpx;
+    }
+}
+
+.orderDetail-btn {
+    width: 144rpx;
+    height: 62rpx;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    text-align: center;
+    margin: 16rpx 0;
+    margin-left: 20rpx;
+    border: 2rpx solid #cccccc;
+    border-radius: 4rpx;
+    box-sizing: border-box;
+    float: right;
+}
+
+.orderDetail-detail {
+    color: #808080;
+}
 </style>
 <template>
-  <view class="container">
-        <navBar navTitle="放心优选"></navBar>
-  </view>
+    <view class="container">
+        <navBar navTitle="订单详情" isChildPage="y"></navBar>
+        <view class="orderDetail-header">
+            <view class="orderDetail-status">{{orderStatus[order.status]}}
+                <i wx:if="{{order.status > 0}}" class="fa fa-angle-right"></i>
+            </view>
+            <view wx:if="{{order.status == 1 || order.status == 3 }}" class="orderDetail-shop">
+                <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar">
+                    <text>{{order.shop.name}}</text>
+                    <view class="orderDetail-shop-phone">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                    </view>
+            </view>
+        </view>
+        <view class="orderDetail-product">
+            <view class="orderDetail-item">商品信息
+                <text class="orderDetail-majorInfo">{{item.status != 2 ? order.deliverTime : '如未拼单成功自动退款'}}</text>
+            </view>
+            <view class="orderDetail-product-list">
+                <repeat for="{{order.product}}" key="type">
+                    <image wx:if="{{index < 5}}" src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-product-img">
+                </repeat>
+                <view class="orderDetail-product-count">共{{order.product.length}}件
+                    <i class="fa fa-angle-right"></i>
+                </view>
+            </view>
+        </view>
+        <view class="orderDetail-pay">
+            <view class="orderDetail-item">商品总价
+                <text>￥{{order.total}}</text>
+            </view>
+            <view class="orderDetail-item">红包
+                <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
+            </view>
+            <view class="orderDetail-item">满减优惠
+                <text>-￥{{order.discount}}</text>
+            </view>
+            <view class="orderDetail-item">商品实付
+                <text>￥{{payFinal}}</text>
+            </view>
+            <view class="orderDetail-item">
+                <view class="orderDetail-btn">{{order.status == 0 ? '立即支付' : '申请退款'}}</view>
+                <text wx:if="{{order.status == 0}}" class="orderDetail-majorInfo">请在15分（倒计时）内支付</text>
+            </view>
+        </view>
+        <view class="orderDetail-detail">
+            <view class="orderDetail-item">订单号码:
+                <text>{{orderID}}</text>
+            </view>
+            <view class="orderDetail-item">订单时间:
+                <text>{{order.createTime}}</text>
+            </view>
+            <view class="orderDetail-item">支付方式:
+                <text>{{order.pay}}</text>
+            </view>
+            <view class="orderDetail-item">订单备注:
+                <text>{{order.remark}}</text>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-import NavBar from '@/components/navBar'
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
 
-
-  export default class Coupon extends wepy.page {
+export default class OrderDetail extends wepy.page {
     components = {
         navBar: NavBar
-    }
+    };
 
     data = {
-        
-    }
+        orderID: '000001',
+        orderStatus: ['订单待支付', '订单已支付', '拼单还未成功', '订单已签收'],
+        order: {
+            status: 0,
+            total: 247.6,
+            createTime: '2018-06-29 19:43:18',
+            deliverTime: '7月16号(明天)',
+            discount: 5,
+            redPacket: 5,
+            pay: '在线支付',
+            remark: '',
+            shop: {
+                avatar: '',
+                name: '朴美琴（小区店长）',
+                phone: '12345678900'
+            },
+            product: [
+                {
+                    id: '000001',
+                    name: '韩国制造，花洒替代品',
+                    imgUrl: '',
+                    price: 39.2,
+                    oriPrice: 75,
+                    count: 2
+                },
+                {
+                    id: '00002',
+                    name: '随便阅读灯',
+                    imgUrl: '',
+                    price: 45.0,
+                    oriPrice: 99,
+                    count: 0
+                },
+                {
+                    id: '000003',
+                    name: '韩国制造，花洒替代品',
+                    imgUrl: '',
+                    price: 39.2,
+                    oriPrice: 75,
+                    count: 2
+                },
+                {
+                    id: '00004',
+                    name: '随便阅读灯',
+                    imgUrl: '',
+                    price: 45.0,
+                    oriPrice: 99,
+                    count: 0
+                },
+                {
+                    id: '000005',
+                    name: '韩国制造，花洒替代品',
+                    imgUrl: '',
+                    price: 39.2,
+                    oriPrice: 75,
+                    count: 2,
+                    people: 7,
+                    maxpeople: 10
+                },
+                {
+                    id: '00006',
+                    name: '随便阅读灯',
+                    imgUrl: '',
+                    price: 45.0,
+                    oriPrice: 99,
+                    count: 0,
+                    people: 3,
+                    maxpeople: 10
+                }
+            ]
+        }
+    };
 
-    methods = {
-        
-    }
+    computed = {
+        payFinal() {
+            return (
+                this.order.total - this.order.discount - this.order.redPacket
+            );
+        }
+    };
 
-    events = {
-        
-    }
+    methods = {};
+
+    events = {};
 
     onLoad() {
-        
+        var self = this;
+        self.$apply();
     }
-  }
+}
 </script>

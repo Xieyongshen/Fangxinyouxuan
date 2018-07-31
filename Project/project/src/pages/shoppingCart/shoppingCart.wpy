@@ -98,7 +98,7 @@ page {
     }
     .fa {
         color: #bfbfbf;
-        font-size: 40rpx;
+        font-size: 35rpx;
         line-height: 90rpx;
         vertical-align: top;
         margin-left: 10rpx;
@@ -178,7 +178,7 @@ page {
 .count-plus {
     width: 35rpx;
     height: 35rpx;
-    font-size: 40rpx;
+    font-size: 35rpx;
     line-height: 33rpx;
     text-align: center;
     border: 1rpx solid #bfbfbf;
@@ -205,7 +205,7 @@ page {
 
 .shoppingCart-redPacket .fa, .shoppingCart-result-deliver .fa {
     color: #999999;
-    font-size: 40rpx;
+    font-size: 35rpx;
     line-height: 90rpx;
     margin-left: 10rpx;
     float: right;

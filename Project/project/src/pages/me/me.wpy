@@ -69,7 +69,7 @@
     box-sizing: border-box;
     display: inline-block;
     .fa {
-        font-size: 40rpx;
+        font-size: 35rpx;
         line-height: 70rpx;
         display: block;
     }
@@ -100,7 +100,7 @@
     box-sizing: border-box;
     .fa {
         color: #999999;
-        font-size: 40rpx;
+        font-size: 35rpx;
         line-height: 90rpx;
         float: right;
     }

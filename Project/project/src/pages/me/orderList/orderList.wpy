@@ -147,14 +147,14 @@
     margin-top: 10rpx;
 }
 
-.orderList-item-total{
+.orderList-item-total {
     color: #f5333f;
     font-size: 28rpx;
     line-height: 110rpx;
     float: right;
 }
 
-.orderList-item-operation{
+.orderList-item-operation {
     width: 750rpx;
     height: 85rpx;
     color: #999999;
@@ -164,7 +164,7 @@
     box-sizing: border-box;
 }
 
-.operation-btn{
+.operation-btn {
     width: 144rpx;
     height: 62rpx;
     font-size: 24rpx;
@@ -178,7 +178,7 @@
     float: right;
 }
 
-.btn-major{
+.btn-major {
     color: #f5333f;
     border: 2rpx solid #f5333f;
 }
@@ -260,9 +260,9 @@ export default class OrderList extends wepy.page {
     components = {
         navBar: NavBar
     };
-
     data = {
         orderType: ['待付款', '待收货', '待成团', '全部订单'],
+        //订单状态：待付款0，待收货1，待成团2，已签收3
         curType: 3,
         orderList: [
             {
@@ -477,7 +477,7 @@ export default class OrderList extends wepy.page {
     computed = {};
 
     methods = {
-        chooseType(index, e){
+        chooseType(index, e) {
             this.curType = index;
             console.log(index);
             console.log(this.curType);

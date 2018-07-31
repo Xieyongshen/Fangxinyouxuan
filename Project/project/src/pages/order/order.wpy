@@ -112,7 +112,7 @@
     float: right;
     .fa {
         color: #999999;
-        font-size: 40rpx;
+        font-size: 35rpx;
         margin-left: 10rpx;
     }
 }
@@ -130,7 +130,7 @@
 
 .order-total-redPacket .fa {
     color: #999999;
-    font-size: 40rpx;
+    font-size: 35rpx;
     line-height: 90rpx;
     margin-left: 10rpx;
     float: right;

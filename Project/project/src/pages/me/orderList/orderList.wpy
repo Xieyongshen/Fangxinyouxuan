@@ -1,9 +1,255 @@
 <style lang="less">
+.orderList-type {
+    width: 750rpx;
+    height: 65rpx;
+    background: #ffffff;
+}
+
+.orderList-type-item {
+    width: 180rpx;
+    height: 65rpx;
+    padding: 0 40rpx;
+    box-sizing: border-box;
+    display: inline-block;
+    text {
+        width: 100rpx;
+        height: 65rpx;
+        font-size: 26rpx;
+        line-height: 65rpx;
+        text-align: center;
+        white-space: nowrap;
+        display: inline-block;
+    }
+}
+
+.orderList-type-item:not(:last-child) {
+    margin-right: 10rpx;
+}
+
+.orderList-type-cur text {
+    color: #f5333f;
+    border-bottom: 4rpx solid #f5333f;
+    box-sizing: border-box;
+}
+
+.orderList-item {
+    width: 750rpx;
+    margin-top: 20rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+    position: relative;
+}
+
+.orderList-item-type {
+    width: 750rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #f2f2f2;
+    text {
+        color: #f5333f;
+        height: 90rpx;
+        font-size: 28rpx;
+        line-height: 90rpx;
+        box-sizing: border-box;
+        float: right;
+    }
+}
+
+.orderList-item-list {
+    width: 750rpx;
+    height: 160rpx;
+    padding: 20rpx 0 20rpx 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #f2f2f2;
+    white-space: nowrap;
+}
+
+.orderList-productAll-label {
+    width: 80rpx;
+    height: 30rpx;
+    font-size: 22rpx;
+    line-height: 30rpx;
+    text-align: center;
+    color: #ffffff;
+    background: #e87573;
+    border-radius: 0 5rpx 5rpx 0;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 100rpx;
+    z-index: 50;
+}
+
+.orderList-product {
+    display: inline-block;
+    position: relative;
+}
+
+.orderList-product-label {
+    width: 80rpx;
+    height: 30rpx;
+    font-size: 22rpx;
+    line-height: 30rpx;
+    text-align: center;
+    color: #ffffff;
+    background: #e87573;
+    border-radius: 0 5rpx 5rpx 5rpx;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.orderList-product-img {
+    width: 120rpx;
+    height: 120rpx;
+    margin-right: 20rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.orderList-item-status {
+    width: 750rpx;
+    height: 110rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.status-label {
+    width: 75rpx;
+    height: 110rpx;
+    text-align: center;
+    margin-right: 40rpx;
+    padding: 15rpx 0;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.status-icon {
+    width: 45rpx;
+    height: 45rpx;
+    color: #ffffff;
+    text-align: center;
+    font-size: 30rpx;
+    line-height: 45rpx;
+    background: #f5333f;
+    border-radius: 50%;
+    margin: 0 15rpx;
+}
+
+.status-text {
+    font-size: 24rpx;
+    line-height: 25rpx;
+    margin-top: 10rpx;
+}
+
+.orderList-item-total{
+    color: #f5333f;
+    font-size: 28rpx;
+    line-height: 110rpx;
+    float: right;
+}
+
+.orderList-item-operation{
+    width: 750rpx;
+    height: 85rpx;
+    color: #999999;
+    font-size: 26rpx;
+    line-height: 85rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+}
+
+.operation-btn{
+    width: 144rpx;
+    height: 62rpx;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    text-align: center;
+    margin: 11rpx 0;
+    margin-left: 30rpx;
+    border: 2rpx solid #cccccc;
+    border-radius: 4rpx;
+    box-sizing: border-box;
+    float: right;
+}
+
+.btn-major{
+    color: #f5333f;
+    border: 2rpx solid #f5333f;
+}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="全部订单" isChildPage="y"></navBar>
-        <view class="orderList-type"></view>
+        <view class="orderList-type">
+            <repeat for="{{orderType}}" key="index">
+                <view class="orderList-type-item {{index == curType ? 'orderList-type-cur' : ''}}" @tap="chooseType({{index}})">
+                    <text>{{item}}</text>
+                </view>
+            </repeat>
+        </view>
+        <view class="orderList-content">
+            <repeat for="{{orderList}}" key="id">
+                <view wx:if="{{curType == 3 || (curType == item.status)}}" class="orderList-item">
+                    <view class="orderList-item-type">
+                        {{item.createTime}}
+                        <text wx:if="{{item.status == 2}}">拼团中</text>
+                        <text wx:else>{{item.deliverTime}}</text>
+                    </view>
+                    <view wx:if="{{item.product[0].list.length == 0 && (item.product[1].list.length == 0 || item.product[2].list.length == 0)}}" class="orderList-productAll-label">{{item.product[2].list.length == 0 ? '预售款':'拼团中'}}</view>
+                    <scroll-view class="orderList-item-list">
+                        <repeat for="{{item.product}}" key="type" item="product" index="proType">
+                            <repeat for="{{product.list}}" key="id" item="list">
+                                <view class="orderList-product">
+                                    <view wx:if="{{proType > 0 && item.product[0].list.length > 0}}" class="orderList-product-label">{{proType == 1 ? '预售款':'拼团中'}}</view>
+                                    <image src="{{listItem.imgUrl}}" mode="aspectFill" class="orderList-product-img">
+                                </view>
+                            </repeat>
+                        </repeat>
+                    </scroll-view>
+                    <view class="orderList-item-status">
+                        <view wx:if="{{item.status == 0}}" class="status-label">
+                            <view class="status-icon">
+                                <i class="fa fa-repeat" aria-hidden="true"></i>
+                            </view>
+                            <view class="status-text">未支付</view>
+                        </view>
+                        <view wx:if="{{item.status > 0}}" class="status-label">
+                            <view class="status-icon">
+                                <i class="fa fa-repeat" aria-hidden="true"></i>
+                            </view>
+                            <view class="status-text">已支付</view>
+                        </view>
+                        <view wx:if="{{item.status > 0 && item.status != 2 }}" class="status-label">
+                            <view class="status-icon">
+                                <i class="fa fa-repeat" aria-hidden="true"></i>
+                            </view>
+                            <view class="status-text">配送中</view>
+                        </view>
+                        <view wx:if="{{item.status > 2}}" class="status-label">
+                            <view class="status-icon">
+                                <i class="fa fa-repeat" aria-hidden="true"></i>
+                            </view>
+                            <view class="status-text">已签收</view>
+                        </view>
+                        <view class="orderList-item-total">￥{{item.total}}</view>
+                    </view>
+                    <view class="orderList-item-operation">
+                        <block wx:if="{{item.status == 2}}">如未成功自动退款</block>
+                        <view wx:if="{{item.status == 0}}" class="operation-btn btn-major">去支付</view>
+                        <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
+                        <view wx:if="{{item.status == 2 || item.status == 3}}" class="operation-btn">查看详情</view>
+                        <view wx:if="{{item.status == 3}}" class="operation-btn">申请退款</view>
+                    </view>
+                </view>
+            </repeat>
+        </view>
+    </view>
 </template>
 
 <script>
@@ -16,11 +262,15 @@ export default class OrderList extends wepy.page {
     };
 
     data = {
+        orderType: ['待付款', '待收货', '待成团', '全部订单'],
+        curType: 3,
         orderList: [
             {
                 id: '000001',
-                remain: 8.88,
+                status: 0,
                 total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
                 product: [
                     {
                         type: 'normal',
@@ -93,11 +343,147 @@ export default class OrderList extends wepy.page {
                         ]
                     }
                 ]
+            },
+            {
+                id: '000002',
+                status: 1,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        type: 'normal',
+                        sendTime: '',
+                        list: []
+                    },
+                    {
+                        type: 'preSale',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000003',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2
+                            },
+                            {
+                                id: '00004',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0
+                            }
+                        ]
+                    },
+                    {
+                        type: 'group',
+                        sendTime: '',
+                        list: []
+                    }
+                ]
+            },
+            {
+                id: '000003',
+                status: 2,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        type: 'normal',
+                        sendTime: '',
+                        list: []
+                    },
+                    {
+                        type: 'preSale',
+                        sendTime: '',
+                        list: []
+                    },
+                    {
+                        type: 'group',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000005',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2,
+                                people: 7,
+                                maxpeople: 10
+                            },
+                            {
+                                id: '00006',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0,
+                                people: 3,
+                                maxpeople: 10
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: '000004',
+                status: 3,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        type: 'normal',
+                        sendTime: '7月16号',
+                        list: [
+                            {
+                                id: '000001',
+                                name: '韩国制造，花洒替代品',
+                                imgUrl: '',
+                                price: 39.2,
+                                oriPrice: 75,
+                                count: 2
+                            },
+                            {
+                                id: '00002',
+                                name: '随便阅读灯',
+                                imgUrl: '',
+                                price: 45.0,
+                                oriPrice: 99,
+                                count: 0
+                            }
+                        ]
+                    },
+                    {
+                        type: 'preSale',
+                        sendTime: '',
+                        list: []
+                    },
+                    {
+                        type: 'group',
+                        sendTime: '',
+                        list: []
+                    }
+                ]
             }
         ]
     };
 
-    methods = {};
+    computed = {};
+
+    methods = {
+        chooseType(index, e){
+            this.curType = index;
+            console.log(index);
+            console.log(this.curType);
+            this.$apply();
+        }
+    };
 
     events = {};
 

@@ -2,7 +2,7 @@
 .navBar {
     width: 750rpx;
     height: 62px;
-    font-size: 36rpx;
+    font-size: 34rpx;
     line-height: 42px;
     text-align: center;
     padding-top: 20px;

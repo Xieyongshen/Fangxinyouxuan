@@ -1,6 +1,7 @@
 <style lang="less">
 .category-content {
     padding: 0 30rpx;
+    background: #ffffff;
 }
 
 .category-header {
@@ -17,7 +18,7 @@
 }
 
 .shop-name {
-    font-size: 34rpx;
+    font-size: 26rpx;
     line-height: 75rpx;
     margin: 0 20rpx;
 }
@@ -49,7 +50,7 @@
 }
 
 .product-title {
-    font-size: 36rpx;
+    font-size: 32rpx;
     line-height: 40rpx;
     margin: 10rpx 0;
     text-align: center;
@@ -84,7 +85,7 @@
 
 .product-item-name {
     width: 435rpx;
-    font-size: 32rpx;
+    font-size: 30rpx;
     line-height: 45rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -93,8 +94,8 @@
 
 .product-item-desc {
     width: 435rpx;
-    color: #959595;
-    font-size: 26rpx;
+    color: #999999;
+    font-size: 24rpx;
     line-height: 45rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -107,7 +108,7 @@
     line-height: 60rpx;
     text-align: center;
     color: #ffffff;
-    background: #e51c23;
+    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 20rpx;
@@ -115,15 +116,15 @@
 }
 
 .product-item-price {
-    color: #e51c23;
-    font-size: 32rpx;
+    color: #f5333f;
+    font-size: 30rpx;
     line-height: 30rpx;
     position: absolute;
     left: 0;
     bottom: 20rpx;
     text {
-        color: #959595;
-        font-size: 24rpx;
+        color: #999999;
+        font-size: 22rpx;
         line-height: 20rpx;
         text-decoration: line-through;
         vertical-align: bottom;

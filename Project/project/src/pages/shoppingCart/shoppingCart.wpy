@@ -6,7 +6,7 @@ page {
 .shoppingCart-shop {
     width: 750rpx;
     height: 80rpx;
-    font-size: 32rpx;
+    font-size: 28rpx;
     line-height: 80rpx;
     text-align: center;
     background: #ffffff;
@@ -51,13 +51,13 @@ page {
     height: 90rpx;
     display: inline-block;
     text {
-        font-size: 32rpx;
+        font-size: 28rpx;
         line-height: 90rpx;
         vertical-align: top;
         display: inline-block;
     }
     .select-choose {
-        margin: 22rpx 10rpx 22rpx 0;
+        margin: 22rpx 15rpx 22rpx 0;
     }
 }
 
@@ -73,19 +73,19 @@ page {
 
 .select-confirm {
     color: #ffffff;
-    background: #ea4141;
+    background: #f5333f;
 }
 
 .select-cancel {
     box-sizing: border-box;
-    border: 1rpx solid #ea4141;
+    border: 1rpx solid #f5333f;
 }
 
 .shoppingCart-product-tip {
     max-width: 550rpx;
     height: 90rpx;
-    color: #ea4141;
-    font-size: 26rpx;
+    color: #f5333f;
+    font-size: 24rpx;
     line-height: 90rpx;
     float: right;
     text {
@@ -140,7 +140,7 @@ page {
 
 .product-item-name {
     width: 450rpx;
-    font-size: 28rpx;
+    font-size: 26rpx;
     line-height: 45rpx;
     letter-spacing: 2rpx;
     overflow: hidden;
@@ -149,13 +149,13 @@ page {
 }
 
 .product-item-price {
-    color: #ea4141;
-    font-size: 32rpx;
+    color: #f5333f;
+    font-size: 26rpx;
     line-height: 45rpx;
     margin-top: 75rpx;
     text {
-        color: #959595;
-        font-size: 24rpx;
+        color: #808080;
+        font-size: 22rpx;
         line-height: 20rpx;
         display: inline-block;
         text-decoration: line-through;
@@ -167,7 +167,7 @@ page {
     right: 0;
     bottom: 10rpx;
     text {
-        font-size: 32rpx;
+        font-size: 26rpx;
         line-height: 35rpx;
         margin: 0 30rpx;
         display: inline-block;
@@ -189,7 +189,7 @@ page {
 .shoppingCart-product-subtotal {
     width: 720rpx;
     height: 80rpx;
-    font-size: 28rpx;
+    font-size: 26rpx;
     line-height: 80rpx;
     text-align: right;
     padding-right: 30rpx;
@@ -203,7 +203,7 @@ page {
     padding-left: 30rpx;
 }
 
-.shoppingCart-redPacket .fa {
+.shoppingCart-redPacket .fa, .shoppingCart-result-deliver .fa {
     color: #999999;
     font-size: 40rpx;
     line-height: 90rpx;
@@ -216,7 +216,7 @@ page {
 }
 
 .status-true {
-    color: #ea4141;
+    color: #f5333f;
 }
 
 .shoppingCart-result {
@@ -261,9 +261,9 @@ page {
 }
 
 .shoppingCart-recommend-price {
-    color: #ea4141;
+    color: #f5333f;
     margin-top: 30rpx;
-    font-size: 32rpx;
+    font-size: 26rpx;
     line-height: 40rpx;
 }
 
@@ -274,7 +274,7 @@ page {
     font-size: 34rpx;
     line-height: 55rpx;
     text-align: center;
-    background: #ea4141;
+    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 10rpx;
@@ -319,13 +319,13 @@ page {
     font-size: 26rpx;
     line-height: 30rpx;
     text {
-        color: #ea4141;
+        color: #f5333f;
     }
 }
 
 .price-freight {
     color: #999999;
-    font-size: 22rpx;
+    font-size: 18rpx;
     line-height: 30rpx;
 }
 
@@ -336,7 +336,7 @@ page {
     line-height: 90rpx;
     text-align: center;
     color: #ffffff;
-    background: #ea4141;
+    background: #f5333f;
     vertical-align: top;
     float: right;
 }
@@ -401,6 +401,7 @@ page {
                 <text>￥{{total}}</text>
             </view>
             <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
                 <text>{{deliver.name}}</text>
             </view>
         </view>

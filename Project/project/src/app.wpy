@@ -2333,6 +2333,7 @@
 }
 
 page {
+    color: #323232;
     background: #f7f7f7;
 }
 
@@ -2374,7 +2375,7 @@ export default class extends wepy.app {
         },
         tabBar: {
             color: '#999999',
-            selectedColor: '#E51C23',
+            selectedColor: '#f5333f',
             backgroundColor: '#ffffff',
             list: [
                 {

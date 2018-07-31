@@ -18,7 +18,7 @@
 }
 
 .shop-name {
-    font-size: 34rpx;
+    font-size: 26rpx;
     line-height: 75rpx;
     margin: 0 20rpx;
 }
@@ -64,7 +64,7 @@
         box-sizing: border-box;
     }
     .category-title {
-        font-size: 24rpx;
+        font-size: 23rpx;
         line-height: 30rpx;
         text-align: center;
         display: block;
@@ -84,23 +84,23 @@
 .today-title,
 .hot-title,
 .selected-title {
-    font-size: 36rpx;
+    font-size: 32rpx;
     line-height: 50rpx;
     text-align: center;
 }
 
 .today-time {
     color: #6a6461;
-    font-size: 28rpx;
+    font-size: 26rpx;
     line-height: 80rpx;
     letter-spacing: 5rpx;
     text-align: center;
     margin-top: 20rpx;
     margin-bottom: 10rpx;
     background: #fdedeb;
-    border-radius: 40rpx;
+    border-radius: 10rpx;
     text {
-        color: #e51c23;
+        color: #f5333f;
         font-size: 36rpx;
         font-weight: 600;
         line-height: 80rpx;
@@ -147,7 +147,7 @@
 .hot-item-name,
 .selected-item-name {
     width: 435rpx;
-    font-size: 32rpx;
+    font-size: 30rpx;
     line-height: 45rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,8 +158,8 @@
 .hot-item-desc,
 .selected-item-desc {
     width: 435rpx;
-    color: #959595;
-    font-size: 26rpx;
+    color: #999999;
+    font-size: 24rpx;
     line-height: 45rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -168,15 +168,15 @@
 
 .today-item-remain {
     width: 250rpx;
-    font-size: 32rpx;
-    border-radius: 25rpx;
+    border: 1px solid #fceee9;
+    border-radius: 15px;
     overflow: hidden;
     position: absolute;
     left: 0;
     bottom: 65rpx;
     text {
         width: 250rpx;
-        color: #e51c23;
+        color: #f5333f;
         font-size: 26rpx;
         line-height: 20px;
         text-align: center;
@@ -188,13 +188,13 @@
 }
 
 .today-item-price {
-    font-size: 28rpx;
+    font-size: 24rpx;
     line-height: 65rpx;
     position: absolute;
     left: 0;
     bottom: 0;
     text {
-        font-size: 34rpx;
+        font-size: 30rpx;
         line-height: 40rpx;
     }
 }
@@ -207,7 +207,7 @@
     line-height: 60rpx;
     text-align: center;
     color: #ffffff;
-    background: #e51c23;
+    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 20rpx;
@@ -223,8 +223,8 @@
 
 .hot-item-price,
 .selected-item-price {
-    color: #e51c23;
-    font-size: 28rpx;
+    color: #f5333f;
+    font-size: 26rpx;
     line-height: 30rpx;
     position: absolute;
     left: 0;
@@ -232,7 +232,7 @@
 }
 
 .price-only {
-    font-size: 34rpx;
+    font-size: 32rpx;
     line-height: 40rpx;
     position: absolute;
     left: 0;
@@ -241,8 +241,8 @@
 
 .hot-item-curPrice,
 .selected-item-curPrice {
-    color: #ffbc00;
-    font-size: 34rpx;
+    color: #ffba00;
+    font-size: 32rpx;
     line-height: 40rpx;
     position: absolute;
     left: 0;
@@ -257,7 +257,7 @@
         text-align: center;
         vertical-align: top;
         border-radius: 5rpx;
-        background: #ffbc00;
+        background: #ffba00;
         display: inline-block;
     }
 }

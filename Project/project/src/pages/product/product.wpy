@@ -39,25 +39,25 @@ page {
 }
 
 .product-intro-name {
-    font-size: 32rpx;
+    font-size: 36rpx;
     line-height: 45rpx;
 }
 
 .product-intro-desc {
-    color: #959595;
+    color: #808080;
     font-size: 26rpx;
     line-height: 35rpx;
 }
 
 .product-intro-price {
-    color: #e51c23;
+    color: #f5333f;
     font-size: 26rpx;
     line-height: 35rpx;
     margin-top: 30rpx;
 }
 
 .product-intro-label {
-    color: #ffbb00;
+    color: #ffba00;
     font-size: 32rpx;
     line-height: 45rpx;
     vertical-align: top;
@@ -70,7 +70,7 @@ page {
         font-size: 22rpx;
         line-height: 25rpx;
         text-align: center;
-        background: #ffbb00;
+        background: #ffba00;
         display: inline-block;
     }
 }
@@ -99,14 +99,14 @@ page {
 
 .product-recommend-content {
     width: 750rpx;
-    height: 425rpx;
+    height: 415rpx;
     margin-top: 40rpx;
     white-space: nowrap;
 }
 
 .product-recommend-item {
     width: 300rpx;
-    height: 425rpx;
+    height: 415rpx;
     padding: 0 30rpx;
     box-sizing: border-box;
     display: inline-block;
@@ -127,7 +127,7 @@ page {
 .product-recommend-name {
     width: 240rpx;
     margin-top: 45rpx;
-    font-size: 28rpx;
+    font-size: 26rpx;
     line-height: 35rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -135,8 +135,8 @@ page {
 }
 
 .product-recommend-price {
-    margin-top: 60rpx;
-    font-size: 32rpx;
+    margin-top: 50rpx;
+    font-size: 26rpx;
     line-height: 35rpx;
 }
 
@@ -147,7 +147,7 @@ page {
     font-size: 26rpx;
     line-height: 45rpx;
     text-align: center;
-    background: #e51c23;
+    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 0;
@@ -161,15 +161,15 @@ page {
 }
 
 .product-detail-title {
-    font-size: 34rpx;
+    font-size: 32rpx;
     line-height: 45rpx;
 }
 
 .product-detail-content {
     margin-top: 35rpx;
     text {
-        color: #959595;
-        font-size: 32rpx;
+        color: #808080;
+        font-size: 26rpx;
         line-height: 45rpx;
     }
     image {
@@ -216,11 +216,11 @@ page {
 }
 
 .product-btn-addToCart {
-    background: #fe807e;
+    background: #ff6670;
 }
 
 .product-btn-purchase {
-    background: #ea4141;
+    background: #f5333f;
 }
 </style>
 <template>

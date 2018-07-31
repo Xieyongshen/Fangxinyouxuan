@@ -22,7 +22,7 @@
         font-size: 22rpx;
         line-height: 30rpx;
         color: #ffffff;
-        background: #ea4141;
+        background: #f5333f;
         margin: 7rpx 0 7rpx 10rpx;
         padding: 0 10rpx;
         border-radius: 5rpx;
@@ -70,7 +70,7 @@
 }
 
 .order-product-deliver text {
-    color: #ea4141;
+    color: #f5333f;
 }
 
 .order-product-items {
@@ -98,9 +98,12 @@
 .order-product-img {
     width: 100rpx;
     height: 100rpx;
-    margin-right: 20rpx;
     border-radius: 10rpx;
     background: #fdedeb;
+}
+
+.order-product-img:not(:first-child){
+    margin-left: 20rpx;
 }
 
 .order-product-count {
@@ -122,7 +125,7 @@
 }
 
 .order-total-redPacket text {
-    color: #ea4141;
+    color: #f5333f;
 }
 
 .order-total-redPacket .fa {
@@ -138,7 +141,7 @@
 }
 
 .status-true {
-    color: #ea4141;
+    color: #f5333f;
 }
 
 .order-pay {
@@ -158,7 +161,7 @@
 .order-pay-total {
     display: inline-block;
     text {
-        color: #ea4141;
+        color: #f5333f;
     }
 }
 
@@ -167,7 +170,7 @@
     height: 90rpx;
     text-align: center;
     color: #ffffff;
-    background: #ea4141;
+    background: #f5333f;
     vertical-align: top;
     float: right;
 }
@@ -187,10 +190,10 @@
                     <text>{{item.sendTime}}</text>
                 </view>
                 <view class="order-product-items" @tap="navToProductList({{index}})">
-                    <view wx:if="{{index > 0}}" class="order-product-label">{{index == 1 ? '预售款':'拼团中'}}</view>
-                    <repeat for="{{item.list}}" key="id" item="listItem">
-                        <image src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img">
+                    <repeat for="{{item.list}}" key="id" item="listItem" index="idx">
+                        <image wx:if="{{idx < 5}}" src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img">
                     </repeat>
+                    <view wx:if="{{index > 0}}" class="order-product-label">{{index == 1 ? '预售款':'拼团中'}}</view>
                     <view class="order-product-count">共{{item.list.length}}件
                         <i class="fa fa-angle-right"></i>
                     </view>
@@ -323,6 +326,46 @@ export default class Order extends wepy.page {
                     },
                     {
                         id: '00006',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0,
+                        people: 3,
+                        maxpeople: 10
+                    },
+                    {
+                        id: '000007',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2,
+                        people: 7,
+                        maxpeople: 10
+                    },
+                    {
+                        id: '00008',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0,
+                        people: 3,
+                        maxpeople: 10
+                    },
+                    {
+                        id: '00009',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0,
+                        people: 3,
+                        maxpeople: 10
+                    },
+                    {
+                        id: '00010',
                         name: '随便阅读灯',
                         imgUrl: '',
                         price: 45.0,

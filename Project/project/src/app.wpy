@@ -2358,7 +2358,6 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
-            'pages/me/orderDetail/orderDetail',
             'pages/index/index',
             'pages/index/category/category',
             'pages/coupon/coupon',
@@ -2366,6 +2365,9 @@ export default class extends wepy.app {
             'pages/me/me',
             'pages/me/balance/balance',
             'pages/me/orderList/orderList',
+            'pages/me/orderDetail/orderDetail',
+            'pages/me/address/address',
+            'pages/me/address/addressChange/addressChange',
             'pages/product/product',
             'pages/order/order',
             'pages/productList/productList',
@@ -2382,19 +2384,27 @@ export default class extends wepy.app {
             list: [
                 {
                     pagePath: 'pages/index/index',
-                    text: '首页'
+                    text: '首页',
+                    iconPath: 'icons/tabbar-home.png',
+                    selectedIconPath: 'icons/tabbar-home-selected.png'
                 },
                 {
                     pagePath: 'pages/coupon/coupon',
-                    text: '优惠券'
+                    text: '优惠券',
+                    iconPath: 'icons/tabbar-coupon.png',
+                    selectedIconPath: 'icons/tabbar-coupon-selected.png'
                 },
                 {
                     pagePath: 'pages/shoppingCart/shoppingCart',
-                    text: '购物车'
+                    text: '购物车',
+                    iconPath: 'icons/tabbar-shoppingCart.png',
+                    selectedIconPath: 'icons/tabbar-shoppingCart-selected.png'
                 },
                 {
                     pagePath: 'pages/me/me',
-                    text: '我的'
+                    text: '我的',
+                    iconPath: 'icons/tabbar-user.png',
+                    selectedIconPath: 'icons/tabbar-user-selected.png'
                 }
             ]
         }

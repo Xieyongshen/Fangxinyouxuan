@@ -154,6 +154,10 @@
                     我的优惠券
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </navigator>
+                <navigator url="address/address" class="me-manage-item">
+                    我的地址
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </navigator>
             </view>
         </view>
     </view>

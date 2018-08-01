@@ -2,13 +2,19 @@
 .navBar {
     background: transparent;
     color: white;
-    background: #f15655;
+}
+
+.me-header-bg{
+    width: 750rpx;
+    height: 465rpx + 62px;
+    position: absolute;
+    top: 0;
+    z-index: -1;
 }
 
 .me-header {
     width: 750rpx;
     height: 465rpx;
-    background: #f15655;
     position: relative;
 }
 
@@ -67,12 +73,8 @@
     padding: 20rpx 0;
     text-align: center;
     box-sizing: border-box;
+    vertical-align: top;
     display: inline-block;
-    .fa {
-        font-size: 35rpx;
-        line-height: 70rpx;
-        display: block;
-    }
     text {
         font-size: 24rpx;
         line-height: 50rpx;
@@ -81,6 +83,13 @@
         text-overflow: ellipsis;
         display: block;
     }
+}
+
+.me-order-icon{
+    width: 45rpx;
+    height: 45rpx;
+    margin-top: 15rpx;
+    margin-bottom: 10rpx;
 }
 
 .me-manage {
@@ -116,6 +125,7 @@
 </style>
 <template>
     <view class="container">
+        <image src="/icons/me-bg.png" class="me-header-bg">
         <navBar navTitle="放心优选"></navBar>
         <view class="me-header">
             <view class="me-invite">邀请好友</view>
@@ -125,19 +135,19 @@
             </view>
             <view class="me-order">
                 <view class="me-order-item" @tap="toOrderList(0)">
-                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                    <image src="/icons/toPay.png" class="me-order-icon">
                     <text>待付款</text>
                 </view>
                 <view class="me-order-item" @tap="toOrderList(1)">
-                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                    <image src="/icons/toReceive.png" class="me-order-icon">
                     <text>待收货</text>
                 </view>
                 <view class="me-order-item" @tap="toOrderList(2)">
-                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <image src="/icons/toGroup.png" class="me-order-icon">
                     <text>待成团</text>
                 </view>
                 <view class="me-order-item" @tap="toOrderList(3)">
-                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <image src="/icons/orderAll.png" class="me-order-icon">
                     <text>全部订单</text>
                 </view>
             </view>

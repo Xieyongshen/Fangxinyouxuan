@@ -2385,26 +2385,26 @@ export default class extends wepy.app {
                 {
                     pagePath: 'pages/index/index',
                     text: '首页',
-                    iconPath: 'icons/tabbar-home.png',
-                    selectedIconPath: 'icons/tabbar-home-selected.png'
+                    iconPath: 'icons/tabbar/tabbar-home.png',
+                    selectedIconPath: 'icons/tabbar/tabbar-home-selected.png'
                 },
                 {
                     pagePath: 'pages/coupon/coupon',
                     text: '优惠券',
-                    iconPath: 'icons/tabbar-coupon.png',
-                    selectedIconPath: 'icons/tabbar-coupon-selected.png'
+                    iconPath: 'icons/tabbar/tabbar-coupon.png',
+                    selectedIconPath: 'icons/tabbar/tabbar-coupon-selected.png'
                 },
                 {
                     pagePath: 'pages/shoppingCart/shoppingCart',
                     text: '购物车',
-                    iconPath: 'icons/tabbar-shoppingCart.png',
-                    selectedIconPath: 'icons/tabbar-shoppingCart-selected.png'
+                    iconPath: 'icons/tabbar/tabbar-shoppingCart.png',
+                    selectedIconPath: 'icons/tabbar/tabbar-shoppingCart-selected.png'
                 },
                 {
                     pagePath: 'pages/me/me',
                     text: '我的',
-                    iconPath: 'icons/tabbar-user.png',
-                    selectedIconPath: 'icons/tabbar-user-selected.png'
+                    iconPath: 'icons/tabbar/tabbar-user.png',
+                    selectedIconPath: 'icons/tabbar/tabbar-user-selected.png'
                 }
             ]
         }

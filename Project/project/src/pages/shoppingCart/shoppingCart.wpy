@@ -1,6 +1,6 @@
 <style lang="less">
 page {
-    padding-bottom: 90rpx;
+    padding-bottom: 110rpx;
 }
 
 .shoppingCart-shop {
@@ -203,7 +203,8 @@ page {
     padding-left: 30rpx;
 }
 
-.shoppingCart-redPacket .fa, .shoppingCart-result-deliver .fa {
+.shoppingCart-redPacket .fa,
+.shoppingCart-result-deliver .fa {
     color: #999999;
     font-size: 35rpx;
     line-height: 90rpx;
@@ -357,7 +358,8 @@ page {
                     <text>全选</text>
                 </view>
                 <view class="shoppingCart-product-tip">
-                    <text>满{{discount.count}}减{{discount.minus}}<block wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</block></text>
+                    <text>满{{discount.count}}减{{discount.minus}}</text>
+                    <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
                     <i class="fa fa-angle-right"></i>
                 </view>
             </view>
@@ -464,7 +466,7 @@ export default class ShoppingCart extends wepy.page {
                 id: '000001',
                 name: '韩国制造，花洒替代品',
                 imgUrl: '',
-                price: 39.2,
+                price: 39.22,
                 oriPrice: 75,
                 count: 2
             },
@@ -511,19 +513,30 @@ export default class ShoppingCart extends wepy.page {
 
     computed = {
         total() {
-            if (this.subtotal >= this.discount.count)
-                return (
-                    this.subtotal - this.redPacket.count - this.discount.minus
-                );
-            else return this.subtotal - this.redPacket.count;
+            if (this.subtotal <= this.redPacket.count) return 0;
+            var self = this;
+            var subtotal = self.subtotal * 100;
+            var redPacket = self.redPacket.count * 100;
+            var discount = self.discount.minus * 100;
+            var total = subtotal - redPacket;
+            if (self.subtotal >= self.discount.count) {
+                total = total - discount;
+            }
+            total = parseInt(total, 10);
+            return total / 100;
         },
 
         priceFinal() {
-            return this.total + this.deliver.freight;
+            var total = this.total * 100;
+            var freight = this.deliver.freight * 100;
+            var priceFinal = total - freight;
+            priceFinal = parseInt(priceFinal, 10);
+            return priceFinal / 100;
         },
 
         difference() {
             var dif = this.discount.count * 100 - this.subtotal * 100;
+            dif = parseInt(dif, 10);
             return dif / 100;
         }
     };
@@ -536,24 +549,36 @@ export default class ShoppingCart extends wepy.page {
         },
 
         countMinus(index, event) {
-            this.product[index].count--;
-            if (this.isChoosen[index]) {
-                this.subtotal -= this.product[index].price;
+            var self = this;
+            var subtotal = self.subtotal * 1000;
+            self.product[index].count--;
+            if (self.isChoosen[index]) {
+                subtotal -= self.product[index].price * 1000;
             }
-            this.$apply();
+            subtotal = parseInt(subtotal, 10);
+            console.log(subtotal);
+            self.subtotal = subtotal / 1000;
+            self.$apply();
         },
 
         countPlus(index, event) {
-            this.product[index].count++;
-            if (this.isChoosen[index]) {
-                this.subtotal += this.product[index].price;
+            var self = this;
+            var subtotal = self.subtotal * 1000;
+            self.product[index].count++;
+            if (self.isChoosen[index]) {
+                subtotal += self.product[index].price * 1000;
             }
-            this.$apply();
+            subtotal = parseInt(subtotal, 10);
+            console.log(subtotal);
+            self.subtotal = subtotal / 1000;
+            self.$apply();
         },
 
         chooseProduct(index, event) {
             this.isChoosen[index] = !this.isChoosen[index];
-            this.updateTotal();
+            if (this.product[index].count > 0) {
+                this.updateTotal();
+            }
             this.$apply();
         },
 
@@ -572,15 +597,17 @@ export default class ShoppingCart extends wepy.page {
 
     updateTotal() {
         var self = this;
-        var total = 0;
         self.subtotal = 0;
         self.product.forEach((item, index) => {
             if (self.isChoosen[index]) {
-                total += item.price * 100;
+                self.subtotal += item.price * item.count * 1000;
                 self.$apply();
+                console.log(self.subtotal);
             }
         });
-        self.subtotal = total / 100;
+        self.subtotal = parseInt(self.subtotal, 10);
+        self.subtotal /= 1000;
+        console.log(self.subtotal);
         self.$apply();
     }
 

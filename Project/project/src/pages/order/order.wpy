@@ -1,4 +1,8 @@
 <style lang="less">
+page{
+    padding-bottom: 110rpx;
+}
+
 .order-block {
     width: 750rpx;
     margin-top: 20rpx;
@@ -189,7 +193,7 @@
                 <view class="order-product-deliver order-item">送达时间
                     <text>{{item.sendTime}}</text>
                 </view>
-                <view class="order-product-items" @tap="navToProductList({{index}})">
+                <view class="order-product-items" @tap="navToProductList()">
                     <repeat for="{{item.list}}" key="id" item="listItem" index="idx">
                         <image wx:if="{{idx < 5}}" src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img">
                     </repeat>
@@ -393,7 +397,7 @@ export default class Order extends wepy.page {
     methods = {
         navToProductList(index, events) {
             wx.navigateTo({
-                url: 'productList/productList'
+                url: '../productList/productList'
             });
         },
         

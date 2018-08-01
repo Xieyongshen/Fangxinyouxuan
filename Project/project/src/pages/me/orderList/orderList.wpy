@@ -88,21 +88,6 @@
     position: relative;
 }
 
-.orderList-product-label {
-    width: 80rpx;
-    height: 30rpx;
-    font-size: 22rpx;
-    line-height: 30rpx;
-    text-align: center;
-    color: #ffffff;
-    background: #e87573;
-    border-radius: 0 5rpx 5rpx 5rpx;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 0;
-}
-
 .orderList-product-img {
     width: 120rpx;
     height: 120rpx;
@@ -201,15 +186,12 @@
                         <text wx:if="{{item.status == 2}}">拼团中</text>
                         <text wx:else>{{item.deliverTime}}</text>
                     </view>
-                    <view wx:if="{{item.product[0].list.length == 0 && (item.product[1].list.length == 0 || item.product[2].list.length == 0)}}" class="orderList-productAll-label">{{item.product[2].list.length == 0 ? '预售款':'拼团中'}}</view>
+                    <view wx:if="{{item.type == 1 || item.type == 2}}" class="orderList-productAll-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
                     <scroll-view class="orderList-item-list">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
-                            <repeat for="{{product.list}}" key="id" item="list">
-                                <view class="orderList-product">
-                                    <view wx:if="{{proType > 0 && item.product[0].list.length > 0}}" class="orderList-product-label">{{proType == 1 ? '预售款':'拼团中'}}</view>
-                                    <image src="{{listItem.imgUrl}}" mode="aspectFill" class="orderList-product-img">
-                                </view>
-                            </repeat>
+                            <view class="orderList-product">
+                                <image src="{{product.imgUrl}}" mode="aspectFill" class="orderList-product-img">
+                            </view>
                         </repeat>
                     </scroll-view>
                     <view class="orderList-item-status">
@@ -243,7 +225,7 @@
                         <block wx:if="{{item.status == 2}}">如未成功自动退款</block>
                         <view wx:if="{{item.status == 0}}" class="operation-btn btn-major">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
-                        <view wx:if="{{item.status == 2 || item.status == 3}}" class="operation-btn">查看详情</view>
+                        <view wx:if="{{item.status == 2 || item.status == 3}}" class="operation-btn" @tap="toOrderDetail({{item.status}})">查看详情</view>
                         <view wx:if="{{item.status == 3}}" class="operation-btn">申请退款</view>
                     </view>
                 </view>
@@ -262,212 +244,114 @@ export default class OrderList extends wepy.page {
     };
     data = {
         orderType: ['待付款', '待收货', '待成团', '全部订单'],
-        //订单状态：待付款0，待收货1，待成团2，已签收3
+        //订单状态：待付款0，待收货1，待成团2，已签收3, 售后中4, 退款成功5
         curType: 3,
         orderList: [
             {
                 id: '000001',
+                type: 0,
                 status: 0,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
                 deliverTime: '7月16号(明天)',
                 product: [
                     {
-                        type: 'normal',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000001',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2
-                            },
-                            {
-                                id: '00002',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0
-                            }
-                        ]
+                        id: '000001',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
                     },
                     {
-                        type: 'preSale',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000003',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2
-                            },
-                            {
-                                id: '00004',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0
-                            }
-                        ]
-                    },
-                    {
-                        type: 'group',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000005',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2,
-                                people: 7,
-                                maxpeople: 10
-                            },
-                            {
-                                id: '00006',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0,
-                                people: 3,
-                                maxpeople: 10
-                            }
-                        ]
+                        id: '00002',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0
                     }
                 ]
             },
             {
                 id: '000002',
+                type: 1,
                 status: 1,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
                 deliverTime: '7月16号(明天)',
                 product: [
                     {
-                        type: 'normal',
-                        sendTime: '',
-                        list: []
+                        id: '000003',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
                     },
                     {
-                        type: 'preSale',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000003',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2
-                            },
-                            {
-                                id: '00004',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0
-                            }
-                        ]
-                    },
-                    {
-                        type: 'group',
-                        sendTime: '',
-                        list: []
+                        id: '00004',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0
                     }
                 ]
             },
             {
                 id: '000003',
+                type: 2,
                 status: 2,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
                 deliverTime: '7月16号(明天)',
                 product: [
                     {
-                        type: 'normal',
-                        sendTime: '',
-                        list: []
+                        id: '000005',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2,
+                        people: 7,
+                        maxpeople: 10
                     },
                     {
-                        type: 'preSale',
-                        sendTime: '',
-                        list: []
-                    },
-                    {
-                        type: 'group',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000005',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2,
-                                people: 7,
-                                maxpeople: 10
-                            },
-                            {
-                                id: '00006',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0,
-                                people: 3,
-                                maxpeople: 10
-                            }
-                        ]
+                        id: '00006',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0,
+                        people: 3,
+                        maxpeople: 10
                     }
                 ]
             },
             {
                 id: '000004',
+                type: 0,
                 status: 3,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
                 deliverTime: '7月16号(明天)',
                 product: [
                     {
-                        type: 'normal',
-                        sendTime: '7月16号',
-                        list: [
-                            {
-                                id: '000001',
-                                name: '韩国制造，花洒替代品',
-                                imgUrl: '',
-                                price: 39.2,
-                                oriPrice: 75,
-                                count: 2
-                            },
-                            {
-                                id: '00002',
-                                name: '随便阅读灯',
-                                imgUrl: '',
-                                price: 45.0,
-                                oriPrice: 99,
-                                count: 0
-                            }
-                        ]
+                        id: '000001',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
                     },
                     {
-                        type: 'preSale',
-                        sendTime: '',
-                        list: []
-                    },
-                    {
-                        type: 'group',
-                        sendTime: '',
-                        list: []
+                        id: '00002',
+                        name: '随便阅读灯',
+                        imgUrl: '',
+                        price: 45.0,
+                        oriPrice: 99,
+                        count: 0
                     }
                 ]
             }
@@ -479,14 +363,22 @@ export default class OrderList extends wepy.page {
     methods = {
         chooseType(index, e) {
             this.curType = index;
-            console.log(index);
-            console.log(this.curType);
             this.$apply();
+        },
+
+        toOrderDetail(status, e) {
+            wx.navigateTo({
+                url: '../orderDetail/orderDetail?status=' + status
+            });
         }
     };
 
     events = {};
 
-    onLoad() {}
+    onLoad(options) {
+        var self = this;
+        self.curType = options.index;
+        self.$apply();
+    }
 }
 </script>

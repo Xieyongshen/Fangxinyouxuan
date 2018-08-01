@@ -71,12 +71,106 @@
     }
 }
 
+.orderDetail-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.orderDetail-info {
+    color: #999999;
+}
+
 .orderDetail-majorInfo {
     color: #f5333f;
 }
 
-.orderDetail-item:not(:last-child) {
+.orderDetail-product-group {
+    width: 750rpx;
+    margin-top: 20rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.orderDetail-group-info {
+    width: 690rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    margin: 0 30rpx;
     border-bottom: 1rpx solid #f2f2f2;
+    text {
+        float: right;
+    }
+}
+
+.orderDetail-group-list {
+    width: 690rpx;
+    height: 160rpx;
+    margin: 0 30rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #f2f2f2;
+    white-space: nowrap;
+}
+
+.orderDetail-group-item {
+    display: inline-block;
+}
+
+.orderDetail-group-img {
+    width: 120rpx;
+    height: 120rpx;
+    margin-right: 20rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.orderDetail-group-count {
+    width: 750rpx;
+    height: 90rpx;
+    padding: 15rpx 30rpx;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.orderDetail-group-userAll {
+    width: auto;
+    height: 60rpx;
+    display: inline-block;
+}
+
+.orderDetail-group-user {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.user-null {
+    border: 1rpx solid #cccccc;
+}
+
+.orderDetail-group-userImg {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    background: #fdedeb;
+}
+
+.orderDetail-group-user:not(:first-child) {
+    margin-left: 85rpx;
+}
+
+.orderDetail-group-status {
+    width: 750rpx;
+    height: 90rpx;
+    color: #ffffff;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    text-align: center;
+    padding: 0 30rpx;
+    background: #f5333f;
+    box-sizing: border-box;
 }
 
 .orderDetail-product-list {
@@ -84,6 +178,7 @@
     height: 140rpx;
     padding: 20rpx 0;
     box-sizing: border-box;
+    text-align: center;
 }
 
 .orderDetail-product-img {
@@ -130,10 +225,11 @@
     <view class="container">
         <navBar navTitle="订单详情" isChildPage="y"></navBar>
         <view class="orderDetail-header">
-            <view class="orderDetail-status">{{orderStatus[order.status]}}
+            <view wx:if="{{order.type == 2 && order.status == 3}}" class="orderDetail-status">拼单成功</view>
+            <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
                 <i wx:if="{{order.status > 0}}" class="fa fa-angle-right"></i>
             </view>
-            <view wx:if="{{order.status == 1 || order.status == 3 }}" class="orderDetail-shop">
+            <view wx:if="{{order.type != 2 && order.status != 0 && order.status != 2 }}" class="orderDetail-shop">
                 <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar">
                     <text>{{order.shop.name}}</text>
                     <view class="orderDetail-shop-phone">
@@ -141,17 +237,42 @@
                     </view>
             </view>
         </view>
-        <view class="orderDetail-product">
+        <view wx:if="{{order.type != 2}}" class="orderDetail-product">
             <view class="orderDetail-item">商品信息
-                <text class="orderDetail-majorInfo">{{item.status != 2 ? order.deliverTime : '如未拼单成功自动退款'}}</text>
+                <text class="orderDetail-majorInfo">{{order.deliverTime}}</text>
             </view>
-            <view class="orderDetail-product-list">
+            <view class="orderDetail-product-list" @tap="navToProductList()">
                 <repeat for="{{order.product}}" key="type">
                     <image wx:if="{{index < 5}}" src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-product-img">
                 </repeat>
                 <view class="orderDetail-product-count">共{{order.product.length}}件
                     <i class="fa fa-angle-right"></i>
                 </view>
+            </view>
+        </view>
+        <view wx:else class="orderDetail-product-group">
+            <view class="orderDetail-group-info">商品信息
+                <text class="orderDetail-info">如未拼单成功自动退款</text>
+            </view>
+            <scroll-view class="orderDetail-group-list">
+                <repeat for="{{order.product}}" key="id">
+                    <view class="orderDetail-group-item">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-group-img">
+                    </view>
+                </repeat>
+            </scroll-view>
+            <view class="orderDetail-group-count">
+                <view class="orderDetail-group-userAll">
+                    <repeat for="{{order.group.users}}" key="index">
+                        <view class="orderDetail-group-user {{item.id == '' ? 'user-null' : ''}}">
+                            <image wx:if="{{item.id != ''}}" src="{{item.avatar}}" class="orderDetail-group-userImg">
+                        </view>
+                    </repeat>
+                </view>
+            </view>
+            <view class="orderDetail-group-status">
+                <block wx:if="{{order.status == 2}}">还差{{order.group.users.length - order.group.count}}人拼单成功，分享好友一起拼</block>
+                <block wx:else>拼单成功</block>
             </view>
         </view>
         <view class="orderDetail-pay">
@@ -161,30 +282,48 @@
             <view class="orderDetail-item">红包
                 <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
             </view>
-            <view class="orderDetail-item">满减优惠
+            <view wx:if="{{order.type < 2}}" class="orderDetail-item">满减优惠
                 <text>-￥{{order.discount}}</text>
             </view>
             <view class="orderDetail-item">商品实付
                 <text>￥{{payFinal}}</text>
             </view>
             <view class="orderDetail-item">
-                <view class="orderDetail-btn">{{order.status == 0 ? '立即支付' : '申请退款'}}</view>
+                <view wx:if="{{order.status == 0}}" class="orderDetail-btn">立即支付</view>
+                <view wx:elif="{{order.status == 5}}" class="orderDetail-btn">退款成功</view>
+                <view wx:else class="orderDetail-btn">申请退款</view>
                 <text wx:if="{{order.status == 0}}" class="orderDetail-majorInfo">请在15分（倒计时）内支付</text>
             </view>
         </view>
         <view class="orderDetail-detail">
-            <view class="orderDetail-item">订单号码:
-                <text>{{orderID}}</text>
-            </view>
-            <view class="orderDetail-item">订单时间:
-                <text>{{order.createTime}}</text>
-            </view>
-            <view class="orderDetail-item">支付方式:
-                <text>{{order.pay}}</text>
-            </view>
-            <view class="orderDetail-item">订单备注:
-                <text>{{order.remark}}</text>
-            </view>
+            <block wx:if="{{order.type == 2}}">
+                <view class="orderDetail-item">商品名称:
+                    <text>{{order.product[0].name}}</text>
+                </view>
+                <view class="orderDetail-item">订单号码:
+                    <text>{{orderID}}</text>
+                </view>
+                <view class="orderDetail-item">拼单时间:
+                    <text>{{order.createTime}}</text>
+                </view>
+                <view class="orderDetail-item">拼单须知:
+                    <text>人满发货，人不满退款</text>
+                </view>
+            </block>
+            <block wx:elif="{{order.status != 4}}">
+                <view class="orderDetail-item">订单号码:
+                    <text>{{orderID}}</text>
+                </view>
+                <view class="orderDetail-item">订单时间:
+                    <text>{{order.createTime}}</text>
+                </view>
+                <view class="orderDetail-item">支付方式:
+                    <text>{{order.pay}}</text>
+                </view>
+                <view class="orderDetail-item">订单备注:
+                    <text>{{order.remark}}</text>
+                </view>
+            </block>
         </view>
     </view>
 </template>
@@ -200,8 +339,9 @@ export default class OrderDetail extends wepy.page {
 
     data = {
         orderID: '000001',
-        orderStatus: ['订单待支付', '订单已支付', '拼单还未成功', '订单已签收'],
+        orderStatus: ['订单待支付', '订单已支付', '拼单还未成功', '订单已签收', '申请售后', '申请售后'],
         order: {
+            type: 0,
             status: 0,
             total: 247.6,
             createTime: '2018-06-29 19:43:18',
@@ -214,6 +354,23 @@ export default class OrderDetail extends wepy.page {
                 avatar: '',
                 name: '朴美琴（小区店长）',
                 phone: '12345678900'
+            },
+            group: {
+                count: 2,
+                users: [
+                    {
+                        id: '000001',
+                        avatar: ''
+                    },
+                    {
+                        id: '000002',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    }
+                ]
             },
             product: [
                 {
@@ -280,12 +437,20 @@ export default class OrderDetail extends wepy.page {
         }
     };
 
-    methods = {};
+    methods = {
+        navToProductList(index, events) {
+            wx.navigateTo({
+                url: '../../productList/productList'
+            });
+        }
+    };
 
     events = {};
 
-    onLoad() {
+    onLoad(options) {
         var self = this;
+        self.order.status = options.status;
+        console.log(options.status);
         self.$apply();
     }
 }

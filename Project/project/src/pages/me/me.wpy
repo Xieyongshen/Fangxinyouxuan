@@ -124,36 +124,36 @@
                     <view class="me-userinfo-name">{{userInfo.name}}</view>
             </view>
             <view class="me-order">
-                <view class="me-order-item">
+                <view class="me-order-item" @tap="toOrderList(0)">
                     <i class="fa fa-credit-card" aria-hidden="true"></i>
                     <text>待付款</text>
                 </view>
-                <view class="me-order-item">
+                <view class="me-order-item" @tap="toOrderList(1)">
                     <i class="fa fa-briefcase" aria-hidden="true"></i>
                     <text>待收货</text>
                 </view>
-                <view class="me-order-item">
+                <view class="me-order-item" @tap="toOrderList(2)">
                     <i class="fa fa-users" aria-hidden="true"></i>
                     <text>待成团</text>
                 </view>
-                <view class="me-order-item">
+                <view class="me-order-item" @tap="toOrderList(3)">
                     <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <text>全部订单</text>
                 </view>
             </view>
             <view class="me-manage">
-                <view class="me-manage-item">
+                <navigator url="balance/balance" class="me-manage-item">
                     我的余额
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </view>
+                </navigator>
                 <navigator url="../redPacket/redPacket" class="me-manage-item">
                     我的红包
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </navigator>
-                <view class="me-manage-item">
+                <navigator class="me-manage-item">
                     我的优惠券
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </view>
+                </navigator>
             </view>
         </view>
     </view>
@@ -175,7 +175,14 @@ export default class Me extends wepy.page {
         }
     };
 
-    methods = {};
+    methods = {
+
+        toOrderList(index, e){
+            wx.navigateTo({
+                url: 'orderList/orderList?index=' + index
+            });
+        }
+    };
 
     events = {};
 

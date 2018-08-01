@@ -1,0 +1,154 @@
+<style lang="less">
+.addressChange-content {
+    width: 750rpx;
+    padding-left: 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-top: 1rpx solid #f2f2f2;
+}
+
+.addressChange-item {
+    width: 720rpx;
+    height: 90rpx;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+}
+
+.addressChange-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.addressChange-item-title {
+    width: 120rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    margin-right: 30rpx;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.addressChange-item-input {
+    width: 540rpx;
+    height: 90rpx;
+    font-size: 28rpx;
+    line-height: 90rpx;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.input-picker {
+    height: 90rpx;
+    line-height: 90rpx;
+    .fa {
+        font-size: 35rpx;
+        line-height: 90rpx;
+        float: right;
+    }
+}
+
+.picker-null {
+    color: #999999;
+}
+
+.addressChange-btn {
+    width: 690rpx;
+    height: 88rpx;
+    margin: 30rpx;
+    font-size: 32rpx;
+    line-height: 88rpx;
+    text-align: center;
+    border-radius: 10rpx;
+}
+
+.addressChange-save {
+    color: #ffffff;
+    background: #f5333f;
+}
+
+.addressChange-delete {
+    color: #f5333f;
+    background: #ffffff;
+}
+</style>
+<template>
+    <view class="container">
+        <navBar :navTitle.sync="title" isChildPage="y"></navBar>
+        <form>
+            <view class="addressChange-content">
+                <view class="addressChange-item">
+                    <view class="addressChange-item-title">收货人</view>
+                    <input type="text" value="{{address.name}}" placeholder="姓名" class="addressChange-item-input">
+                </view>
+                <view class="addressChange-item">
+                    <view class="addressChange-item-title">联系电话</view>
+                    <input type="text" value="{{address.phone}}" placeholder="手机或固话" class="addressChange-item-input">
+                </view>
+                <view class="addressChange-item">
+                    <view class="addressChange-item-title">收货地区</view>
+                    <picker mode="region" bindchange="bindRegionChange" value="{{address.region}}" class="addressChange-item-input">
+                        <view class="input-picker {{address.region[0] == '' ? 'picker-null' : ''}}">
+                            <block wx:if="{{address.region[0] != ''}}">{{address.region[0]}} {{address.region[1]}} {{address.region[2]}}</block>
+                            <block wx:else>请选择您的收货地区</block>
+                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        </view>
+                    </picker>
+                </view>
+                <view class="addressChange-item">
+                    <view class="addressChange-item-title">详细地址</view>
+                    <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input">
+                </view>
+                <view class="addressChange-item">
+                    <view class="addressChange-item-title">邮政编码</view>
+                    <input type="text" value="{{address.postalCode}}" placeholder="邮政编码（选填）" class="addressChange-item-input">
+                </view>
+            </view>
+            <button class="addressChange-btn addressChange-save">保存</button>
+            <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete">删除收货地址</view>
+        </form>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class Coupon extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {
+        type: 1,
+        title: '编辑收货地址',
+        addressID: '000001',
+        address: {
+            name: '墨小刀',
+            phone: '13000000000',
+            region: ['北京市', '北京市', '朝阳区'],
+            desc: '北京市朝阳区宇宙火星村166号',
+            postalCode: ''
+        }
+    };
+
+    methods = {
+        bindRegionChange(e) {
+            this.address.region = e.detail.value;
+            this.$apply();
+        }
+    };
+
+    events = {};
+
+    onLoad(options) {
+        var self = this;
+        self.type = options.type;
+        if(self.type == 0){
+            self.title = '添加收货地址'
+        }else{
+            self.title = '编辑收货地址'
+        }
+        self.$apply();
+    }
+}
+</script>

@@ -12,25 +12,37 @@
 .index-shop {
     height: 75rpx;
     display: inline-block;
-    .fa {
-        line-height: 75rpx;
-    }
+}
+
+.index-icon-position {
+    width: 20rpx;
+    height: 30rpx;
+    margin: 22rpx 0;
+    vertical-align: top;
 }
 
 .shop-name {
     font-size: 26rpx;
     line-height: 75rpx;
-    margin: 0 20rpx;
+    margin-left: 20rpx;
+    margin-right: 15rpx;
+    display: inline-block;
+    vertical-align: top;
 }
 
-.index-search {
-    width: 50rpx;
-    height: 75rpx;
-    text-align: center;
+.index-icon-down {
+    width: 30rpx;
+    height: 30rpx;
+    margin-top: 25rpx;
+    vertical-align: top;
+}
+
+.index-icon-search {
+    width: 30rpx;
+    height: 30rpx;
+    margin-top: 25rpx;
+    vertical-align: top;
     float: right;
-    .fa {
-        line-height: 75rpx;
-    }
 }
 
 .banner-top {
@@ -54,19 +66,17 @@
 
 .category-item {
     width: 100rpx;
+    text-align: center;
     display: inline-block;
     .category-img {
-        width: 100rpx;
-        height: 100rpx;
+        width: 72rpx;
+        height: 62rpx;
         margin-bottom: 15rpx;
-        border: 1px solid #e9403e;
-        border-radius: 50%;
         box-sizing: border-box;
     }
     .category-title {
         font-size: 23rpx;
         line-height: 30rpx;
-        text-align: center;
         display: block;
     }
 }
@@ -90,22 +100,27 @@
 }
 
 .today-time {
-    color: #6a6461;
+    width: 690rpx;
+    height: 80rpx;
+    color: #ffffff;
     font-size: 26rpx;
     line-height: 80rpx;
     letter-spacing: 5rpx;
     text-align: center;
     margin-top: 20rpx;
     margin-bottom: 10rpx;
-    background: #fdedeb;
+    background: #f5333f;
     border-radius: 10rpx;
     text {
-        color: #f5333f;
-        font-size: 36rpx;
-        font-weight: 600;
         line-height: 80rpx;
         display: inline-block;
+        vertical-align: top;
     }
+}
+
+.today-time-num {
+    font-size: 36rpx;
+    font-weight: 600;
 }
 
 .today-item,
@@ -168,7 +183,7 @@
 
 .today-item-remain {
     width: 250rpx;
-    border: 1px solid #fceee9;
+    border: 1px solid #fdd6d9;
     border-radius: 15px;
     overflow: hidden;
     position: absolute;
@@ -199,9 +214,7 @@
     }
 }
 
-.today-item-btn,
-.hot-item-btn,
-.selected-item-btn {
+.index-icon-cart {
     width: 60rpx;
     height: 60rpx;
     line-height: 60rpx;
@@ -268,13 +281,11 @@
         <view class="index-content">
             <view class="index-header">
                 <view class="index-shop">
-                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <text class="shop-name">{{shopChoose}}</text>
-                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    <image src="/icons/position.png" class="index-icon-position">
+                        <text class="shop-name">{{shopChoose}}</text>
+                        <image src="/icons/down.png" class="index-icon-down">
                 </view>
-                <view class="index-search">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </view>
+                <image src="/icons/search.png" class="index-icon-search">
             </view>
             <view class="index-banner">
                 <image class="banner-top">
@@ -284,15 +295,16 @@
             <view class="index-category">
                 <repeat for="{{category}}" key="index">
                     <view class="category-item" @tap="navToCategory({{item.title}})">
-                        <image class="category-img">
+                        <image src="{{item.imgUrl}}" class="category-img">
                             <text class="category-title">{{item.title}}</text>
                     </view>
                 </repeat>
             </view>
             <view class="index-today">
                 <view class="today-title">今日热卖</view>
-                <view class="today-time">距离活动结束还剩：
-                    <text>{{todayTime}}</text>
+                <view class="today-time">
+                    <text>距离活动结束还剩：</text>
+                    <text class="today-time-num">{{todayTime}}</text>
                 </view>
                 <repeat for="{{today}}" key="id">
                     <view class="today-item" @tap="navToProduct({{item.id}})">
@@ -301,15 +313,13 @@
                                 <view class="today-item-name">{{item.name}}</view>
                                 <view class="today-item-desc">{{item.desc}}</view>
                                 <view wx:if="{{item.isLimited == false}}" class="today-item-remain">
-                                    <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#f9cac9" backgroundColor="#fceee9" />
+                                    <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
                                     <text>还剩{{item.remain}}份</text>
                                 </view>
                                 <view class="today-item-price">限时价
                                     <text>¥{{item.price}}</text>
                                 </view>
-                                <view class="today-item-btn">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                </view>
+                                <image src="/icons/cart-recommend.png" class="index-icon-cart">
                             </view>
                     </view>
                 </repeat>
@@ -328,9 +338,7 @@
                                         ¥{{item.curPrice}}
                                         <text>{{item.notice}}</text>
                                     </view>
-                                    <view class="hot-item-btn">
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                    </view>
+                                    <image src="/icons/cart-recommend.png" class="index-icon-cart">
                                 </view>
                         </view>
                     </repeat>
@@ -349,9 +357,7 @@
                                             ¥{{item.curPrice}}
                                             <text>{{item.notice}}</text>
                                         </view>
-                                        <view class="selected-item-btn">
-                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                        </view>
+                                        <image src="/icons/cart-recommend.png" class="index-icon-cart">
                                     </view>
                             </view>
                         </repeat>
@@ -374,19 +380,24 @@ export default class Index extends wepy.page {
         shopChoose: '春树馆街小区',
         category: [
             {
-                title: '美味餐桌'
+                title: '美味餐桌',
+                imgUrl: '/icons/index/index-table.png'
             },
             {
-                title: '宝妈必备'
+                title: '宝妈必备',
+                imgUrl: '/icons/index/index-mother.png'
             },
             {
-                title: '居家优选'
+                title: '居家优选',
+                imgUrl: '/icons/index/index-home.png'
             },
             {
-                title: '健康关怀'
+                title: '健康关怀',
+                imgUrl: '/icons/index/index-health.png'
             },
             {
-                title: '其他'
+                title: '其他',
+                imgUrl: '/icons/index/index-other.png'
             }
         ],
         todayTime: '01:23:09',

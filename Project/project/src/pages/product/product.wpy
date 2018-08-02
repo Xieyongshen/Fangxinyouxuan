@@ -32,10 +32,31 @@ page {
 
 .product-intro {
     width: 750rpx;
-    height: 235rpx;
     padding: 15rpx 25rpx 30rpx 25rpx;
     box-sizing: border-box;
     background: #ffffff;
+    position: relative;
+}
+
+.product-intro-share {
+    height: 30rpx;
+    position: absolute;
+    right: 30rpx;
+    top: 25rpx;
+    text {
+        height: 30rpx;
+        font-size: 26rpx;
+        line-height: 30rpx;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.product-icon-share {
+    width: 30rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
+        vertical-align: top;
 }
 
 .product-intro-name {
@@ -47,13 +68,13 @@ page {
     color: #808080;
     font-size: 26rpx;
     line-height: 35rpx;
+    margin-bottom: 30rpx;
 }
 
 .product-intro-price {
     color: #f5333f;
     font-size: 26rpx;
     line-height: 35rpx;
-    margin-top: 30rpx;
 }
 
 .product-intro-label {
@@ -65,7 +86,7 @@ page {
     text {
         width: 100rpx;
         height: 25rpx;
-        margin: 10rpx 0;
+        margin: 10rpx 0 10rpx 10rpx;
         color: #ffffff;
         font-size: 22rpx;
         line-height: 25rpx;
@@ -82,6 +103,99 @@ page {
     margin-left: 15rpx;
     vertical-align: top;
     display: inline-block;
+}
+
+.product-intro-preSale {
+    font-size: 22rpx;
+    line-height: 30rpx;
+    margin-top: 25rpx;
+}
+
+.preSale-label {
+    height: 30rpx;
+    margin-right: 40rpx;
+    display: inline-block;
+    text {
+        height: 30rpx;
+        vertical-align: top;
+        display: inline-block;
+    }
+}
+
+.preSale-mark {
+    width: 8rpx;
+    height: 8rpx;
+    margin: 11rpx 10rpx 11rpx 0;
+    border-radius: 50%;
+    background: #000000;
+    display: inline-block;
+}
+
+.product-group {
+    width: 750rpx;
+    margin-top: 20rpx;
+    padding-left: 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.product-group-title {
+    width: 720rpx;
+    height: 90rpx;
+    font-size: 26rpx;
+    line-height: 90rpx;
+    padding-right: 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.product-group-item {
+    width: 720rpx;
+    height: 100rpx;
+    padding: 20rpx 30rpx 20rpx 0;
+    box-sizing: border-box;
+    border-top: 1rpx solid #e3e3e3;
+}
+
+.product-group-avatar {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    background: #fdedeb;
+}
+
+.product-group-content {
+    width: 510rpx;
+    height: 60rpx;
+    margin-left: 20rpx;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.product-group-head {
+    height: 35rpx;
+    font-size: 26rpx;
+    line-height: 35rpx;
+}
+
+.product-group-time {
+    height: 25rpx;
+    color: #999999;
+    font-size: 20rpx;
+    line-height: 25rpx;
+}
+
+.product-group-btn {
+    width: 100rpx;
+    height: 40rpx;
+    margin: 10rpx 0;
+    color: #ffffff;
+    font-size: 24rpx;
+    line-height: 40rpx;
+    text-align: center;
+    border-radius: 20rpx;
+    background: #f5333f;
+    float: right;
 }
 
 .product-recommend {
@@ -140,14 +254,9 @@ page {
     line-height: 35rpx;
 }
 
-.product-recommend-btn {
+.product-recommend-cart {
     width: 45rpx;
     height: 45rpx;
-    color: #ffffff;
-    font-size: 26rpx;
-    line-height: 45rpx;
-    text-align: center;
-    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 0;
@@ -188,12 +297,34 @@ page {
     z-index: 99;
 }
 
+.product-empty {
+    width: 750rpx;
+    height: 90rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 90rpx;
+    text-align: center;
+    background: #f5333f;
+}
+
+.product-btn-separate,
+.product-btn-group {
+    width: 375rpx;
+    height: 90rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 90rpx;
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+}
+
 .product-btn-shoppingCart {
     width: 150rpx;
     height: 90rpx;
     background: #ffffff;
     text-align: center;
-    padding-top: 5rpx;
+    padding-top: 10rpx;
     box-sizing: border-box;
     display: inline-block;
     text {
@@ -201,6 +332,11 @@ page {
         line-height: 30rpx;
         display: block;
     }
+}
+
+.product-btn-cart {
+    width: 45rpx;
+    height: 40rpx;
 }
 
 .product-btn-addToCart,
@@ -215,10 +351,12 @@ page {
     display: inline-block;
 }
 
+.product-btn-separate,
 .product-btn-addToCart {
     background: #ff6670;
 }
 
+.product-btn-group,
 .product-btn-purchase {
     background: #f5333f;
 }
@@ -237,28 +375,48 @@ page {
             <view class="product-image-index">{{curImage + 1}}/{{product.image.length}}</view>
         </view>
         <view class="product-intro">
+            <view class="product-intro-share">
+                <image src="/icons/share.png" class="product-icon-share">
+                    <text>分享</text>
+            </view>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
-            <view class="product-intro-price">￥{{product.price}}</view>
-            <view class="product-intro-label">￥{{product.labelPrice}}
-                <text>{{product.label}}</text>
-            </view>
+            <block wx:if="{{product.type == 0}}">
+                <view class="product-intro-price">￥{{product.price}}</view>
+                <view class="product-intro-label">￥{{product.label.price}}
+                    <text>{{product.label.name}}</text>
+                </view>
+            </block>
+            <block wx:else>
+                <view class="product-intro-label">￥{{product.price}}</view>
+            </block>
             <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
-        </view>
-        <view class="product-recommend">
-            <view class="product-recommend-title">推荐搭配商品</view>
-            <scroll-view scroll-x="true" class="product-recommend-content">
-                <repeat for="{{product.recommend}}" key="id">
-                    <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="product-recommend-img">
-                            <view class="product-recommend-name">{{item.name}}</view>
-                            <view class="product-recommend-price">￥{{item.price}}</view>
-                            <view class="product-recommend-btn">
-                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                            </view>
+            <view wx:if="{{product.type == 1}}" class="product-intro-preSale">
+                <repeat for="{{product.preSale.label}}" key="index">
+                    <view class="preSale-label">
+                        <view class="preSale-mark"></view>
+                        <text>{{item}}</text>
                     </view>
                 </repeat>
-            </scroll-view>
+                <view class="preSale-label">
+                    <view class="preSale-mark"></view>
+                    <text wx:if="{{product.preSale.reachTime > 0}}">预计到货{{product.preSale.reachTime}}天</text>
+                    <text wx:else>已到货</text>
+                </view>
+            </view>
+        </view>
+        <view wx:if="{{product.type == 2}}" class="product-group">
+            <view class="product-group-title">已有{{product.group.list.length}}人在开团，可直接参与</view>
+            <repeat for="{{product.group.list}}" key="index">
+                <view class="product-group-item">
+                    <image src="{{item.head.avatar}}" class="product-group-avatar">
+                        <view class="product-group-content">
+                            <view class="product-group-head">{{item.head.name}}</view>
+                            <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
+                        </view>
+                        <view class="product-group-btn">去参团</view>
+                </view>
+            </repeat>
         </view>
         <view class="product-detail">
             <view class="product-detail-title">规格</view>
@@ -269,13 +427,35 @@ page {
                 </repeat>
             </view>
         </view>
+        <view class="product-recommend">
+            <view class="product-recommend-title">推荐搭配商品</view>
+            <scroll-view scroll-x="true" class="product-recommend-content">
+                <repeat for="{{product.recommend}}" key="id">
+                    <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
+                        <image src="{{item.imgUrl}}" class="product-recommend-img">
+                            <view class="product-recommend-name">{{item.name}}</view>
+                            <view class="product-recommend-price">￥{{item.price}}</view>
+                            <image src="/icons/cart-recommend.png" class="product-recommend-cart">
+                    </view>
+                </repeat>
+            </scroll-view>
+        </view>
         <view class="product-btn">
-            <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                <text>购物车</text>
-            </view>
-            <view class="product-btn-addToCart">加入购物车</view>
-            <navigator url="../order/order" class="product-btn-purchase">立即购买</navigator>
+            <block wx:if="{{product.remain == 0}}">
+                <view class="product-empty">已售罄</view>
+            </block>
+            <block wx:elif="{{product.type == 2}}">
+                <view class="product-btn-separate">单独购买 ￥{{product.price}}</view>
+                <view class="product-btn-group">拼单购 ￥{{product.group.price}}</view>
+            </block>
+            <block wx:else>
+                <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
+                    <image src="/icons/shoppingCart.png" class="product-btn-cart">
+                        <text>购物车</text>
+                </view>
+                <view class="product-btn-addToCart">加入购物车</view>
+                <navigator url="../order/order" class="product-btn-purchase">立即购买</navigator>
+            </block>
         </view>
     </view>
 </template>
@@ -294,12 +474,50 @@ export default class Product extends wepy.page {
         productID: '',
         product: {
             id: '000001',
+            type: 0,
             name: '日式纯棉色织条纹围裙',
             desc: '100%全棉，双层加厚',
             price: 49,
-            labelPrice: 39.2,
-            label: '会员专享',
+            label: {
+                name: '会员专享',
+                price: 39.2
+            },
             soldCount: 10785,
+            remain: 10,
+            preSale: {
+                reachTime: 1,
+                label: ['国贸店']
+            },
+            group: {
+                price: 9.9,
+                count: 3,
+                list: [
+                    {
+                        head: {
+                            name: '小鱼',
+                            avatar: ''
+                        },
+                        count: 2,
+                        restTime: '5:41:43'
+                    },
+                    {
+                        head: {
+                            name: '小鱼',
+                            avatar: ''
+                        },
+                        count: 1,
+                        restTime: '5:41:43'
+                    },
+                    {
+                        head: {
+                            name: '小鱼',
+                            avatar: ''
+                        },
+                        count: 2,
+                        restTime: '5:41:43'
+                    }
+                ]
+            },
             detail: {
                 text: '重量：\n\n包装：\n\n保质期：\n\n贮存方法：\n',
                 imgList: [
@@ -367,14 +585,14 @@ export default class Product extends wepy.page {
             this.curImage = e.detail.current;
             this.$apply();
         },
-        
+
         navToProduct(product, event) {
             wx.navigateTo({
                 url: '/pages/product/product?id=' + product
             });
         },
 
-        navToShoppingCart(){
+        navToShoppingCart() {
             wx.switchTab({
                 url: '/pages/shoppingCart/shoppingCart?isChild=y'
             });

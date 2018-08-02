@@ -2358,6 +2358,7 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
+            'pages/product/product',
             'pages/index/index',
             'pages/index/category/category',
             'pages/coupon/coupon',
@@ -2368,7 +2369,6 @@ export default class extends wepy.app {
             'pages/me/orderDetail/orderDetail',
             'pages/me/address/address',
             'pages/me/address/addressChange/addressChange',
-            'pages/product/product',
             'pages/order/order',
             'pages/productList/productList',
             'pages/redPacket/redPacket'
@@ -2385,26 +2385,26 @@ export default class extends wepy.app {
                 {
                     pagePath: 'pages/index/index',
                     text: '首页',
-                    iconPath: 'icons/tabbar/tabbar-home.png',
-                    selectedIconPath: 'icons/tabbar/tabbar-home-selected.png'
+                    iconPath: 'icons/tabbar/home.png',
+                    selectedIconPath: 'icons/tabbar/home-selected.png'
                 },
                 {
                     pagePath: 'pages/coupon/coupon',
                     text: '优惠券',
-                    iconPath: 'icons/tabbar/tabbar-coupon.png',
-                    selectedIconPath: 'icons/tabbar/tabbar-coupon-selected.png'
+                    iconPath: 'icons/tabbar/coupon.png',
+                    selectedIconPath: 'icons/tabbar/coupon-selected.png'
                 },
                 {
                     pagePath: 'pages/shoppingCart/shoppingCart',
                     text: '购物车',
-                    iconPath: 'icons/tabbar/tabbar-shoppingCart.png',
-                    selectedIconPath: 'icons/tabbar/tabbar-shoppingCart-selected.png'
+                    iconPath: 'icons/tabbar/shoppingCart.png',
+                    selectedIconPath: 'icons/tabbar/shoppingCart-selected.png'
                 },
                 {
                     pagePath: 'pages/me/me',
                     text: '我的',
-                    iconPath: 'icons/tabbar/tabbar-user.png',
-                    selectedIconPath: 'icons/tabbar/tabbar-user-selected.png'
+                    iconPath: 'icons/tabbar/user.png',
+                    selectedIconPath: 'icons/tabbar/user-selected.png'
                 }
             ]
         }

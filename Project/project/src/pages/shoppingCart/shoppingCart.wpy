@@ -2,6 +2,13 @@
 page {
     padding-bottom: 110rpx;
 }
+.shoppingCart-header {
+    width: 750rpx;
+    height: 5rpx;
+    background: #ffffff;
+    position: absolute;
+    top: 62px;
+}
 
 .shoppingCart-shop {
     width: 750rpx;
@@ -10,10 +17,13 @@ page {
     line-height: 80rpx;
     text-align: center;
     background: #ffffff;
-    .fa {
-        line-height: 80rpx;
-        margin-right: 20rpx;
-    }
+}
+
+.shoppingCart-icon-position{
+    width: 20rpx;
+    height: 30rpx;
+    margin: 25rpx 15rpx 25rpx 0;
+    vertical-align: top;
 }
 
 .shoppingCart-block {
@@ -56,29 +66,17 @@ page {
         vertical-align: top;
         display: inline-block;
     }
-    .select-choose {
+    .shoppingCart-icon-select {
         margin: 22rpx 15rpx 22rpx 0;
     }
 }
 
-.select-choose {
+.shoppingCart-icon-select {
     width: 45rpx;
     height: 45rpx;
     text-align: center;
-    line-height: 45rpx;
-    margin-right: 10rpx;
     border-radius: 50%;
     display: inline-block;
-}
-
-.select-confirm {
-    color: #ffffff;
-    background: #f5333f;
-}
-
-.select-cancel {
-    box-sizing: border-box;
-    border: 1rpx solid #f5333f;
 }
 
 .shoppingCart-product-tip {
@@ -115,7 +113,7 @@ page {
     height: 225rpx;
     padding: 30rpx 30rpx 30rpx 0;
     box-sizing: border-box;
-    .select-choose {
+    .shoppingCart-icon-select {
         margin: 60rpx 0;
         vertical-align: top;
     }
@@ -303,7 +301,7 @@ page {
         vertical-align: top;
         display: inline-block;
     }
-    .select-choose {
+    .shoppingCart-icon-select {
         margin: 20rpx 10rpx 20rpx 0;
     }
 }
@@ -345,96 +343,91 @@ page {
 <template>
     <view class="container">
         <navBar navTitle="放心优选"></navBar>
-        <view class="shoppingCart-shop">
-            <i class="fa fa-map-marker" aria-hidden="true"></i>
-            <text class="shop-name">{{shopChoose}}</text>
-        </view>
-        <view class="shoppingCart-block shoppingCart-product">
-            <view class="shoppingCart-item shoppingCart-product-manage">
-                <view class="shoppingCart-product-selectAll">
-                    <view class="select-choose {{chooseAll == true?'select-confirm':'select-cancel'}}" @tap="chooseAll">
-                        <i wx:if="{{chooseAll == true}}" class="fa fa-check" aria-hidden="true"></i>
+        <image src="/icons/address-bg.png" class="shoppingCart-header">
+            <view class="shoppingCart-shop">
+                    <image src="/icons/position.png" class="shoppingCart-icon-position">
+                <text class="shop-name">{{shopChoose}}</text>
+            </view>
+            <view class="shoppingCart-block shoppingCart-product">
+                <view class="shoppingCart-item shoppingCart-product-manage">
+                    <view class="shoppingCart-product-selectAll">
+                        <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll">
+                            <text>全选</text>
                     </view>
-                    <text>全选</text>
+                    <view class="shoppingCart-product-tip">
+                        <text>满{{discount.count}}减{{discount.minus}}</text>
+                        <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
+                        <i class="fa fa-angle-right"></i>
+                    </view>
                 </view>
-                <view class="shoppingCart-product-tip">
-                    <text>满{{discount.count}}减{{discount.minus}}</text>
-                    <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
-                    <i class="fa fa-angle-right"></i>
+                <view class="shoppingCart-product-list">
+                    <repeat for="{{product}}" key="id">
+                        <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
+                            <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})">
+                                <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image">
+                                    <view class="product-item-content">
+                                        <view class="product-item-name">{{item.name}}</view>
+                                        <view class="product-item-price">￥{{item.price}}
+                                            <text>￥{{item.oriPrice}}</text>
+                                        </view>
+                                        <view class="product-item-count">
+                                            <view wx:if="{{item.count > 0}}" class="count-minus" @tap.stop="countMinus({{index}})">-</view>
+                                            <text>{{item.count}}</text>
+                                            <view class="count-plus" @tap.stop="countPlus({{index}})">+</view>
+                                        </view>
+                                    </view>
+                        </view>
+                    </repeat>
+                </view>
+                <view class="shoppingCart-product-subtotal">
+                    <text>小计：</text>￥{{subtotal}}
                 </view>
             </view>
-            <view class="shoppingCart-product-list">
-                <repeat for="{{product}}" key="id">
-                    <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
-                        <view class="select-choose {{isChoosen[index] == true?'select-confirm':'select-cancel'}}" @tap.stop="chooseProduct({{index}})">
-                            <i wx:if="{{isChoosen[index] == true}}" class="fa fa-check" aria-hidden="true"></i>
-                        </view>
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image">
-                            <view class="product-item-content">
-                                <view class="product-item-name">{{item.name}}</view>
-                                <view class="product-item-price">￥{{item.price}}
-                                    <text>￥{{item.oriPrice}}</text>
-                                </view>
-                                <view class="product-item-count">
-                                    <view wx:if="{{item.count > 0}}" class="count-minus" @tap.stop="countMinus({{index}})">-</view>
-                                    <text>{{item.count}}</text>
-                                    <view class="count-plus" @tap.stop="countPlus({{index}})">+</view>
-                                </view>
+            <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
+                <view class="shoppingCart-item">
+                    红包
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    <text class="{{redPacket.count == 0 ? 'status-false' : 'status-true'}}">
+                        <block wx:if="{{redPacket.count == 0}}">无可使用红包</block>
+                        <block wx:else>{{redPacket.count}}元</block>
+                    </text>
+                </view>
+            </navigator>
+            <view class="shoppingCart-block shoppingCart-result">
+                <view class="shoppingCart-item shoppingCart-result-total">商品实付
+                    <text>￥{{total}}</text>
+                </view>
+                <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    <text>{{deliver.name}}</text>
+                </view>
+            </view>
+            <view class="shoppingCart-block shoppingCart-recommend">
+                <view class="shoppingCart-recommend-title">推荐商品</view>
+                <repeat for="{{recommend}}" key="id">
+                    <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img">
+                            <view class="shoppingCart-recommend-name">{{item.name}}</view>
+                            <view class="shoppingCart-recommend-price">￥{{item.price}}</view>
+                            <view class="shoppingCart-recommend-btn">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             </view>
                     </view>
                 </repeat>
             </view>
-            <view class="shoppingCart-product-subtotal">
-                <text>小计：</text>￥{{subtotal}}
-            </view>
-        </view>
-        <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
-            <view class="shoppingCart-item">
-                红包
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-                <text class="{{redPacket.count == 0 ? 'status-false' : 'status-true'}}">
-                    <block wx:if="{{redPacket.count == 0}}">无可使用红包</block>
-                    <block wx:else>{{redPacket.count}}元</block>
-                </text>
-            </view>
-        </navigator>
-        <view class="shoppingCart-block shoppingCart-result">
-            <view class="shoppingCart-item shoppingCart-result-total">商品实付
-                <text>￥{{total}}</text>
-            </view>
-            <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
-                <i class="fa fa-angle-right" aria-hidden="true"></i>
-                <text>{{deliver.name}}</text>
-            </view>
-        </view>
-        <view class="shoppingCart-block shoppingCart-recommend">
-            <view class="shoppingCart-recommend-title">推荐商品</view>
-            <repeat for="{{recommend}}" key="id">
-                <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img">
-                        <view class="shoppingCart-recommend-name">{{item.name}}</view>
-                        <view class="shoppingCart-recommend-price">￥{{item.price}}</view>
-                        <view class="shoppingCart-recommend-btn">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        </view>
+            <view class="shoppingCart-settle">
+                <view class="shoppingCart-settle-selectAll">
+                    <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll">
+                        <text>全选</text>
                 </view>
-            </repeat>
-        </view>
-        <view class="shoppingCart-settle">
-            <view class="shoppingCart-settle-selectAll">
-                <view class="select-choose {{chooseAll == true?'select-confirm':'select-cancel'}}" @tap="chooseAll">
-                    <i wx:if="{{chooseAll == true}}" class="fa fa-check" aria-hidden="true"></i>
+                <view class="shoppingCart-settle-price">
+                    <view class="price-total">合计:
+                        <text>￥{{priceFinal}}</text>
+                    </view>
+                    <view class="price-freight">运费￥{{deliver.freight}}</view>
                 </view>
-                <text>全选</text>
+                <navigator url="../order/order" class="shoppingCart-settle-btn">去结算</navigator>
             </view>
-            <view class="shoppingCart-settle-price">
-                <view class="price-total">合计:
-                    <text>￥{{priceFinal}}</text>
-                </view>
-                <view class="price-freight">运费￥{{deliver.freight}}</view>
-            </view>
-            <navigator url="../order/order" class="shoppingCart-settle-btn">去结算</navigator>
-        </view>
     </view>
 </template>
 

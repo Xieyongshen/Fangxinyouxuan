@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from shop import views as fangxin_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/token', fangxin_views.create_token, name='token'),
+    path('login', fangxin_views.login),
 ]

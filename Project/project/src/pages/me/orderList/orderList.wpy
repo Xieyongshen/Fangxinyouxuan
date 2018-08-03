@@ -117,11 +117,6 @@
 .status-icon {
     width: 45rpx;
     height: 45rpx;
-    color: #ffffff;
-    text-align: center;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    background: #f5333f;
     border-radius: 50%;
     margin: 0 15rpx;
 }
@@ -129,7 +124,6 @@
 .status-text {
     font-size: 24rpx;
     line-height: 25rpx;
-    margin-top: 10rpx;
 }
 
 .orderList-item-total {
@@ -196,27 +190,19 @@
                     </scroll-view>
                     <view class="orderList-item-status">
                         <view wx:if="{{item.status == 0}}" class="status-label">
-                            <view class="status-icon">
-                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                            </view>
+                            <image src="/icons/pay.png" class="status-icon">
                             <view class="status-text">未支付</view>
                         </view>
                         <view wx:if="{{item.status > 0}}" class="status-label">
-                            <view class="status-icon">
-                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                            </view>
+                            <image src="/icons/pay.png" class="status-icon">
                             <view class="status-text">已支付</view>
                         </view>
                         <view wx:if="{{item.status > 0 && item.status != 2 }}" class="status-label">
-                            <view class="status-icon">
-                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                            </view>
+                            <image src="/icons/deliver.png" class="status-icon">
                             <view class="status-text">配送中</view>
                         </view>
                         <view wx:if="{{item.status > 2}}" class="status-label">
-                            <view class="status-icon">
-                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                            </view>
+                            <image src="/icons/received.png" class="status-icon">
                             <view class="status-text">已签收</view>
                         </view>
                         <view class="orderList-item-total">￥{{item.total}}</view>

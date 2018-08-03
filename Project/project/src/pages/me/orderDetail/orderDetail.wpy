@@ -203,6 +203,12 @@
     }
 }
 
+.orderDetail-redPacket-icon{
+    width: 25rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
+}
+
 .orderDetail-btn {
     width: 144rpx;
     height: 62rpx;
@@ -279,8 +285,10 @@
             <view class="orderDetail-item">商品总价
                 <text>￥{{order.total}}</text>
             </view>
-            <view class="orderDetail-item">红包
-                <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
+            <view class="orderDetail-item">
+                <image src="/icons/redPacket.png" class="orderDetail-redPacket-icon">
+                    红包
+                    <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
             </view>
             <view wx:if="{{order.type < 2}}" class="orderDetail-item">满减优惠
                 <text>-￥{{order.discount}}</text>
@@ -339,7 +347,14 @@ export default class OrderDetail extends wepy.page {
 
     data = {
         orderID: '000001',
-        orderStatus: ['订单待支付', '订单已支付', '拼单还未成功', '订单已签收', '申请售后', '申请售后'],
+        orderStatus: [
+            '订单待支付',
+            '订单已支付',
+            '拼单还未成功',
+            '订单已签收',
+            '申请售后',
+            '申请售后'
+        ],
         order: {
             type: 0,
             status: 0,

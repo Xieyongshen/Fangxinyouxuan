@@ -22,6 +22,14 @@ page{
     width: 690rpx;
     height: 190rpx;
     margin: 0 30rpx 20rpx 30rpx;
+    position: relative;
+}
+
+.redPacket-bg{
+    width: 690rpx;
+    height: 190rpx;
+    position: absolute;
+    z-index: -1;
 }
 
 .redPacket-item-count {
@@ -31,7 +39,6 @@ page{
     font-size: 30rpx;
     line-height: 70rpx;
     padding: 60rpx 0 60rpx 50rpx;
-    background: #ffffff;
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
@@ -47,7 +54,6 @@ page{
     font-size: 22rpx;
     line-height: 30rpx;
     padding: 50rpx 0 50rpx 50rpx;
-    background: #fafafa;
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
@@ -62,18 +68,12 @@ page{
     letter-spacing: 2rpx;
     text-align: center;
     writing-mode: vertical-rl;
-    background: #f5333f;
     display: inline-block;
     vertical-align: top;
 }
 
-.redPacket-overdue {
-    .redPacket-item-count, .redPacket-item-content {
+.redPacket-overdue .redPacket-item-count, .redPacket-overdue .redPacket-item-content {
         color: #cccccc;
-    }
-    .redPacket-item-use {
-        background: #cccccc;
-    }
 }
 
 .redPacket-more{
@@ -148,10 +148,11 @@ page{
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="redPacket-content">
             <view wx:if="{{tipCount > 0}}" class="redPacket-tip">
-                您有<text>{{tipCount}}</text>个红包将过期
+                您有<text>{{tipCount}}</text>个红包已将过期
             </view>
             <repeat for="{{redPacket}}" key="id">
                 <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
+                <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg">
                     <view class="redPacket-item-count">￥
                         <text>{{item.count}}</text>
                     </view>

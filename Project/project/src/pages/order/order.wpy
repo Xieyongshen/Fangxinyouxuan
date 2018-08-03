@@ -140,6 +140,12 @@ page{
     float: right;
 }
 
+.order-redPacket-icon{
+    width: 25rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
+}
+
 .status-false {
     color: #bfbfbf;
 }
@@ -216,6 +222,7 @@ page{
                 <text>￥{{subtotal}}</text>
             </view>
             <view class="order-item order-total-redPacket" @tap="navToRedPacket()">
+                        <image src="/icons/redPacket.png" class="order-redPacket-icon">
                 红包
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
                 <text class="{{redPacket.count == 0 ? 'status-false' : 'status-true'}}">

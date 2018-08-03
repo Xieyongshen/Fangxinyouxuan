@@ -2358,10 +2358,10 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
+            'pages/coupon/coupon',
             'pages/me/orderList/orderList',
             'pages/index/index',
             'pages/index/category/category',
-            'pages/coupon/coupon',
             'pages/shoppingCart/shoppingCart',
             'pages/me/me',
             'pages/me/balance/balance',

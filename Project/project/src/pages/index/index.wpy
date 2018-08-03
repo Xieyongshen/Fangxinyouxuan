@@ -138,8 +138,8 @@
 .today-item-img,
 .hot-item-img,
 .selected-item-img {
-    width: 215rpx;
-    height: 215rpx;
+    width: 220rpx;
+    height: 220rpx;
     margin-right: 30rpx;
     border: 1rpx solid #f5ebe4;
     border-radius: 10rpx;
@@ -151,8 +151,8 @@
 .today-item-content,
 .hot-item-content,
 .selected-item-content {
-    width: 435rpx;
-    height: 215rpx;
+    width: 430rpx;
+    height: 220rpx;
     vertical-align: top;
     display: inline-block;
     position: relative;
@@ -161,7 +161,7 @@
 .today-item-name,
 .hot-item-name,
 .selected-item-name {
-    width: 435rpx;
+    width: 430rpx;
     font-size: 30rpx;
     line-height: 45rpx;
     overflow: hidden;
@@ -172,7 +172,7 @@
 .today-item-desc,
 .hot-item-desc,
 .selected-item-desc {
-    width: 435rpx;
+    width: 430rpx;
     color: #999999;
     font-size: 24rpx;
     line-height: 45rpx;

@@ -281,21 +281,21 @@
         <view class="index-content">
             <view class="index-header">
                 <view class="index-shop">
-                    <image src="/icons/position.png" class="index-icon-position">
+                    <image src="/icons/position.png" class="index-icon-position" />
                         <text class="shop-name">{{shopChoose}}</text>
-                        <image src="/icons/down.png" class="index-icon-down">
+                        <image src="/icons/down.png" class="index-icon-down" />
                 </view>
-                <image src="/icons/search.png" class="index-icon-search">
+                <image src="/icons/search.png" class="index-icon-search" />
             </view>
             <view class="index-banner">
-                <image class="banner-top">
-                    <image class="banner-bottom">
-                        <image class="banner-bottom">
+                <image class="banner-top" />
+                    <image class="banner-bottom" />
+                        <image class="banner-bottom" />
             </view>
             <view class="index-category">
                 <repeat for="{{category}}" key="index">
                     <view class="category-item" @tap="navToCategory({{item.title}})">
-                        <image src="{{item.imgUrl}}" class="category-img">
+                        <image src="{{item.imgUrl}}" class="category-img" />
                             <text class="category-title">{{item.title}}</text>
                     </view>
                 </repeat>
@@ -308,7 +308,7 @@
                 </view>
                 <repeat for="{{today}}" key="id">
                     <view class="today-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="today-item-img">
+                        <image src="{{item.imgUrl}}" class="today-item-img" />
                             <view class="today-item-content">
                                 <view class="today-item-name">{{item.name}}</view>
                                 <view class="today-item-desc">{{item.desc}}</view>
@@ -319,17 +319,17 @@
                                 <view class="today-item-price">限时价
                                     <text>¥{{item.price}}</text>
                                 </view>
-                                <image src="/icons/cart-recommend.png" class="index-icon-cart">
+                                <image src="/icons/cart-recommend.png" class="index-icon-cart" />
                             </view>
                     </view>
                 </repeat>
             </view>
-            <image class="index-banner-middle">
+            <image class="index-banner-middle" />
                 <view class="index-hot">
                     <view class="hot-title">热卖爆款</view>
                     <repeat for="{{hot}}" key="id">
                         <view class="hot-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="hot-item-img">
+                            <image src="{{item.imgUrl}}" class="hot-item-img" />
                                 <view class="hot-item-content">
                                     <view class="hot-item-name">{{item.name}}</view>
                                     <view class="hot-item-desc">{{item.desc}}</view>
@@ -338,17 +338,17 @@
                                         ¥{{item.curPrice}}
                                         <text>{{item.notice}}</text>
                                     </view>
-                                    <image src="/icons/cart-recommend.png" class="index-icon-cart">
+                                    <image src="/icons/cart-recommend.png" class="index-icon-cart" />
                                 </view>
                         </view>
                     </repeat>
                 </view>
-                <image class="index-banner-middle">
+                <image class="index-banner-middle" />
                     <view class="index-selected">
                         <view class="selected-title">放心精选</view>
                         <repeat for="{{selected}}" key="id">
                             <view class="selected-item" @tap="navToProduct({{item.id}})">
-                                <image src="{{item.imgUrl}}" class="selected-item-img">
+                                <image src="{{item.imgUrl}}" class="selected-item-img" />
                                     <view class="selected-item-content">
                                         <view class="selected-item-name">{{item.name}}</view>
                                         <view class="selected-item-desc">{{item.desc}}</view>
@@ -357,7 +357,7 @@
                                             ¥{{item.curPrice}}
                                             <text>{{item.notice}}</text>
                                         </view>
-                                        <image src="/icons/cart-recommend.png" class="index-icon-cart">
+                                        <image src="/icons/cart-recommend.png" class="index-icon-cart" />
                                     </view>
                             </view>
                         </repeat>
@@ -548,10 +548,10 @@ export default class Index extends wepy.page {
         }
     };
 
-    async onLoad() {
-        let self = this;
-        let res = await api.getShopProduct();
-        console.log(res.data)
-    }
+    // async onLoad() {
+    //     let self = this;
+    //     let res = await api.getShopProduct();
+    //     console.log(res.data)
+    // }
 }
 </script>

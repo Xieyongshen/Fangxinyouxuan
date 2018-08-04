@@ -60,7 +60,7 @@
                         <view>{{item.name}} {{item.phone}}</view>
                         <view>{{item.desc}}</view>
                     </view>
-                    <view class="address-edit" @tap="addressEdit"><image src="/icons/edit.png" class="address-edit-img"></view>
+                    <view class="address-edit" @tap="addressEdit"><image src="/icons/edit.png" class="address-edit-img" /></view>
                 </view>
             </repeat>
         </view>

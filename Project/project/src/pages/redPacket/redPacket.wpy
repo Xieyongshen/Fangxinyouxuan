@@ -1,5 +1,5 @@
 <style lang="less">
-page{
+page {
     padding-bottom: 20rpx;
 }
 
@@ -25,7 +25,7 @@ page{
     position: relative;
 }
 
-.redPacket-bg{
+.redPacket-bg {
     width: 690rpx;
     height: 190rpx;
     position: absolute;
@@ -72,11 +72,12 @@ page{
     vertical-align: top;
 }
 
-.redPacket-overdue .redPacket-item-count, .redPacket-overdue .redPacket-item-content {
-        color: #cccccc;
+.redPacket-overdue .redPacket-item-count,
+.redPacket-overdue .redPacket-item-content {
+    color: #cccccc;
 }
 
-.redPacket-more{
+.redPacket-more {
     color: #999999;
     font-size: 22rpx;
     line-height: 60rpx;
@@ -129,14 +130,9 @@ page{
     line-height: 40rpx;
 }
 
-.redPacket-recommend-btn {
+.redPacket-icon-cart {
     width: 55rpx;
     height: 55rpx;
-    color: #ffffff;
-    font-size: 34rpx;
-    line-height: 55rpx;
-    text-align: center;
-    background: #f5333f;
     border-radius: 50%;
     position: absolute;
     bottom: 10rpx;
@@ -148,20 +144,21 @@ page{
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="redPacket-content">
             <view wx:if="{{tipCount > 0}}" class="redPacket-tip">
-                您有<text>{{tipCount}}</text>个红包已将过期
+                您有
+                <text>{{tipCount}}</text>个红包已将过期
             </view>
             <repeat for="{{redPacket}}" key="id">
                 <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
-                <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg">
-                    <view class="redPacket-item-count">￥
-                        <text>{{item.count}}</text>
-                    </view>
-                    <view class="redPacket-item-content">
-                        <view class="redPacket-item-name">{{item.name}}</view>
-                        <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
-                        <view class="redPacket-item-date">有效期：{{item.date}}</view>
-                    </view>
-                    <view class="redPacket-item-use">立即使用</view>
+                    <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
+                        <view class="redPacket-item-count">￥
+                            <text>{{item.count}}</text>
+                        </view>
+                        <view class="redPacket-item-content">
+                            <view class="redPacket-item-name">{{item.name}}</view>
+                            <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
+                            <view class="redPacket-item-date">有效期：{{item.date}}</view>
+                        </view>
+                        <view class="redPacket-item-use">立即使用</view>
                 </view>
             </repeat>
             <view class="redPacket-more">没有更多了</view>
@@ -170,12 +167,10 @@ page{
             <view class="redPacket-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
                 <view class="redPacket-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="redPacket-recommend-img">
+                    <image src="{{item.imgUrl}}" mode="aspectFill" class="redPacket-recommend-img" />
                         <view class="redPacket-recommend-name">{{item.name}}</view>
                         <view class="redPacket-recommend-price">￥{{item.price}}</view>
-                        <view class="redPacket-recommend-btn">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        </view>
+                        <image src="/icons/cart-recommend.png" class="redPacket-icon-cart" />
                 </view>
             </repeat>
         </view>

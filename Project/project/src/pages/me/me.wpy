@@ -4,7 +4,7 @@
     color: white;
 }
 
-.me-header-bg{
+.me-header-bg {
     width: 750rpx;
     height: 465rpx + 62px;
     position: absolute;
@@ -85,7 +85,7 @@
     }
 }
 
-.me-order-icon{
+.me-order-icon {
     width: 45rpx;
     height: 45rpx;
     margin-top: 15rpx;
@@ -107,10 +107,10 @@
     line-height: 90rpx;
     padding-right: 30rpx;
     box-sizing: border-box;
-    .fa {
-        color: #999999;
-        font-size: 35rpx;
-        line-height: 90rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 32.5rpx 0;
         float: right;
     }
 }
@@ -125,51 +125,51 @@
 </style>
 <template>
     <view class="container">
-        <image src="/icons/me-bg.png" class="me-header-bg">
-        <navBar navTitle="放心优选"></navBar>
-        <view class="me-header">
-            <view class="me-invite">邀请好友</view>
-            <view class="me-userinfo">
-                <image src="{{userInfo.avatar}}" class="me-userinfo-avatar">
-                    <view class="me-userinfo-name">{{userInfo.name}}</view>
+        <image src="/icons/me-bg.png" class="me-header-bg" />
+            <navBar navTitle="放心优选"></navBar>
+            <view class="me-header">
+                <view class="me-invite">邀请好友</view>
+                <view class="me-userinfo">
+                    <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
+                        <view class="me-userinfo-name">{{userInfo.name}}</view>
+                </view>
+                <view class="me-order">
+                    <view class="me-order-item" @tap="toOrderList(0)">
+                        <image src="/icons/toPay.png" class="me-order-icon" />
+                            <text>待付款</text>
+                    </view>
+                    <view class="me-order-item" @tap="toOrderList(1)">
+                        <image src="/icons/toReceive.png" class="me-order-icon" />
+                            <text>待收货</text>
+                    </view>
+                    <view class="me-order-item" @tap="toOrderList(2)">
+                        <image src="/icons/toGroup.png" class="me-order-icon" />
+                            <text>待成团</text>
+                    </view>
+                    <view class="me-order-item" @tap="toOrderList(3)">
+                        <image src="/icons/orderAll.png" class="me-order-icon" />
+                            <text>全部订单</text>
+                    </view>
+                </view>
+                <view class="me-manage">
+                    <navigator url="balance/balance" class="me-manage-item">
+                        我的余额
+                        <image src="/icons/in.png" class="icon-in" />
+                    </navigator>
+                    <navigator url="../redPacket/redPacket" class="me-manage-item">
+                        我的红包
+                        <image src="/icons/in.png" class="icon-in" />
+                    </navigator>
+                    <navigator class="me-manage-item">
+                        我的优惠券
+                        <image src="/icons/in.png" class="icon-in" />
+                    </navigator>
+                    <navigator url="address/address" class="me-manage-item">
+                        我的地址
+                        <image src="/icons/in.png" class="icon-in" />
+                    </navigator>
+                </view>
             </view>
-            <view class="me-order">
-                <view class="me-order-item" @tap="toOrderList(0)">
-                    <image src="/icons/toPay.png" class="me-order-icon">
-                    <text>待付款</text>
-                </view>
-                <view class="me-order-item" @tap="toOrderList(1)">
-                    <image src="/icons/toReceive.png" class="me-order-icon">
-                    <text>待收货</text>
-                </view>
-                <view class="me-order-item" @tap="toOrderList(2)">
-                    <image src="/icons/toGroup.png" class="me-order-icon">
-                    <text>待成团</text>
-                </view>
-                <view class="me-order-item" @tap="toOrderList(3)">
-                    <image src="/icons/orderAll.png" class="me-order-icon">
-                    <text>全部订单</text>
-                </view>
-            </view>
-            <view class="me-manage">
-                <navigator url="balance/balance" class="me-manage-item">
-                    我的余额
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </navigator>
-                <navigator url="../redPacket/redPacket" class="me-manage-item">
-                    我的红包
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </navigator>
-                <navigator class="me-manage-item">
-                    我的优惠券
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </navigator>
-                <navigator url="address/address" class="me-manage-item">
-                    我的地址
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </navigator>
-            </view>
-        </view>
     </view>
 </template>
 
@@ -190,8 +190,7 @@ export default class Me extends wepy.page {
     };
 
     methods = {
-
-        toOrderList(index, e){
+        toOrderList(index, e) {
             wx.navigateTo({
                 url: 'orderList/orderList?index=' + index
             });

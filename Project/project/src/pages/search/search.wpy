@@ -170,8 +170,8 @@ page {
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="search-bar">
             <view class="search-bar-content">
-                <image src="/icons/search.png" class="search-bar-icon">
-                    <input type="text" placeholder="请输入商品名称" class="search-bar-input">
+                <image src="/icons/search.png" class="search-bar-icon" />
+                    <input type="text" placeholder="请输入商品名称" class="search-bar-input" />
             </view>
             <text class="search-bar-cancel">取消</text>
         </view>
@@ -194,14 +194,14 @@ page {
             <view class="search-recommend-product">
                 <repeat for="{{recommend}}" key="id">
                     <view class="recommend-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="recommend-item-img">
+                        <image src="{{item.imgUrl}}" class="recommend-item-img" />
                             <view class="recommend-item-content">
                                 <view class="recommend-item-name">{{item.name}}</view>
                                 <view class="recommend-item-desc">{{item.desc}}</view>
                                 <view class="recommend-item-price">¥{{item.price}}
                                     <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                                 </view>
-                                <image src="/icons/cart-recommend.png" class="search-recommend-cart">
+                                <image src="/icons/cart-recommend.png" class="search-recommend-cart" />
                             </view>
                     </view>
                 </repeat>

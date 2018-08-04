@@ -312,7 +312,7 @@ page {
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
                         <view class="limit-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="limit-item-img">
+                            <image src="{{item.imgUrl}}" class="limit-item-img" />
                                 <view class="limit-item-content">
                                     <view class="limit-item-name">{{item.name}}</view>
                                     <view class="limit-item-desc">{{item.desc}}</view>
@@ -320,16 +320,16 @@ page {
                                     <view class="limit-item-price">¥{{item.price}}
                                         <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                                     </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart">
+                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
                                 </view>
                         </view>
                     </repeat>
                 </view>
             </view>
             <view class="coupon-recommend">
-                <image src="{{recommend.imgUrl}}" class="coupon-recommend-img">
+                <image src="{{recommend.imgUrl}}" class="coupon-recommend-img" />
                 <view class="coupon-recommend-update">
-                    <image src="{{recommend.update.user.avatar}}" class="coupon-recommend-avatar">
+                    <image src="{{recommend.update.user.avatar}}" class="coupon-recommend-avatar" />
                     <text>{{recommend.update.user.name}}【{{recommend.update.product.name}}】商品拼单已成功，商品已售{{recommend.update.product.soldCount}}件</text>
                 </view>
             </view>
@@ -338,20 +338,20 @@ page {
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
                         <view class="group-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="group-item-img">
+                            <image src="{{item.imgUrl}}" class="group-item-img" />
                                 <view class="group-item-content">
                                     <view class="group-item-name">{{item.name}}</view>
                                     <view class="group-item-sold">
                                         <repeat for="{{item.buyer}}" key="id">
-                                            <image src="{{item.avatar}}" class="group-item-buyer">
+                                            <image src="{{item.avatar}}" class="group-item-buyer" />
                                         </repeat>
-                                        <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis">
+                                        <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
                                             <text>已团{{item.soldCount}}件</text>
                                     </view>
                                     <view class="group-item-price">¥{{item.price}}
                                         <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
                                     </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart">
+                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
                                 </view>
                         </view>
                     </repeat>

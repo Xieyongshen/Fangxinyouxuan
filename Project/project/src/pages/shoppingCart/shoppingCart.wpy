@@ -94,12 +94,11 @@ page {
         display: inline-block;
         float: none;
     }
-    .fa {
-        color: #bfbfbf;
-        font-size: 35rpx;
-        line-height: 90rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 32.5rpx 0 32.5rpx 10rpx;
         vertical-align: top;
-        margin-left: 10rpx;
     }
 }
 
@@ -168,19 +167,17 @@ page {
         font-size: 26rpx;
         line-height: 35rpx;
         margin: 0 30rpx;
+        vertical-align: top;
         display: inline-block;
     }
 }
 
-.count-minus,
-.count-plus {
+.count-reduce,
+.count-add {
     width: 35rpx;
     height: 35rpx;
-    font-size: 35rpx;
-    line-height: 33rpx;
-    text-align: center;
-    border: 1rpx solid #bfbfbf;
     border-radius: 50%;
+    vertical-align: top;
     display: inline-block;
 }
 
@@ -207,13 +204,12 @@ page {
     margin-right: 10rpx;
 }
 
-.shoppingCart-redPacket .fa,
-.shoppingCart-result-deliver .fa {
-    color: #999999;
-    font-size: 35rpx;
-    line-height: 90rpx;
-    margin-left: 10rpx;
-    float: right;
+.shoppingCart-redPacket .icon-in,
+.shoppingCart-result-deliver .icon-in {
+    width: 15rpx;
+    height: 25rpx;
+    margin: 32.5rpx 0 32.5rpx 10rpx;
+    vertical-align: top;
 }
 
 .status-false {
@@ -228,14 +224,14 @@ page {
     padding-left: 30rpx;
 }
 
-.shoppingCart-deliver-input{
+.shoppingCart-deliver-input {
     width: 550rpx;
     height: 90rpx;
     text-align: right;
     float: right;
 }
 
-.picker-null{
+.picker-null {
     color: #bfbfbf;
 }
 
@@ -306,7 +302,7 @@ page {
     line-height: 40rpx;
 }
 
-.shoppingCart-recommend-btn {
+.shoppingCart-icon-cart {
     width: 55rpx;
     height: 55rpx;
     color: #ffffff;
@@ -384,37 +380,37 @@ page {
     <view class="container">
         <navBar navTitle="放心优选"></navBar>
         <view wx:if="{{product.length > 0}}" class="shoppingCart-content">
-            <image src="/icons/address-bg.png" class="shoppingCart-header">
+            <image src="/icons/address-bg.png" class="shoppingCart-header" />
                 <view class="shoppingCart-block shoppingCart-shop">
-                    <image src="/icons/position.png" class="shoppingCart-icon-position">
+                    <image src="/icons/position.png" class="shoppingCart-icon-position" />
                         <text class="shop-name">{{shopChoose}}</text>
                 </view>
                 <view class="shoppingCart-block shoppingCart-product">
                     <view class="shoppingCart-item shoppingCart-product-manage">
                         <view class="shoppingCart-product-selectAll">
-                            <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll">
+                            <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
                                 <text>全选</text>
                         </view>
                         <view class="shoppingCart-product-tip">
                             <text>满{{discount.count}}减{{discount.minus}}</text>
                             <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
-                            <i class="fa fa-angle-right"></i>
+                            <image src="/icons/in.png" class="icon-in" />
                         </view>
                     </view>
                     <view class="shoppingCart-product-list">
                         <repeat for="{{product}}" key="id">
                             <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
-                                <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})">
-                                    <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image">
+                                <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
+                                    <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
                                         <view class="product-item-content">
                                             <view class="product-item-name">{{item.name}}</view>
                                             <view class="product-item-price">￥{{item.price}}
                                                 <text>￥{{item.oriPrice}}</text>
                                             </view>
                                             <view class="product-item-count">
-                                                <view wx:if="{{item.count > 0}}" class="count-minus" @tap.stop="countMinus({{index}})">-</view>
-                                                <text>{{item.count}}</text>
-                                                <view class="count-plus" @tap.stop="countPlus({{index}})">+</view>
+                                                <image wx:if="{{item.count > 0}}" src="/icons/Reduce.png" class="count-reduce" @tap.stop="countMinus({{index}})" />
+                                                    <text>{{item.count}}</text>
+                                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countPlus({{index}})" />
                                             </view>
                                         </view>
                             </view>
@@ -426,13 +422,13 @@ page {
                 </view>
                 <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
                     <view class="shoppingCart-item">
-                        <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon">
+                        <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon" />
                             红包
-                            <i class="fa fa-angle-right" aria-hidden="true"></i>
-                            <text class="{{redPacket.id == '' ? 'status-false' : 'status-true'}}">
-                                <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
-                                <block wx:else>{{redPacket.count}}元</block>
-                            </text>
+                            <image src="/icons/in.png" class="icon-in" />
+                                <text class="{{redPacket.id == '' ? 'status-false' : 'status-true'}}">
+                                    <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
+                                    <block wx:else>{{redPacket.count}}元</block>
+                                </text>
                     </view>
                 </navigator>
                 <view class="shoppingCart-block shoppingCart-result">
@@ -444,32 +440,30 @@ page {
                             <view class="input-picker {{deliver.choose < 0 ? 'picker-null' : ''}}">
                                 <block wx:if="{{deliver.choose >= 0}}">{{deliverList[deliver.choose]}}</block>
                                 <block wx:else>请选择配送方式</block>
-                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                <image src="/icons/in.png" class="icon-in" />
                             </view>
                         </picker>
                     </view>
                 </view>
         </view>
         <view wx:else class="shoppingCart-empty">
-            <image src="/icons/shoppingCart-empty.png" class="shoppingCart-empty-img">
+            <image src="/icons/shoppingCart-empty.png" class="shoppingCart-empty-img" />
                 <view class="shoppingCart-empty-text">购物车空空如也~</view>
         </view>
         <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
                 <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img">
+                    <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img" />
                         <view class="shoppingCart-recommend-name">{{item.name}}</view>
                         <view class="shoppingCart-recommend-price">￥{{item.price}}</view>
-                        <view class="shoppingCart-recommend-btn">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        </view>
+                        <image src="/icons/cart-recommend.png" class="shoppingCart-icon-cart" />
                 </view>
             </repeat>
         </view>
         <view wx:if="{{product.length > 0}}" class="shoppingCart-settle">
             <view class="shoppingCart-settle-selectAll">
-                <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll">
+                <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
                     <text>全选</text>
             </view>
             <view class="shoppingCart-settle-price">

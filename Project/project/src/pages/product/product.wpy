@@ -368,7 +368,7 @@ page {
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{product.image}}" key="index">
                     <swiper-item class="product-image-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="product-image-img">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="product-image-img" />
                     </swiper-item>
                 </repeat>
             </swiper>
@@ -376,7 +376,7 @@ page {
         </view>
         <view class="product-intro">
             <view class="product-intro-share">
-                <image src="/icons/share.png" class="product-icon-share">
+                <image src="/icons/share.png" class="product-icon-share" />
                     <text>分享</text>
             </view>
             <view class="product-intro-name">{{product.name}}</view>
@@ -409,7 +409,7 @@ page {
             <view class="product-group-title">已有{{product.group.list.length}}人在开团，可直接参与</view>
             <repeat for="{{product.group.list}}" key="index">
                 <view class="product-group-item">
-                    <image src="{{item.head.avatar}}" class="product-group-avatar">
+                    <image src="{{item.head.avatar}}" class="product-group-avatar" />
                         <view class="product-group-content">
                             <view class="product-group-head">{{item.head.name}}</view>
                             <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
@@ -423,7 +423,7 @@ page {
             <view class="product-detail-content">
                 <text>{{product.detail.text}}</text>
                 <repeat for="{{product.detail.imgList}}">
-                    <image mode="widthFix" src="{{item.imgUrl}}">
+                    <image mode="widthFix" src="{{item.imgUrl}}" />
                 </repeat>
             </view>
         </view>
@@ -432,10 +432,10 @@ page {
             <scroll-view scroll-x="true" class="product-recommend-content">
                 <repeat for="{{product.recommend}}" key="id">
                     <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="product-recommend-img">
+                        <image src="{{item.imgUrl}}" class="product-recommend-img" />
                             <view class="product-recommend-name">{{item.name}}</view>
                             <view class="product-recommend-price">￥{{item.price}}</view>
-                            <image src="/icons/cart-recommend.png" class="product-recommend-cart">
+                            <image src="/icons/cart-recommend.png" class="product-recommend-cart" />
                     </view>
                 </repeat>
             </scroll-view>
@@ -450,7 +450,7 @@ page {
             </block>
             <block wx:else>
                 <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
-                    <image src="/icons/shoppingCart.png" class="product-btn-cart">
+                    <image src="/icons/shoppingCart.png" class="product-btn-cart" />
                         <text>购物车</text>
                 </view>
                 <view class="product-btn-addToCart">加入购物车</view>

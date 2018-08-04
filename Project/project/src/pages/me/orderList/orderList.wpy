@@ -184,25 +184,25 @@
                     <scroll-view class="orderList-item-list">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
                             <view class="orderList-product">
-                                <image src="{{product.imgUrl}}" mode="aspectFill" class="orderList-product-img">
+                                <image src="{{product.imgUrl}}" mode="aspectFill" class="orderList-product-img" />
                             </view>
                         </repeat>
                     </scroll-view>
                     <view class="orderList-item-status">
                         <view wx:if="{{item.status == 0}}" class="status-label">
-                            <image src="/icons/pay.png" class="status-icon">
+                            <image src="/icons/pay.png" class="status-icon" />
                             <view class="status-text">未支付</view>
                         </view>
                         <view wx:if="{{item.status > 0}}" class="status-label">
-                            <image src="/icons/pay.png" class="status-icon">
+                            <image src="/icons/pay.png" class="status-icon" />
                             <view class="status-text">已支付</view>
                         </view>
                         <view wx:if="{{item.status > 0 && item.status != 2 }}" class="status-label">
-                            <image src="/icons/deliver.png" class="status-icon">
+                            <image src="/icons/deliver.png" class="status-icon" />
                             <view class="status-text">配送中</view>
                         </view>
                         <view wx:if="{{item.status > 2}}" class="status-label">
-                            <image src="/icons/received.png" class="status-icon">
+                            <image src="/icons/received.png" class="status-icon" />
                             <view class="status-text">已签收</view>
                         </view>
                         <view class="orderList-item-total">￥{{item.total}}</view>

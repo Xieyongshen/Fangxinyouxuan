@@ -548,10 +548,10 @@ export default class Index extends wepy.page {
         }
     };
 
-    // async onLoad() {
-    //     let self = this;
-    //     let res = await api.getShopProduct();
-    //     console.log(res.data)
-    // }
+    async onLoad() {
+        let self = this;
+        let res = await api.getShopProduct();
+        console.log(res.data)
+    }
 }
 </script>

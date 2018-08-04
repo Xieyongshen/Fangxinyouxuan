@@ -2,6 +2,7 @@
 page {
     padding-bottom: 90rpx;
 }
+
 .shoppingCart-header {
     width: 750rpx;
     height: 5rpx;

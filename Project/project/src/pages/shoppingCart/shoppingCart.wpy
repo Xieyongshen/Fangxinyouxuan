@@ -437,7 +437,7 @@ page {
                         <text>￥{{total}}</text>
                     </view>
                     <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
-                        <picker mode="selector" range="{{deliverList}}" range-key="" bindchange="bindDeliverChange" value="{{deliver.choose}}" class="shoppingCart-deliver-input">
+                        <picker mode="selector" range="{{deliverList}}" range-key="" bindchange="bindDeliverChange" value="{{deliverList[deliver.choose]}}" class="shoppingCart-deliver-input">
                             <view class="input-picker {{deliver.choose < 0 ? 'picker-null' : ''}}">
                                 <block wx:if="{{deliver.choose >= 0}}">{{deliverList[deliver.choose]}}</block>
                                 <block wx:else>请选择配送方式</block>

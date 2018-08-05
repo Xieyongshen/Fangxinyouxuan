@@ -143,22 +143,17 @@ page {
     <view class="container">
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="redPacket-content">
-            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">
-                您有
-                <text>{{tipCount}}</text>个红包已将过期
-            </view>
+            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有<text>{{tipCount}}</text>个红包已将过期</view>
             <repeat for="{{redPacket}}" key="id">
                 <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
                     <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
-                        <view class="redPacket-item-count">￥
-                            <text>{{item.count}}</text>
-                        </view>
+                        <view class="redPacket-item-count">￥<text>{{item.count}}</text></view>
                         <view class="redPacket-item-content">
                             <view class="redPacket-item-name">{{item.name}}</view>
                             <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
                             <view class="redPacket-item-date">有效期：{{item.date}}</view>
                         </view>
-                        <view class="redPacket-item-use">立即使用</view>
+                        <view class="redPacket-item-use" @tap="redPacketChoose({{item.id}})">立即使用</view>
                 </view>
             </repeat>
             <view class="redPacket-more">没有更多了</view>
@@ -242,7 +237,13 @@ export default class RedPacket extends wepy.page {
         ]
     };
 
-    methods = {};
+    methods = {
+        redPacketChoose(id, events){
+            wx.navigateBack({
+                delta: 1
+            })
+        }
+    };
 
     events = {};
 

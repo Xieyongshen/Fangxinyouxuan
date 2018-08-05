@@ -1,0 +1,100 @@
+<style lang="less">
+#myMap {
+    width: 750rpx;
+    height: 500rpx;
+}
+
+.page-body-button {
+    margin-top: 30rpx;
+    margin-bottom: 30rpx;
+    font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+<template>
+    <view class="container">
+        <view class="page-body">
+            <map id="myMap" markers="{{markers}}" show-location="true"></map>
+            <view class="btn-area">
+                <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取位置</button>
+                <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
+                <button bindtap="includePoints" class="page-body-button" type="primary">缩放视野展示所有经纬度</button>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Index extends wepy.page {
+    config = {};
+    components = {};
+
+    data = {
+        markers: [
+            {
+                id: 1,
+                latitude: 26.470189999,
+                longitude: 116.0094099999,
+                name: 'T.I.T 创意园'
+            },
+            {
+                id: 2,
+                latitude: 26.471,
+                longitude: 116.01,
+                name: 'T.I.T 创意园'
+            }
+        ]
+    };
+
+    computed = {};
+
+    methods = {
+        getCenterLocation() {
+            this.mapCtx.getCenterLocation({
+                success: function(res) {
+                    console.log(res.longitude);
+                    console.log(res.latitude);
+                }
+            });
+        },
+        translateMarker() {
+            this.mapCtx.translateMarker({
+                markerId: 2,
+                autoRotate: true,
+                duration: 1000,
+                destination: {
+                    latitude: 26.48,
+                    longitude: 116.01
+                },
+                animationEnd() {
+                    console.log('animation end');
+                }
+            });
+        },
+        includePoints() {
+            this.mapCtx.includePoints({
+                padding: [10],
+                points: [
+                    {
+                        latitude: 26.5,
+                        longitude: 116.01
+                    },
+                    {
+                        latitude: 26.4,
+                        longitude: 116.0
+                    }
+                ]
+            });
+        }
+    };
+
+    events = {};
+
+    onLoad() {
+        var self = this;
+        self.mapCtx = wx.createMapContext('myMap');
+        self.mapCtx.moveToLocation();
+    }
+}
+</script>

@@ -550,8 +550,12 @@ export default class Index extends wepy.page {
 
     async onLoad() {
         let self = this;
-        let res = await api.getShopProduct();
-        console.log(res.data)
+        let res = await api.getShopProduct({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        });
+        console.log(res)
     }
 }
 </script>

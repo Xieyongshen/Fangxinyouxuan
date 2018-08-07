@@ -11,23 +11,23 @@ from datetime import datetime
 import time
 import uuid
 import random
-from shop.oauth import Address
+from shop.models import Address
 from shop.models import User
 from shop.models import Shop
 from shop.models import ShopBannar
 from shop.models import AbstractType
 from shop.models import ProductType
 from shop.models import ShopProduct
-from shop.models import GroupProduct
+
 from shop.models import ProductGroup
-from shop.models import ShopProductPicture
-from shop.models import GroupProductPicture
+from shop.models import ProductPicture
+
 from shop.models import ShoppingCart
-from shop.models import CartItem_ShopProduct
+from shop.models import CartItem
 from shop.models import RedPack
 from shop.models import Order
-from shop.models import OrderItem_ShopProduct
-from shop.models import OrderItem_GroupProduct
+from shop.models import OrderItem
+
 from shop.models import GroupNorm
 
 APP_ID = '1'
@@ -149,3 +149,17 @@ def login(request):
 	res_json = json.dumps(res_dict)
 	return HttpResponse(res_json)
 
+def getShopProduct(request):
+    res_dict = dict()
+    shopIdstr = request.GET['shopId']
+    shopId = uuid.UUID(shopIdstr)
+    the_shop = Shop.objects.get(shop_id=shopId)
+    todayProducts = list()
+    hotProducts = list()
+    selectedProducts = list()
+
+    
+
+    res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)

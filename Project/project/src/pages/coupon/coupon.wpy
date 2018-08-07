@@ -66,7 +66,7 @@ page {
     text-align: center;
 }
 
-.coupon-block{
+.coupon-block {
     width: 750rpx;
     margin-top: 60rpx;
 }
@@ -93,61 +93,6 @@ page {
     }
 }
 
-.limit-item,
-.group-item {
-    padding: 40rpx 30rpx 40rpx 40rpx;
-}
-
-.limit-item:first-child {
-    padding-top: 30rpx;
-}
-
-.limit-item:not(:last-child),
-.group-item:not(:last-child) {
-    border-bottom: 1rpx solid #f2f2f2;
-}
-
-.limit-item-img,
-.group-item-img {
-    width: 220rpx;
-    height: 220rpx;
-    margin-right: 30rpx;
-    border: 1rpx solid #f5ebe4;
-    border-radius: 10rpx;
-    background: #fdedeb;
-    vertical-align: top;
-    box-sizing: border-box;
-}
-
-.limit-item-content,
-.group-item-content {
-    width: 430rpx;
-    height: 220rpx;
-    vertical-align: top;
-    display: inline-block;
-    position: relative;
-}
-
-.limit-item-name,
-.group-item-name {
-    width: 430rpx;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.limit-item-desc {
-    width: 430rpx;
-    color: #999999;
-    font-size: 24rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .limit-item-time {
     width: 430rpx;
     color: #f5333f;
@@ -167,20 +112,7 @@ page {
     }
 }
 
-.coupon-icon-cart {
-    width: 60rpx;
-    height: 60rpx;
-    line-height: 60rpx;
-    text-align: center;
-    color: #ffffff;
-    background: #f5333f;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20rpx;
-    right: 0;
-}
-
-.coupon-recommend{
+.coupon-recommend {
     width: 690rpx;
     height: 220rpx;
     margin: 20rpx 30rpx;
@@ -188,14 +120,14 @@ page {
     position: relative;
 }
 
-.coupon-recommend-img{
+.coupon-recommend-img {
     width: 690rpx;
     height: 220rpx;
     border-radius: 20rpx 20rpx 0 0;
     background: #fdedeb;
 }
 
-.coupon-recommend-update{
+.coupon-recommend-update {
     width: 690rpx;
     height: 60rpx;
     padding: 10rpx;
@@ -207,7 +139,7 @@ page {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text{
+    text {
         color: #999999;
         height: 40rpx;
         font-size: 20rpx;
@@ -217,7 +149,7 @@ page {
     }
 }
 
-.coupon-recommend-avatar{
+.coupon-recommend-avatar {
     width: 40rpx;
     height: 40rpx;
     margin-right: 20rpx;
@@ -252,7 +184,7 @@ page {
     border-radius: 50%;
     background: #fdedeb;
     margin-right: 10rpx;
-        vertical-align: top;
+    vertical-align: top;
 }
 
 .group-item-ellipsis {
@@ -260,7 +192,7 @@ page {
     height: 35rpx;
     border-radius: 50%;
     margin-right: 20rpx;
-        vertical-align: top;
+    vertical-align: top;
 }
 
 .group-item-price {
@@ -276,7 +208,8 @@ page {
     }
 }
 
-.coupon-quetion-content, .coupon-game-content{
+.coupon-quetion-content,
+.coupon-game-content {
     width: 750rpx;
     height: 300rpx;
     color: #ffffff;
@@ -311,18 +244,14 @@ page {
                 </view>
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
-                        <view class="limit-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="limit-item-img" />
-                                <view class="limit-item-content">
-                                    <view class="limit-item-name">{{item.name}}</view>
-                                    <view class="limit-item-desc">{{item.desc}}</view>
-                                    <view class="limit-item-time">{{limit.startTime}} 开抢</view>
-                                    <view class="limit-item-price">¥{{item.price}}
-                                        <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
-                                    </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
+                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc">
+                            <view slot="extra" class="limit-item-time">{{limit.startTime}} 开抢</view>
+                            <view slot="price" class="limit-item-price">
+                                <view class="limit-item-price">¥{{item.price}}
+                                    <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                                 </view>
-                        </view>
+                            </view>
+                        </product>
                     </repeat>
                 </view>
             </view>
@@ -337,27 +266,22 @@ page {
                 <view class="coupon-block-title">优选拼单购</view>
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
-                        <view class="group-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="group-item-img" />
-                                <view class="group-item-content">
-                                    <view class="group-item-name">{{item.name}}</view>
-                                    <view class="group-item-sold">
-                                        <repeat for="{{item.buyer}}" key="id">
-                                            <image src="{{item.avatar}}" class="group-item-buyer" />
-                                        </repeat>
-                                        <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
-                                            <text>已团{{item.soldCount}}件</text>
-                                    </view>
-                                    <view class="group-item-price">¥{{item.price}}
-                                        <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
-                                    </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
-                                </view>
-                        </view>
+                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name">
+                            <view slot="extra" class="group-item-sold">
+                                <repeat for="{{item.buyer}}" key="id">
+                                    <image src="{{item.avatar}}" class="group-item-buyer" />
+                                </repeat>
+                                <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
+                                <text>已团{{item.soldCount}}件</text>
+                            </view>
+                            <view slot="price" class="group-item-price">¥{{item.price}}
+                                <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
+                            </view>
+                        </product>
                     </repeat>
                 </view>
             </view>
-            
+
             <view class="coupon-block">
                 <view class="coupon-block-title">有奖知识问答</view>
                 <view class="coupon-quetion-content">敬请期待</view>
@@ -373,10 +297,12 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 
 export default class Coupon extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {
@@ -500,6 +426,12 @@ export default class Coupon extends wepy.page {
         chooseModule(index, e) {
             this.curModule = index;
             this.$apply();
+        },
+
+        navToProduct(product, events) {
+            wx.navigateTo({
+                url: '/pages/product/product?id=' + product
+            });
         }
     };
 

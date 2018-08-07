@@ -93,63 +93,8 @@
     text-align: center;
 }
 
-.product-item {
-    padding: 40rpx 0 40rpx 10rpx;
-}
-
-.product-item:not(:last-child) {
-    border-bottom: 1rpx solid #f2f2f2;
-}
-
-.product-item-img {
-    width: 215rpx;
-    height: 215rpx;
-    margin-right: 30rpx;
-    border: 1rpx solid #f5ebe4;
-    border-radius: 10rpx;
-    background: #fdedeb;
-    vertical-align: top;
-    box-sizing: border-box;
-}
-
-.product-item-content {
-    width: 435rpx;
-    height: 215rpx;
-    vertical-align: top;
-    display: inline-block;
-    position: relative;
-}
-
-.product-item-name {
-    width: 435rpx;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.product-item-desc {
-    width: 435rpx;
-    color: #999999;
-    font-size: 24rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.category-icon-cart {
-    width: 60rpx;
-    height: 60rpx;
-    line-height: 60rpx;
-    text-align: center;
-    color: #ffffff;
-    background: #f5333f;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20rpx;
-    right: 0;
+.category-product-item{
+    margin: 0 -30rpx;
 }
 
 .product-item-price {
@@ -176,8 +121,8 @@
             <view class="category-header">
                 <view class="category-shop">
                     <image src="/icons/position.png" class="category-icon-position" />
-                        <text class="shop-name">{{shopChoose}}</text>
-                        <image src="/icons/down.png" class="category-icon-down" />
+                    <text class="shop-name">{{shopChoose}}</text>
+                    <image src="/icons/down.png" class="category-icon-down" />
                 </view>
                 <image src="/icons/search.png" class="category-icon-search" />
             </view>
@@ -192,24 +137,18 @@
                 <repeat for="{{type}}" key="index">
                     <view class="category-type-item">
                         <image src="{{item.icon}}" class="category-type-icon" />
-                            <view class="category-type-text">{{item.name}}</view>
+                        <view class="category-type-text">{{item.name}}</view>
                     </view>
                 </repeat>
             </view>
             <view class="category-product">
                 <view class="product-title">{{category}}</view>
                 <repeat for="{{product}}" key="id">
-                    <view class="product-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="product-item-img" />
-                            <view class="product-item-content">
-                                <view class="product-item-name">{{item.name}}</view>
-                                <view class="product-item-desc">{{item.desc}}</view>
-                                <view class="product-item-price">¥{{item.price}}
-                                    <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
-                                </view>
-                                <image src="/icons/cart-recommend.png" class="category-icon-cart" />
-                            </view>
-                    </view>
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
+                        <view slot="price" class="product-item-price">¥{{item.price}}
+                            <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
+                        </view>
+                    </product>
                 </repeat>
             </view>
         </view>
@@ -219,11 +158,13 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 
 export default class Category extends wepy.page {
     config = {};
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {

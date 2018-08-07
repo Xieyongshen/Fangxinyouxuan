@@ -123,64 +123,6 @@
     font-weight: 600;
 }
 
-.today-item,
-.hot-item,
-.selected-item {
-    padding: 40rpx 0 40rpx 10rpx;
-}
-
-.today-item:not(:last-child),
-.hot-item:not(:last-child),
-.selected-item:not(:last-child) {
-    border-bottom: 1rpx solid #f2f2f2;
-}
-
-.today-item-img,
-.hot-item-img,
-.selected-item-img {
-    width: 220rpx;
-    height: 220rpx;
-    margin-right: 30rpx;
-    border: 1rpx solid #f5ebe4;
-    border-radius: 10rpx;
-    background: #fdedeb;
-    vertical-align: top;
-    box-sizing: border-box;
-}
-
-.today-item-content,
-.hot-item-content,
-.selected-item-content {
-    width: 430rpx;
-    height: 220rpx;
-    vertical-align: top;
-    display: inline-block;
-    position: relative;
-}
-
-.today-item-name,
-.hot-item-name,
-.selected-item-name {
-    width: 430rpx;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.today-item-desc,
-.hot-item-desc,
-.selected-item-desc {
-    width: 430rpx;
-    color: #999999;
-    font-size: 24rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .today-item-remain {
     width: 250rpx;
     border: 1px solid #fdd6d9;
@@ -212,15 +154,6 @@
         font-size: 30rpx;
         line-height: 40rpx;
     }
-}
-
-.index-icon-cart {
-    width: 60rpx;
-    height: 60rpx;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20rpx;
-    right: 0;
 }
 
 .index-banner-middle {
@@ -270,6 +203,10 @@
         display: inline-block;
     }
 }
+
+.index-product {
+    margin: 0 -30rpx;
+}
 </style>
 <template>
     <view class="container">
@@ -281,7 +218,7 @@
                     <text class="shop-name">{{shopChoose}}</text>
                     <image src="/icons/down.png" class="index-icon-down" />
                 </view>
-                <image src="/icons/search.png" class="index-icon-search" />
+                <image src="/icons/search.png" class="index-icon-search" @tap="navToSearch" />
             </view>
             <view class="index-banner">
                 <image class="banner-top" />
@@ -302,60 +239,46 @@
                     <text>距离活动结束还剩：</text>
                     <text class="today-time-num">{{todayTime}}</text>
                 </view>
-                <repeat for="{{today}}" key="id">
-                    <view class="today-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="today-item-img" />
-                        <view class="today-item-content">
-                            <view class="today-item-name">{{item.name}}</view>
-                            <view class="today-item-desc">{{item.desc}}</view>
-                            <view wx:if="{{item.isLimited == false}}" class="today-item-remain">
-                                <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
-                                <text>还剩{{item.remain}}份</text>
-                            </view>
-                            <view class="today-item-price">限时价
-                                <text>¥{{item.price}}</text>
-                            </view>
-                            <image src="/icons/cart-recommend.png" class="index-icon-cart" />
+                <repeat for="{{today}}" key="id" index="i">
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view wx:if="{{item.isLimited == false}}" slot="extra" class="today-item-remain">
+                            <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
+                            <text>还剩{{item.remain}}份</text>
                         </view>
-                    </view>
+                        <view slot="price" class="today-item-price">限时价
+                            <text>¥{{item.price}}</text>
+                        </view>
+                    </product>
                 </repeat>
             </view>
             <image class="index-banner-middle" />
             <view class="index-hot">
                 <view class="hot-title">热卖爆款</view>
                 <repeat for="{{hot}}" key="id">
-                    <view class="hot-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="hot-item-img" />
-                        <view class="hot-item-content">
-                            <view class="hot-item-name">{{item.name}}</view>
-                            <view class="hot-item-desc">{{item.desc}}</view>
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view slot="price">
                             <view class="hot-item-price {{item.curPrice >= 0 ? '' : 'price-only'}}">¥{{item.price}}</view>
                             <view wx:if="{{item.curPrice >= 0}}" class="hot-item-curPrice">
                                 ¥{{item.curPrice}}
                                 <text>{{item.notice}}</text>
                             </view>
-                            <image src="/icons/cart-recommend.png" class="index-icon-cart" />
                         </view>
-                    </view>
+                    </product>
                 </repeat>
             </view>
             <image class="index-banner-middle" />
             <view class="index-selected">
                 <view class="selected-title">放心精选</view>
                 <repeat for="{{selected}}" key="id">
-                    <view class="selected-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="selected-item-img" />
-                        <view class="selected-item-content">
-                            <view class="selected-item-name">{{item.name}}</view>
-                            <view class="selected-item-desc">{{item.desc}}</view>
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view slot="price">
                             <view class="selected-item-price {{item.curPrice >= 0 ? '' : 'price-only'}}">¥{{item.price}}</view>
                             <view wx:if="{{item.curPrice >= 0}}" class="selected-item-curPrice">
                                 ¥{{item.curPrice}}
                                 <text>{{item.notice}}</text>
                             </view>
-                            <image src="/icons/cart-recommend.png" class="index-icon-cart" />
                         </view>
-                    </view>
+                    </product>
                 </repeat>
             </view>
         </view>
@@ -365,12 +288,14 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 import api from '@/api/api';
 
 export default class Index extends wepy.page {
     config = {};
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {
@@ -531,6 +456,12 @@ export default class Index extends wepy.page {
     computed = {};
 
     methods = {
+        navToSearch(){
+            wx.navigateTo({
+                url: '/pages/search/search'
+            });
+        },
+
         navToCategory(category, event) {
             wx.navigateTo({
                 url: '/pages/index/category/category?name=' + category

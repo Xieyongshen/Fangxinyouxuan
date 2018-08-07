@@ -597,7 +597,6 @@ export default class ShoppingCart extends wepy.page {
                 subtotal -= self.product[index].price * 1000;
             }
             subtotal = parseInt(subtotal, 10);
-            console.log(subtotal);
             self.subtotal = subtotal / 1000;
             self.$apply();
         },
@@ -610,7 +609,6 @@ export default class ShoppingCart extends wepy.page {
                 subtotal += self.product[index].price * 1000;
             }
             subtotal = parseInt(subtotal, 10);
-            console.log(subtotal);
             self.subtotal = subtotal / 1000;
             self.$apply();
         },
@@ -648,12 +646,10 @@ export default class ShoppingCart extends wepy.page {
             if (self.isChoosen[index]) {
                 self.subtotal += item.price * item.count * 1000;
                 self.$apply();
-                console.log(self.subtotal);
             }
         });
         self.subtotal = parseInt(self.subtotal, 10);
         self.subtotal /= 1000;
-        console.log(self.subtotal);
         self.$apply();
     }
 

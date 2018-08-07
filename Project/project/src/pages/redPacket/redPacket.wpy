@@ -153,7 +153,7 @@ page {
                             <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
                             <view class="redPacket-item-date">有效期：{{item.date}}</view>
                         </view>
-                        <view class="redPacket-item-use" @tap="redPacketChoose({{item.id}})">立即使用</view>
+                        <view class="redPacket-item-use" @tap="redPacketChoose({{item.overdue}}, {{item.id}})">立即使用</view>
                 </view>
             </repeat>
             <view class="redPacket-more">没有更多了</view>
@@ -238,7 +238,8 @@ export default class RedPacket extends wepy.page {
     };
 
     methods = {
-        redPacketChoose(id, events){
+        redPacketChoose(overdue, id, events){
+            if(overdue) return;
             wx.navigateBack({
                 delta: 1
             })

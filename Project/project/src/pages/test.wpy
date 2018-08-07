@@ -1,7 +1,7 @@
 <style lang="less">
 #myMap {
     width: 750rpx;
-    height: 500rpx;
+    height: 500px;
 }
 
 .page-body-button {
@@ -13,7 +13,7 @@
 <template>
     <view class="container">
         <view class="page-body">
-            <map id="myMap" markers="{{markers}}" show-location="true"></map>
+            <map id="myMap" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location="true"></map>
             <view class="btn-area">
                 <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取位置</button>
                 <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
@@ -31,18 +31,36 @@ export default class Index extends wepy.page {
     components = {};
 
     data = {
+        latitude: 30.5378,
+        longitude: 114.3628,
         markers: [
             {
                 id: 1,
-                latitude: 26.470189999,
-                longitude: 116.0094099999,
-                name: 'T.I.T 创意园'
+                latitude: 30.5378,
+                longitude: 114.3628,
+                iconPath: '/icons/position.png',
+                callout: {
+                    content: '标记点1',
+                    color: '#f54a4a',
+                    fontSize: 12,
+                    bgColor: '#fafafa',
+                    display: 'ALWAYS',
+                    textAlign: 'center'
+                }
             },
             {
                 id: 2,
-                latitude: 26.471,
-                longitude: 116.01,
-                name: 'T.I.T 创意园'
+                latitude: 30.53,
+                longitude: 114.36,
+                iconPath: '/icons/position.png',
+                callout: {
+                    content: '标记点2',
+                    color: '#f54a4a',
+                    fontSize: 12,
+                    bgColor: '#fafafa',
+                    display: 'ALWAYS',
+                    textAlign: 'center'
+                }
             }
         ]
     };
@@ -57,6 +75,7 @@ export default class Index extends wepy.page {
                     console.log(res.latitude);
                 }
             });
+            this.mapCtx.moveToLocation();
         },
         translateMarker() {
             this.mapCtx.translateMarker({
@@ -64,8 +83,8 @@ export default class Index extends wepy.page {
                 autoRotate: true,
                 duration: 1000,
                 destination: {
-                    latitude: 26.48,
-                    longitude: 116.01
+                    latitude: 30.54,
+                    longitude: 114.37
                 },
                 animationEnd() {
                     console.log('animation end');
@@ -94,7 +113,7 @@ export default class Index extends wepy.page {
     onLoad() {
         var self = this;
         self.mapCtx = wx.createMapContext('myMap');
-        self.mapCtx.moveToLocation();
+        // self.mapCtx.moveToLocation();
     }
 }
 </script>

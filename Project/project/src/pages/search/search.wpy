@@ -62,7 +62,7 @@ page {
     margin-bottom: 15rpx;
 }
 
-.search-hot-change{
+.search-hot-change {
     color: #f5333f;
     font-size: 20rpx;
     line-height: 30rpx;
@@ -93,7 +93,7 @@ page {
     position: relative;
 }
 
-.search-history-clear{
+.search-history-clear {
     width: 25rpx;
     height: 30rpx;
     position: absolute;
@@ -160,6 +160,7 @@ page {
 }
 
 .recommend-item-price {
+    color: #f5333f;
     font-size: 30rpx;
     line-height: 65rpx;
     margin-top: 75rpx;
@@ -188,12 +189,6 @@ page {
     padding: 0 30rpx;
     box-sizing: border-box;
     border-bottom: 1rpx solid #f2f2f2;
-}
-
-.search-result {
-    width: 750rpx;
-    padding: 0 30rpx;
-    box-sizing: border-box;
 }
 
 .search-result-item {
@@ -280,17 +275,11 @@ page {
                 <view class="search-recommend-title">推荐商品</view>
                 <view class="search-recommend-product">
                     <repeat for="{{recommend}}" key="id">
-                        <view class="recommend-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="recommend-item-img" />
-                            <view class="recommend-item-content">
-                                <view class="recommend-item-name">{{item.name}}</view>
-                                <view class="recommend-item-desc">{{item.desc}}</view>
-                                <view class="recommend-item-price">¥{{item.price}}
-                                    <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
-                                </view>
-                                <image src="/icons/cart-recommend.png" class="search-icon-cart" />
+                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                            <view slot="price" class="recommend-item-price">¥{{item.price}}
+                                <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                             </view>
-                        </view>
+                        </product>
                     </repeat>
                 </view>
             </view>
@@ -302,15 +291,9 @@ page {
         </view>
         <view wx:else class="search-result">
             <repeat for="{{result}}" key="id">
-                <view class="search-result-item">
-                    <image src="{{item.imgUrl}}" class="search-result-img" />
-                    <view class="search-result-content">
-                        <view class="search-result-name">{{item.name}}</view>
-                        <view class="search-result-desc">{{item.desc}}</view>
-                        <view class="search-result-price">¥{{item.price}}</view>
-                        <image src="/icons/cart-recommend.png" class="search-icon-cart" />
-                    </view>
-                </view>
+                <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                    <view slot="price" class="search-result-price">¥{{item.price}}</view>
+                </product>
             </repeat>
         </view>
     </view>
@@ -319,10 +302,12 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 
 export default class Search extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {

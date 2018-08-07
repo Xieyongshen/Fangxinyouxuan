@@ -603,6 +603,7 @@ export default class Product extends wepy.page {
 
     onLoad(options) {
         this.productID = options.id;
+        console.log(this.productID);
         this.$apply();
     }
 }

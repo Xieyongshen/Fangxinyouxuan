@@ -12,9 +12,13 @@
 .category-shop {
     height: 75rpx;
     display: inline-block;
-    .fa {
-        line-height: 75rpx;
-    }
+}
+
+.category-icon-position {
+    width: 20rpx;
+    height: 30rpx;
+    margin: 22rpx 0;
+    vertical-align: top;
 }
 
 .shop-name {
@@ -23,14 +27,19 @@
     margin: 0 20rpx;
 }
 
-.category-search {
-    width: 50rpx;
-    height: 75rpx;
-    text-align: center;
+.category-icon-down {
+    width: 30rpx;
+    height: 30rpx;
+    margin-top: 25rpx;
+    vertical-align: top;
+}
+
+.category-icon-search {
+    width: 30rpx;
+    height: 30rpx;
+    margin-top: 25rpx;
+    vertical-align: top;
     float: right;
-    .fa {
-        line-height: 75rpx;
-    }
 }
 
 .category-banner {
@@ -45,8 +54,36 @@
     border-radius: 20rpx;
 }
 
-.category-product {
+.category-type {
+    width: 750rpx;
+    height: 145rpx;
     margin-top: 45rpx;
+    margin-bottom: 80rpx;
+    padding: 0 7rpx;
+    box-sizing: border-box;
+}
+
+.category-type-item {
+    width: 100rpx;
+    text-align: center;
+    display: inline-block;
+}
+
+.category-type-item:not(:last-child) {
+    margin-right: 44rpx;
+}
+
+.category-type-icon {
+    width: 100rpx;
+    height: 100rpx;
+}
+
+.category-type-text {
+    font-size: 24rpx;
+    line-height: 25rpx;
+    text-align: center;
+    margin-top: 20rpx;
+    display: block;
 }
 
 .product-title {
@@ -102,7 +139,7 @@
     white-space: nowrap;
 }
 
-.product-item-btn {
+.category-icon-cart {
     width: 60rpx;
     height: 60rpx;
     line-height: 60rpx;
@@ -138,36 +175,39 @@
         <view class="category-content">
             <view class="category-header">
                 <view class="category-shop">
-                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <text class="shop-name">{{shopChoose}}</text>
-                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    <image src="/icons/position.png" class="category-icon-position" />
+                        <text class="shop-name">{{shopChoose}}</text>
+                        <image src="/icons/down.png" class="category-icon-down" />
                 </view>
-                <view class="category-search">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </view>
+                <image src="/icons/search.png" class="category-icon-search" />
             </view>
-            <swiper indicator-dots="true" indicator-color="rgba(255, 255, 255, .7)" indicator-active-color="#ffffff" autoplay="true" interval="5000" duration="1000" circular="true" class="category-banner">
+            <swiper indicator-dots="true" indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#ffffff" autoplay="true" interval="5000" duration="1000" circular="true" class="category-banner">
                 <repeat for="{{banner}}" key="index">
                     <swiper-item class="category-banner-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="category-banner-img" @tap="navToProduct({{item.productID}})">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="category-banner-img" @tap="navToProduct({{item.productID}})" />
                     </swiper-item>
                 </repeat>
             </swiper>
+            <view class="category-type">
+                <repeat for="{{type}}" key="index">
+                    <view class="category-type-item">
+                        <image src="{{item.icon}}" class="category-type-icon" />
+                            <view class="category-type-text">{{item.name}}</view>
+                    </view>
+                </repeat>
+            </view>
             <view class="category-product">
                 <view class="product-title">{{category}}</view>
                 <repeat for="{{product}}" key="id">
                     <view class="product-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="product-item-img">
+                        <image src="{{item.imgUrl}}" class="product-item-img" />
                             <view class="product-item-content">
                                 <view class="product-item-name">{{item.name}}</view>
                                 <view class="product-item-desc">{{item.desc}}</view>
                                 <view class="product-item-price">¥{{item.price}}
                                     <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
                                 </view>
-
-                                <view class="product-item-btn">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                </view>
+                                <image src="/icons/cart-recommend.png" class="category-icon-cart" />
                             </view>
                     </view>
                 </repeat>
@@ -205,6 +245,28 @@ export default class Category extends wepy.page {
             {
                 imgUrl: '',
                 productID: ''
+            }
+        ],
+        type: [
+            {
+                name: '热卖',
+                icon: '/icons/index/hot.png'
+            },
+            {
+                name: '水果',
+                icon: '/icons/index/fruit.png'
+            },
+            {
+                name: '鲜蔬',
+                icon: '/icons/index/vegetable.png'
+            },
+            {
+                name: '海鲜',
+                icon: '/icons/index/seafood.png'
+            },
+            {
+                name: '其他',
+                icon: '/icons/index/other.png'
             }
         ],
         product: [

@@ -16,9 +16,11 @@
     line-height: 145rpx;
     text-align: center;
     border-bottom: 1rpx solid #f2f2f2;
-    .fa {
-        color: #999999;
-        font-size: 35rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 60rpx 0;
+        float: right;
     }
 }
 
@@ -43,14 +45,10 @@
     background: #fdedeb;
 }
 
-.orderDetail-shop-phone {
+.orderDetail-icon-phone {
     width: 36rpx;
     height: 36rpx;
-    font-size: 30rpx;
-    line-height: 36rpx;
-    text-align: center;
     margin: 21rpx 0;
-    border: 1rpx solid #434343;
     border-radius: 50%;
     float: right;
 }
@@ -193,14 +191,23 @@
 }
 
 .orderDetail-product-count {
+    height: 100rpx;
     font-size: 26rpx;
     line-height: 100rpx;
     float: right;
-    .fa {
-        color: #999999;
-        font-size: 35rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin-top: 38rpx;
         margin-left: 10rpx;
+        float: right;
     }
+}
+
+.orderDetail-redPacket-icon {
+    width: 25rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
 }
 
 .orderDetail-btn {
@@ -227,14 +234,12 @@
         <view class="orderDetail-header">
             <view wx:if="{{order.type == 2 && order.status == 3}}" class="orderDetail-status">拼单成功</view>
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
-                <i wx:if="{{order.status > 0}}" class="fa fa-angle-right"></i>
+                <image wx:if="{{order.status > 0}}" src="/icons/in.png" class="icon-in" />
             </view>
             <view wx:if="{{order.type != 2 && order.status != 0 && order.status != 2 }}" class="orderDetail-shop">
-                <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar">
+                <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" />
                     <text>{{order.shop.name}}</text>
-                    <view class="orderDetail-shop-phone">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
-                    </view>
+                    <image src="/icons/phone.png" class="orderDetail-icon-phone" />
             </view>
         </view>
         <view wx:if="{{order.type != 2}}" class="orderDetail-product">
@@ -243,10 +248,10 @@
             </view>
             <view class="orderDetail-product-list" @tap="navToProductList()">
                 <repeat for="{{order.product}}" key="type">
-                    <image wx:if="{{index < 5}}" src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-product-img">
+                    <image wx:if="{{index < 5}}" src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-product-img" />
                 </repeat>
                 <view class="orderDetail-product-count">共{{order.product.length}}件
-                    <i class="fa fa-angle-right"></i>
+                    <image src="/icons/in.png" class="icon-in" />
                 </view>
             </view>
         </view>
@@ -257,7 +262,7 @@
             <scroll-view class="orderDetail-group-list">
                 <repeat for="{{order.product}}" key="id">
                     <view class="orderDetail-group-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-group-img">
+                        <image src="{{item.imgUrl}}" mode="aspectFill" class="orderDetail-group-img" />
                     </view>
                 </repeat>
             </scroll-view>
@@ -265,7 +270,7 @@
                 <view class="orderDetail-group-userAll">
                     <repeat for="{{order.group.users}}" key="index">
                         <view class="orderDetail-group-user {{item.id == '' ? 'user-null' : ''}}">
-                            <image wx:if="{{item.id != ''}}" src="{{item.avatar}}" class="orderDetail-group-userImg">
+                            <image wx:if="{{item.id != ''}}" src="{{item.avatar}}" class="orderDetail-group-userImg" />
                         </view>
                     </repeat>
                 </view>
@@ -279,8 +284,10 @@
             <view class="orderDetail-item">商品总价
                 <text>￥{{order.total}}</text>
             </view>
-            <view class="orderDetail-item">红包
-                <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
+            <view class="orderDetail-item">
+                <image src="/icons/redPacket.png" class="orderDetail-redPacket-icon" />
+                    红包
+                    <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
             </view>
             <view wx:if="{{order.type < 2}}" class="orderDetail-item">满减优惠
                 <text>-￥{{order.discount}}</text>
@@ -339,7 +346,14 @@ export default class OrderDetail extends wepy.page {
 
     data = {
         orderID: '000001',
-        orderStatus: ['订单待支付', '订单已支付', '拼单还未成功', '订单已签收', '申请售后', '申请售后'],
+        orderStatus: [
+            '订单待支付',
+            '订单已支付',
+            '拼单还未成功',
+            '订单已签收',
+            '申请售后',
+            '申请售后'
+        ],
         order: {
             type: 0,
             status: 0,

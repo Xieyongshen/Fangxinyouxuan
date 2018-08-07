@@ -40,11 +40,6 @@
 .input-picker {
     height: 90rpx;
     line-height: 90rpx;
-    .fa {
-        font-size: 35rpx;
-        line-height: 90rpx;
-        float: right;
-    }
 }
 
 .picker-null {
@@ -70,6 +65,13 @@
     color: #f5333f;
     background: #ffffff;
 }
+
+.icon-in {
+    width: 15rpx;
+    height: 25rpx;
+    margin: 32.5rpx 0;
+    float: right;
+}
 </style>
 <template>
     <view class="container">
@@ -78,11 +80,11 @@
             <view class="addressChange-content">
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">收货人</view>
-                    <input type="text" value="{{address.name}}" placeholder="姓名" class="addressChange-item-input">
+                    <input type="text" value="{{address.name}}" placeholder="姓名" class="addressChange-item-input" />
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">联系电话</view>
-                    <input type="text" value="{{address.phone}}" placeholder="手机或固话" class="addressChange-item-input">
+                    <input type="text" value="{{address.phone}}" placeholder="手机或固话" class="addressChange-item-input" />
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">收货地区</view>
@@ -90,17 +92,17 @@
                         <view class="input-picker {{address.region[0] == '' ? 'picker-null' : ''}}">
                             <block wx:if="{{address.region[0] != ''}}">{{address.region[0]}} {{address.region[1]}} {{address.region[2]}}</block>
                             <block wx:else>请选择您的收货地区</block>
-                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            <image src="/icons/in.png" class="icon-in" />
                         </view>
                     </picker>
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">详细地址</view>
-                    <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input">
+                    <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input" />
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">邮政编码</view>
-                    <input type="text" value="{{address.postalCode}}" placeholder="邮政编码（选填）" class="addressChange-item-input">
+                    <input type="text" value="{{address.postalCode}}" placeholder="邮政编码（选填）" class="addressChange-item-input" />
                 </view>
             </view>
             <button class="addressChange-btn addressChange-save">保存</button>
@@ -143,10 +145,10 @@ export default class Coupon extends wepy.page {
     onLoad(options) {
         var self = this;
         self.type = options.type;
-        if(self.type == 0){
-            self.title = '添加收货地址'
-        }else{
-            self.title = '编辑收货地址'
+        if (self.type == 0) {
+            self.title = '添加收货地址';
+        } else {
+            self.title = '编辑收货地址';
         }
         self.$apply();
     }

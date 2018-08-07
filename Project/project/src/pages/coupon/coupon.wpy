@@ -1,36 +1,510 @@
 <style lang="less">
+page {
+    background: #ffffff;
+}
 
+.coupon-module {
+    width: 750rpx;
+    height: 65rpx;
+    background: #ffffff;
+}
+
+.coupon-module-item {
+    width: 180rpx;
+    height: 65rpx;
+    box-sizing: border-box;
+    display: inline-block;
+    text {
+        width: 180rpx;
+        height: 61rpx;
+        font-size: 26rpx;
+        line-height: 65rpx;
+        text-align: center;
+        white-space: nowrap;
+        display: block;
+    }
+}
+
+.coupon-module-item:not(:last-child) {
+    margin-right: 10rpx;
+}
+
+.coupon-module-bar {
+    width: 100rpx;
+    height: 4rpx;
+    background: #ffffff;
+    margin: 0 40rpx;
+}
+
+.coupon-module-cur {
+    color: #f5333f;
+    .coupon-module-bar {
+        background: #f5333f;
+    }
+}
+
+.coupon-rank {
+    width: 690rpx;
+    height: 308rpx;
+    margin: 20rpx 30rpx;
+    padding: 30rpx 0;
+    box-sizing: border-box;
+    border-radius: 20rpx;
+    color: #ffffff;
+    background: #f5333f;
+}
+
+.coupon-rank-title {
+    font-size: 32rpx;
+    line-height: 40rpx;
+    text-align: center;
+}
+
+.coupon-rank-content {
+    font-size: 32rpx;
+    line-height: 208rpx;
+    text-align: center;
+}
+
+.coupon-block{
+    width: 750rpx;
+    margin-top: 60rpx;
+}
+
+.coupon-block-title {
+    font-size: 32rpx;
+    line-height: 35rpx;
+    margin-bottom: 40rpx;
+    text-align: center;
+}
+
+.coupon-limit-time {
+    font-size: 24rpx;
+    line-height: 44rpx;
+    text-align: center;
+    text {
+        width: 44rpx;
+        height: 44rpx;
+        color: #ffffff;
+        margin: 0 10rpx;
+        background: #f5333f;
+        border-radius: 50%;
+        display: inline-block;
+    }
+}
+
+.limit-item,
+.group-item {
+    padding: 40rpx 30rpx 40rpx 40rpx;
+}
+
+.limit-item:first-child {
+    padding-top: 30rpx;
+}
+
+.limit-item:not(:last-child),
+.group-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.limit-item-img,
+.group-item-img {
+    width: 220rpx;
+    height: 220rpx;
+    margin-right: 30rpx;
+    border: 1rpx solid #f5ebe4;
+    border-radius: 10rpx;
+    background: #fdedeb;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.limit-item-content,
+.group-item-content {
+    width: 430rpx;
+    height: 220rpx;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+}
+
+.limit-item-name,
+.group-item-name {
+    width: 430rpx;
+    font-size: 30rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.limit-item-desc {
+    width: 430rpx;
+    color: #999999;
+    font-size: 24rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.limit-item-time {
+    width: 430rpx;
+    color: #f5333f;
+    font-size: 24rpx;
+    line-height: 25rpx;
+    margin-top: 50rpx;
+}
+
+.limit-item-price {
+    font-size: 30rpx;
+    line-height: 65rpx;
+    text {
+        color: #999999;
+        font-size: 22rpx;
+        line-height: 40rpx;
+        text-decoration: line-through;
+    }
+}
+
+.coupon-icon-cart {
+    width: 60rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    color: #ffffff;
+    background: #f5333f;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20rpx;
+    right: 0;
+}
+
+.coupon-recommend{
+    width: 690rpx;
+    height: 220rpx;
+    margin: 20rpx 30rpx;
+    border-bottom: 1rpx solid #f2f2f2;
+    position: relative;
+}
+
+.coupon-recommend-img{
+    width: 690rpx;
+    height: 220rpx;
+    border-radius: 20rpx 20rpx 0 0;
+    background: #fdedeb;
+}
+
+.coupon-recommend-update{
+    width: 690rpx;
+    height: 60rpx;
+    padding: 10rpx;
+    background: #ffffff;
+    border-radius: 20rpx 20rpx 0 0;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text{
+        color: #999999;
+        height: 40rpx;
+        font-size: 20rpx;
+        line-height: 40rpx;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.coupon-recommend-avatar{
+    width: 40rpx;
+    height: 40rpx;
+    margin-right: 20rpx;
+    border-radius: 50%;
+    vertical-align: top;
+    background: #fdedeb;
+}
+
+.group-item:first-child {
+    padding-top: 0;
+}
+
+.group-item-sold {
+    width: 430rpx;
+    height: 45rpx;
+    color: #bfbfbf;
+    margin-top: 15rpx;
+    padding: 5rpx 0;
+    box-sizing: border-box;
+    text {
+        height: 35rpx;
+        font-size: 20rpx;
+        line-height: 35rpx;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.group-item-buyer {
+    width: 35rpx;
+    height: 35rpx;
+    border-radius: 50%;
+    background: #fdedeb;
+    margin-right: 10rpx;
+        vertical-align: top;
+}
+
+.group-item-ellipsis {
+    width: 35rpx;
+    height: 35rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+        vertical-align: top;
+}
+
+.group-item-price {
+    color: #f5333f;
+    font-size: 30rpx;
+    line-height: 65rpx;
+    margin-top: 60rpx;
+    text {
+        color: #999999;
+        font-size: 22rpx;
+        line-height: 40rpx;
+        text-decoration: line-through;
+    }
+}
+
+.coupon-quetion-content, .coupon-game-content{
+    width: 750rpx;
+    height: 300rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 300rpx;
+    text-align: center;
+    background: #f5333f;
+}
 </style>
 <template>
-  <view class="container">
+    <view class="container">
         <navBar navTitle="放心优选"></navBar>
-  </view>
+        <view class="coupon-module">
+            <repeat for="{{couponModule}}" key="index">
+                <view class="coupon-module-item {{index == curModule ? 'coupon-module-cur' : ''}}" @tap="chooseModule({{index}})">
+                    <text>{{item}}</text>
+                    <view class="coupon-module-bar"></view>
+                </view>
+            </repeat>
+        </view>
+        <view wx:if="{{curModule == 0}}" class="coupon-content">
+            <view class="coupon-rank">
+                <view class="coupon-rank-title">王者社区排行榜</view>
+                <view class="coupon-rank-content">敬请期待</view>
+            </view>
+            <view class="coupon-block coupon-limit">
+                <view class="coupon-block-title">限时秒杀</view>
+                <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
+                    <text>{{limit.restTime[0]}}</text>:
+                    <text>{{limit.restTime[1]}}</text>:
+                    <text>{{limit.restTime[2]}}</text>
+                </view>
+                <view class="coupon-limit-product">
+                    <repeat for="{{limit.product}}" key="id">
+                        <view class="limit-item" @tap="navToProduct({{item.id}})">
+                            <image src="{{item.imgUrl}}" class="limit-item-img" />
+                                <view class="limit-item-content">
+                                    <view class="limit-item-name">{{item.name}}</view>
+                                    <view class="limit-item-desc">{{item.desc}}</view>
+                                    <view class="limit-item-time">{{limit.startTime}} 开抢</view>
+                                    <view class="limit-item-price">¥{{item.price}}
+                                        <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
+                                    </view>
+                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
+                                </view>
+                        </view>
+                    </repeat>
+                </view>
+            </view>
+            <view class="coupon-recommend">
+                <image src="{{recommend.imgUrl}}" class="coupon-recommend-img" />
+                <view class="coupon-recommend-update">
+                    <image src="{{recommend.update.user.avatar}}" class="coupon-recommend-avatar" />
+                    <text>{{recommend.update.user.name}}【{{recommend.update.product.name}}】商品拼单已成功，商品已售{{recommend.update.product.soldCount}}件</text>
+                </view>
+            </view>
+            <view class="coupon-block coupon-group">
+                <view class="coupon-block-title">优选拼单购</view>
+                <view class="coupon-group-product">
+                    <repeat for="{{groupProduct}}" key="id">
+                        <view class="group-item" @tap="navToProduct({{item.id}})">
+                            <image src="{{item.imgUrl}}" class="group-item-img" />
+                                <view class="group-item-content">
+                                    <view class="group-item-name">{{item.name}}</view>
+                                    <view class="group-item-sold">
+                                        <repeat for="{{item.buyer}}" key="id">
+                                            <image src="{{item.avatar}}" class="group-item-buyer" />
+                                        </repeat>
+                                        <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
+                                            <text>已团{{item.soldCount}}件</text>
+                                    </view>
+                                    <view class="group-item-price">¥{{item.price}}
+                                        <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
+                                    </view>
+                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
+                                </view>
+                        </view>
+                    </repeat>
+                </view>
+            </view>
+            
+            <view class="coupon-block">
+                <view class="coupon-block-title">有奖知识问答</view>
+                <view class="coupon-quetion-content">敬请期待</view>
+            </view>
+            <view class="coupon-block">
+                <view class="coupon-block-title">游戏赢大奖</view>
+                <view class="coupon-game-content">敬请期待</view>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-import NavBar from '@/components/navBar'
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
 
-
-  export default class Coupon extends wepy.page {
+export default class Coupon extends wepy.page {
     components = {
         navBar: NavBar
-    }
+    };
 
     data = {
-        
-    }
+        couponModule: ['社区积分榜', '限时秒杀', '拼团购', '放心赢红包'],
+        curModule: 0,
+        limit: {
+            isStarted: false,
+            startTime: '7月24日 12：00',
+            restTime: ['10', '39', '06'],
+            product: [
+                {
+                    id: '00001',
+                    name: '日式蝴蝶结通勤女鞋',
+                    desc: '甜美通勤，轻松搭配',
+                    imgUrl: '',
+                    price: 209.3,
+                    oriPrice: 299
+                },
+                {
+                    id: '00002',
+                    name: '随便阅读灯',
+                    desc: '无极调光，360°自由旋转',
+                    imgUrl: '',
+                    price: 45
+                },
+                {
+                    id: '00003',
+                    name: '男士都市轻生活弹力牛仔裤',
+                    desc: '自如转换多场景，让双腿保持昂扬活力',
+                    imgUrl: '',
+                    oriPrice: 103.3,
+                    price: 83.3
+                }
+            ]
+        },
+        recommend: {
+            imgUrl: '',
+            update: {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            }
+        },
+        groupProduct: [
+            {
+                id: '00001',
+                name: '日式蝴蝶结通勤女鞋',
+                imgUrl: '',
+                price: 209.3,
+                oriPrice: 299,
+                soldCount: 289,
+                buyer: [
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    }
+                ]
+            },
+            {
+                id: '00002',
+                name: '随便阅读灯',
+                imgUrl: '',
+                price: 45,
+                soldCount: 289,
+                buyer: [
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    }
+                ]
+            },
+            {
+                id: '00003',
+                name: '男士都市轻生活弹力牛仔裤',
+                imgUrl: '',
+                price: 83.3,
+                oriPrice: 103.3,
+                soldCount: 289,
+                buyer: [
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    },
+                    {
+                        id: '',
+                        avatar: ''
+                    }
+                ]
+            }
+        ]
+    };
 
     methods = {
-        
-    }
+        chooseModule(index, e) {
+            this.curModule = index;
+            this.$apply();
+        }
+    };
 
-    events = {
-        
-    }
+    events = {};
 
-    onLoad() {
-        
-    }
-  }
+    onLoad() {}
+}
 </script>

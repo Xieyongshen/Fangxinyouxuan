@@ -18,9 +18,10 @@
     text-align: left;
     position: absolute;
     left: 30rpx;
-    .fa {
-        font-size: 50rpx;
-        line-height: 42px;
+    .icon-out {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 8.5rpx 0;
     }
 }
 </style>
@@ -28,7 +29,7 @@
     <view class="navBar">
         <block wx:if="{{isChildPage == 'y'}}">
             <navigator open-type="navigateBack" delta="1" hover-class="none" class="nav-back">
-                <text class="fa fa-angle-left"></text>
+                <image src="/icons/out.png" class="icon-out" />
             </navigator>
         </block>
         <text class="nav-title">{{navTitle}}</text>

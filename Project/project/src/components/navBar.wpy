@@ -2,8 +2,6 @@
 .navBar {
     width: 750rpx;
     height: 62px;
-    font-size: 34rpx;
-    line-height: 42px;
     text-align: center;
     padding-top: 20px;
     background: #ffffff;
@@ -19,10 +17,16 @@
     position: absolute;
     left: 30rpx;
     .icon-out {
-        width: 15rpx;
-        height: 25rpx;
-        margin: 8.5rpx 0;
+        width: 12px;
+        height: 20px;
+        margin: 11px 0;
     }
+}
+
+.nav-title{
+    font-size: 18px;
+    line-height: 42px;
+    display: inline-block;
 }
 </style>
 <template>
@@ -38,7 +42,7 @@
 <script>
 import wepy from 'wepy';
 
-export default class navBar extends wepy.component {
+export default class NavBar extends wepy.component {
     props = {
         navTitle: String,
         isChildPage: {

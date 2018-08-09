@@ -1,0 +1,90 @@
+<style lang="less">
+.product-item {
+    width: 750rpx;
+    padding: 40rpx 30rpx;
+    box-sizing: border-box;
+}
+
+.product-item:not(:last-child) {
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.product-item-img {
+    width: 220rpx;
+    height: 220rpx;
+    margin-right: 30rpx;
+    border: 1rpx solid #f5ebe4;
+    border-radius: 10rpx;
+    background: #fdedeb;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.product-item-content {
+    width: 440rpx;
+    height: 220rpx;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+}
+
+.product-item-name {
+    width: 440rpx;
+    font-size: 30rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-item-desc {
+    width: 440rpx;
+    color: #999999;
+    font-size: 24rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-icon-cart {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20rpx;
+    right: 0;
+}
+</style>
+<template>
+    <view class="product-item" @tap="navToProduct({{id}})">
+        <image src="{{imgUrl}}" class="product-item-img" />
+        <view class="product-item-content">
+            <view class="product-item-name">{{name}}</view>
+            <view class="product-item-desc">{{desc}}</view>
+            <slot name="extra"></slot>
+            <slot name="price">￥0</slot>
+            <image src="/icons/cart-recommend.png" class="product-icon-cart" />
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class ProductBlock extends wepy.component {
+    props = {
+        id: String,
+        imgUrl: String,
+        name: String,
+        desc: String
+    };
+
+    methods = {
+        navToProduct(product, event) {
+            wx.navigateTo({
+                url: '/pages/product/product?id=' + product
+            });
+        }
+    }
+}
+</script>

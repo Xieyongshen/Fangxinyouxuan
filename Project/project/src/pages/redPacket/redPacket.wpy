@@ -96,69 +96,22 @@ page {
     padding-left: 10rpx;
     margin-bottom: 35rpx;
 }
-
-.redPacket-recommend-item {
-    width: 355rpx;
-    padding: 0 10rpx;
-    margin-bottom: 30rpx;
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
-}
-
-.redPacket-recommend-img {
-    width: 335rpx;
-    height: 335rpx;
-    border-radius: 10rpx;
-    background: #fdedeb;
-}
-
-.redPacket-recommend-name {
-    width: 220rpx;
-    font-size: 26rpx;
-    line-height: 45rpx;
-    letter-spacing: 2rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.redPacket-recommend-price {
-    color: #f5333f;
-    margin-top: 30rpx;
-    font-size: 32rpx;
-    line-height: 40rpx;
-}
-
-.redPacket-icon-cart {
-    width: 55rpx;
-    height: 55rpx;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 10rpx;
-    right: 10rpx;
-}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="redPacket-content">
-            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">
-                您有
-                <text>{{tipCount}}</text>个红包已将过期
-            </view>
+            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有<text>{{tipCount}}</text>个红包已将过期</view>
             <repeat for="{{redPacket}}" key="id">
                 <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
                     <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
-                        <view class="redPacket-item-count">￥
-                            <text>{{item.count}}</text>
-                        </view>
+                        <view class="redPacket-item-count">￥<text>{{item.count}}</text></view>
                         <view class="redPacket-item-content">
                             <view class="redPacket-item-name">{{item.name}}</view>
                             <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
                             <view class="redPacket-item-date">有效期：{{item.date}}</view>
                         </view>
-                        <view class="redPacket-item-use">立即使用</view>
+                        <view class="redPacket-item-use" @tap="redPacketChoose({{item.overdue}}, {{item.id}})">立即使用</view>
                 </view>
             </repeat>
             <view class="redPacket-more">没有更多了</view>
@@ -166,12 +119,7 @@ page {
         <view class="redPacket-recommend">
             <view class="redPacket-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
-                <view class="redPacket-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="redPacket-recommend-img" />
-                        <view class="redPacket-recommend-name">{{item.name}}</view>
-                        <view class="redPacket-recommend-price">￥{{item.price}}</view>
-                        <image src="/icons/cart-recommend.png" class="redPacket-icon-cart" />
-                </view>
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
             </repeat>
         </view>
     </view>
@@ -180,10 +128,12 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Recommend from '@/components/recommendBlock';
 
 export default class RedPacket extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        recommend: Recommend
     };
 
     data = {
@@ -242,7 +192,14 @@ export default class RedPacket extends wepy.page {
         ]
     };
 
-    methods = {};
+    methods = {
+        redPacketChoose(overdue, id, events){
+            if(overdue) return;
+            wx.navigateBack({
+                delta: 1
+            })
+        }
+    };
 
     events = {};
 

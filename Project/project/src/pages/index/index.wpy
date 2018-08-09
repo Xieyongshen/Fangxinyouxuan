@@ -15,14 +15,14 @@
 }
 
 .index-icon-position {
-    width: 20rpx;
-    height: 30rpx;
-    margin: 22rpx 0;
+    width: 26rpx;
+    height: 39rpx;
+    margin: 18rpx 0;
     vertical-align: top;
 }
 
 .shop-name {
-    font-size: 26rpx;
+    font-size: 28rpx;
     line-height: 75rpx;
     margin-left: 20rpx;
     margin-right: 15rpx;
@@ -31,16 +31,16 @@
 }
 
 .index-icon-down {
-    width: 30rpx;
-    height: 30rpx;
-    margin-top: 25rpx;
+    width: 45rpx;
+    height: 45rpx;
+    margin-top: 18rpx;
     vertical-align: top;
 }
 
 .index-icon-search {
-    width: 30rpx;
-    height: 30rpx;
-    margin-top: 25rpx;
+    width: 35rpx;
+    height: 35rpx;
+    margin-top: 20rpx;
     vertical-align: top;
     float: right;
 }
@@ -52,10 +52,18 @@
     background: #fdedeb;
 }
 
-.banner-bottom {
-    width: 325rpx;
+.banner-left {
+    width: 335rpx;
     height: 150rpx;
-    margin: 20rpx 10rpx;
+    margin: 10rpx 10rpx 20rpx 0;
+    border-radius: 20rpx;
+    background: #fdedeb;
+}
+
+.banner-right {
+    width: 335rpx;
+    height: 150rpx;
+    margin: 10rpx 0 20rpx 10rpx;
     border-radius: 20rpx;
     background: #fdedeb;
 }
@@ -123,77 +131,21 @@
     font-weight: 600;
 }
 
-.today-item,
-.hot-item,
-.selected-item {
-    padding: 40rpx 0 40rpx 10rpx;
-}
-
-.today-item:not(:last-child),
-.hot-item:not(:last-child),
-.selected-item:not(:last-child) {
-    border-bottom: 1rpx solid #f2f2f2;
-}
-
-.today-item-img,
-.hot-item-img,
-.selected-item-img {
-    width: 220rpx;
-    height: 220rpx;
-    margin-right: 30rpx;
-    border: 1rpx solid #f5ebe4;
-    border-radius: 10rpx;
-    background: #fdedeb;
-    vertical-align: top;
-    box-sizing: border-box;
-}
-
-.today-item-content,
-.hot-item-content,
-.selected-item-content {
-    width: 430rpx;
-    height: 220rpx;
-    vertical-align: top;
-    display: inline-block;
-    position: relative;
-}
-
-.today-item-name,
-.hot-item-name,
-.selected-item-name {
-    width: 430rpx;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.today-item-desc,
-.hot-item-desc,
-.selected-item-desc {
-    width: 430rpx;
-    color: #999999;
-    font-size: 24rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .today-item-remain {
     width: 250rpx;
+    height: 20px;
+    margin-top: 10rpx;
+    padding: 0;
     border: 1px solid #fdd6d9;
     border-radius: 15px;
+    box-sizing: border-box;
     overflow: hidden;
-    position: absolute;
-    left: 0;
-    bottom: 65rpx;
+    position: relative;
     text {
         width: 250rpx;
         color: #f5333f;
         font-size: 26rpx;
-        line-height: 20px;
+        line-height: 18px;
         text-align: center;
         display: inline-block;
         position: absolute;
@@ -203,28 +155,28 @@
 }
 
 .today-item-price {
-    font-size: 24rpx;
-    line-height: 65rpx;
     position: absolute;
-    left: 0;
     bottom: 0;
+}
+
+.today-price-cur {
+    font-size: 24rpx;
+    line-height: 30rpx;
     text {
         font-size: 30rpx;
         line-height: 40rpx;
     }
 }
 
-.index-icon-cart {
-    width: 60rpx;
-    height: 60rpx;
-    line-height: 60rpx;
-    text-align: center;
-    color: #ffffff;
-    background: #f5333f;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20rpx;
-    right: 0;
+.today-price-ori {
+    color: #999999;
+    font-size: 24rpx;
+    line-height: 30rpx;
+    text {
+        font-size: 30rpx;
+        line-height: 35rpx;
+        text-decoration: line-through;
+    }
 }
 
 .index-banner-middle {
@@ -234,22 +186,32 @@
     background: #fdedeb;
 }
 
-.hot-item-price,
-.selected-item-price {
-    color: #f5333f;
-    font-size: 26rpx;
+.hot-item-label, .selected-item-label {
+    width: 110rpx;
+    height: 30rpx;
+    margin: 5rpx;
+    color: #ffffff;
+    font-size: 24rpx;
     line-height: 30rpx;
-    position: absolute;
-    left: 0;
-    bottom: 60rpx;
+    text-align: center;
+    vertical-align: top;
+    border-radius: 5rpx;
+    background: #ffba00;
+    display: inline-block;
 }
 
-.price-only {
-    font-size: 32rpx;
-    line-height: 40rpx;
+.hot-item-price,
+.selected-item-price {
     position: absolute;
     left: 0;
     bottom: 15rpx;
+}
+
+.hot-item-oriPrice,
+.selected-item-oriPrice {
+    color: #f5333f;
+    font-size: 26rpx;
+    line-height: 30rpx;
 }
 
 .hot-item-curPrice,
@@ -257,22 +219,23 @@
     color: #ffba00;
     font-size: 32rpx;
     line-height: 40rpx;
-    position: absolute;
-    left: 0;
-    bottom: 15rpx;
+}
+
+.hot-item-nowPrice,
+.selected-item-nowPrice {
+    color: #f5333f;
+    font-size: 32rpx;
+    line-height: 40rpx;
     text {
-        width: 110rpx;
-        height: 30rpx;
-        margin: 5rpx;
-        color: #ffffff;
-        font-size: 24rpx;
+        color: #999999;
+        font-size: 22rpx;
         line-height: 30rpx;
-        text-align: center;
-        vertical-align: top;
-        border-radius: 5rpx;
-        background: #ffba00;
-        display: inline-block;
+        text-decoration: line-through;
     }
+}
+
+.index-product {
+    margin: 0 -30rpx;
 }
 </style>
 <template>
@@ -282,21 +245,21 @@
             <view class="index-header">
                 <view class="index-shop">
                     <image src="/icons/position.png" class="index-icon-position" />
-                        <text class="shop-name">{{shopChoose}}</text>
-                        <image src="/icons/down.png" class="index-icon-down" />
+                    <text class="shop-name">{{shopChoose}}</text>
+                    <image src="/icons/down.png" class="index-icon-down" />
                 </view>
-                <image src="/icons/search.png" class="index-icon-search" />
+                <image src="/icons/search.png" class="index-icon-search" @tap="navToSearch" />
             </view>
             <view class="index-banner">
                 <image class="banner-top" />
-                    <image class="banner-bottom" />
-                        <image class="banner-bottom" />
+                <image class="banner-left" />
+                <image class="banner-right" />
             </view>
             <view class="index-category">
                 <repeat for="{{category}}" key="index">
                     <view class="category-item" @tap="navToCategory({{item.title}})">
                         <image src="{{item.imgUrl}}" class="category-img" />
-                            <text class="category-title">{{item.title}}</text>
+                        <text class="category-title">{{item.title}}</text>
                     </view>
                 </repeat>
             </view>
@@ -306,62 +269,63 @@
                     <text>距离活动结束还剩：</text>
                     <text class="today-time-num">{{todayTime}}</text>
                 </view>
-                <repeat for="{{today}}" key="id">
-                    <view class="today-item" @tap="navToProduct({{item.id}})">
-                        <image src="{{item.imgUrl}}" class="today-item-img" />
-                            <view class="today-item-content">
-                                <view class="today-item-name">{{item.name}}</view>
-                                <view class="today-item-desc">{{item.desc}}</view>
-                                <view wx:if="{{item.isLimited == false}}" class="today-item-remain">
-                                    <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
-                                    <text>还剩{{item.remain}}份</text>
-                                </view>
-                                <view class="today-item-price">限时价
-                                    <text>¥{{item.price}}</text>
-                                </view>
-                                <image src="/icons/cart-recommend.png" class="index-icon-cart" />
+                <repeat for="{{today}}" key="id" index="i">
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view wx:if="{{item.isLimited == false}}" slot="extra" class="today-item-remain">
+                            <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
+                            <text>还剩{{item.remain}}份</text>
+                        </view>
+                        <view slot="price" class="today-item-price">
+                            <view class="today-price-cur">限时价
+                                <text>¥{{item.price}}</text>
                             </view>
-                    </view>
+                            <view wx:if="{{item.oriPrice > 0}}" class="today-price-ori">原价
+                                <text>¥{{item.oriPrice}}</text>
+                            </view>
+                        </view>
+                    </product>
                 </repeat>
             </view>
             <image class="index-banner-middle" />
-                <view class="index-hot">
-                    <view class="hot-title">热卖爆款</view>
-                    <repeat for="{{hot}}" key="id">
-                        <view class="hot-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="hot-item-img" />
-                                <view class="hot-item-content">
-                                    <view class="hot-item-name">{{item.name}}</view>
-                                    <view class="hot-item-desc">{{item.desc}}</view>
-                                    <view class="hot-item-price {{item.curPrice >= 0 ? '' : 'price-only'}}">¥{{item.price}}</view>
-                                    <view wx:if="{{item.curPrice >= 0}}" class="hot-item-curPrice">
-                                        ¥{{item.curPrice}}
-                                        <text>{{item.notice}}</text>
-                                    </view>
-                                    <image src="/icons/cart-recommend.png" class="index-icon-cart" />
+            <view class="index-hot">
+                <view class="hot-title">热卖爆款</view>
+                <repeat for="{{hot}}" key="id">
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label">{{item.label}}</view>
+                        <view slot="price" class="hot-item-price">
+                            <block wx:if="{{item.label != ''}}">
+                                <view class="hot-item-oriPrice">¥{{item.oriPrice}}</view>
+                                <view wx:if="{{item.price >= 0}}" class="hot-item-curPrice">¥{{item.price}}</view>
+                            </block>
+                            <block wx:else>
+                                <view class="hot-item-nowPrice">¥{{item.price}}
+                                    <text>¥{{item.oriPrice}}</text>
                                 </view>
+                            </block>
                         </view>
-                    </repeat>
-                </view>
-                <image class="index-banner-middle" />
-                    <view class="index-selected">
-                        <view class="selected-title">放心精选</view>
-                        <repeat for="{{selected}}" key="id">
-                            <view class="selected-item" @tap="navToProduct({{item.id}})">
-                                <image src="{{item.imgUrl}}" class="selected-item-img" />
-                                    <view class="selected-item-content">
-                                        <view class="selected-item-name">{{item.name}}</view>
-                                        <view class="selected-item-desc">{{item.desc}}</view>
-                                        <view class="selected-item-price {{item.curPrice >= 0 ? '' : 'price-only'}}">¥{{item.price}}</view>
-                                        <view wx:if="{{item.curPrice >= 0}}" class="selected-item-curPrice">
-                                            ¥{{item.curPrice}}
-                                            <text>{{item.notice}}</text>
-                                        </view>
-                                        <image src="/icons/cart-recommend.png" class="index-icon-cart" />
-                                    </view>
-                            </view>
-                        </repeat>
-                    </view>
+                    </product>
+                </repeat>
+            </view>
+            <image class="index-banner-middle" />
+            <view class="index-selected">
+                <view class="selected-title">放心精选</view>
+                <repeat for="{{selected}}" key="id">
+                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label">{{item.label}}</view>
+                        <view slot="price" class="selected-item-price">
+                            <block wx:if="{{item.label != ''}}">
+                                <view class="selected-item-oriPrice">¥{{item.oriPrice}}</view>
+                                <view wx:if="{{item.price >= 0}}" class="selected-item-curPrice">¥{{item.price}}</view>
+                            </block>
+                            <block wx:else>
+                                <view class="selected-item-nowPrice">¥{{item.price}}
+                                    <text>¥{{item.oriPrice}}</text>
+                                </view>
+                            </block>
+                        </view>
+                    </product>
+                </repeat>
+            </view>
         </view>
     </view>
 </template>
@@ -369,12 +333,14 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 import api from '@/api/api';
 
 export default class Index extends wepy.page {
     config = {};
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {
@@ -411,7 +377,8 @@ export default class Index extends wepy.page {
                 count: 100,
                 remain: 60,
                 isLimited: false,
-                price: 209.3
+                price: 209.3,
+                oriPrice: 300
             },
             {
                 id: '00002',
@@ -419,9 +386,10 @@ export default class Index extends wepy.page {
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
                 count: 100,
-                remain: 60,
+                remain: 50,
                 isLimited: false,
-                price: 209.3
+                price: 209.3,
+                oriPrice: 300
             },
             {
                 id: '00003',
@@ -429,9 +397,10 @@ export default class Index extends wepy.page {
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
                 count: 100,
-                remain: 60,
+                remain: 30,
                 isLimited: false,
-                price: 209.3
+                price: 209.3,
+                oriPrice: 300
             },
             {
                 id: '00004',
@@ -439,9 +408,10 @@ export default class Index extends wepy.page {
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
                 count: 100,
-                remain: 60,
+                remain: 80,
                 isLimited: false,
-                price: 209.3
+                price: 209.3,
+                oriPrice: 300
             },
             {
                 id: '00005',
@@ -451,7 +421,8 @@ export default class Index extends wepy.page {
                 count: 100,
                 remain: 60,
                 isLimited: true,
-                price: 209.3
+                price: 209.3,
+                oriPrice: 300
             }
         ],
         hot: [
@@ -460,36 +431,36 @@ export default class Index extends wepy.page {
                 name: '日式蝴蝶结通勤女鞋',
                 desc: '甜美通勤，轻松搭配',
                 imgUrl: '',
-                price: 399,
-                curPrice: 153.3,
-                notice: '可拼团'
+                oriPrice: 399,
+                price: 153.3,
+                label: '可拼团'
             },
             {
                 id: '00002',
                 name: '随便阅读灯',
                 desc: '无极调光，360°自由旋转',
                 imgUrl: '',
-                price: 45,
-                curPrice: -1,
-                notice: ''
+                oriPrice: 45,
+                price: 30,
+                label: ''
             },
             {
                 id: '00003',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
-                price: 103.3,
-                curPrice: 83.3,
-                notice: '满20减5'
+                oriPrice: 103.3,
+                price: 83.3,
+                label: '满20减5'
             },
             {
                 id: '00004',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
-                price: 499,
-                curPrice: 209.3,
-                notice: '甄选优品'
+                oriPrice: 499,
+                price: 209.3,
+                label: '甄选优品'
             }
         ],
         selected: [
@@ -498,36 +469,36 @@ export default class Index extends wepy.page {
                 name: '日式蝴蝶结通勤女鞋',
                 desc: '甜美通勤，轻松搭配',
                 imgUrl: '',
-                price: 399,
-                curPrice: 153.3,
-                notice: '可拼团'
+                oriPrice: 399,
+                price: 153.3,
+                label: '可拼团'
             },
             {
                 id: '00002',
                 name: '随便阅读灯',
                 desc: '无极调光，360°自由旋转',
                 imgUrl: '',
-                price: 45,
-                curPrice: -1,
-                notice: ''
+                oriPrice: 45,
+                price: 30,
+                label: ''
             },
             {
                 id: '00003',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
-                price: 103.3,
-                curPrice: 83.3,
-                notice: '满20减5'
+                oriPrice: 103.3,
+                price: 83.3,
+                label: '满20减5'
             },
             {
                 id: '00004',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
-                price: 499,
-                curPrice: 209.3,
-                notice: '甄选优品'
+                oriPrice: 499,
+                price: 209.3,
+                label: '甄选优品'
             }
         ]
     };
@@ -535,6 +506,12 @@ export default class Index extends wepy.page {
     computed = {};
 
     methods = {
+        navToSearch() {
+            wx.navigateTo({
+                url: '/pages/search/search'
+            });
+        },
+
         navToCategory(category, event) {
             wx.navigateTo({
                 url: '/pages/index/category/category?name=' + category
@@ -556,6 +533,18 @@ export default class Index extends wepy.page {
             }
         });
         console.log(res)
+    
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/index/index'
+        };
     }
+
+    // async onLoad() {
+    //     let self = this;
+    //     let res = await api.getShopProduct();
+    //     console.log(res.data)
+    // }
 }
 </script>

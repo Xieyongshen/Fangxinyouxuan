@@ -1,0 +1,73 @@
+<style lang="less">
+.recommend-item {
+    width: 355rpx;
+    padding: 0 10rpx;
+    margin-bottom: 30rpx;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+}
+
+.recommend-item-img {
+    width: 335rpx;
+    height: 335rpx;
+    border-radius: 10rpx;
+    background: #fdedeb;
+}
+
+.recommend-item-name {
+    width: 220rpx;
+    font-size: 26rpx;
+    line-height: 45rpx;
+    letter-spacing: 2rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recommend-item-price {
+    color: #f5333f;
+    margin-top: 30rpx;
+    font-size: 32rpx;
+    line-height: 40rpx;
+}
+
+.recommend-icon-cart {
+    width: 55rpx;
+    height: 55rpx;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 10rpx;
+    right: 10rpx;
+}
+</style>
+<template>
+    <view class="recommend-item" @tap="navToProduct({{id}})">
+        <image src="{{imgUrl}}" class="recommend-item-img" />
+        <view class="recommend-item-content">
+            <view class="recommend-item-name">{{name}}</view>
+            <view class="recommend-item-price">￥{{price}}</view>
+            <image src="/icons/cart-recommend.png" class="recommend-icon-cart" />
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class RecommendBlock extends wepy.component {
+    props = {
+        id: String,
+        imgUrl: String,
+        name: String,
+        price: String
+    };
+
+    methods = {
+        navToProduct(product, event) {
+            wx.navigateTo({
+                url: '/pages/product/product?id=' + product
+            });
+        }
+    }
+}
+</script>

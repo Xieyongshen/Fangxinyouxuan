@@ -66,7 +66,7 @@ page {
     text-align: center;
 }
 
-.coupon-block{
+.coupon-block {
     width: 750rpx;
     margin-top: 60rpx;
 }
@@ -93,61 +93,6 @@ page {
     }
 }
 
-.limit-item,
-.group-item {
-    padding: 40rpx 30rpx 40rpx 40rpx;
-}
-
-.limit-item:first-child {
-    padding-top: 30rpx;
-}
-
-.limit-item:not(:last-child),
-.group-item:not(:last-child) {
-    border-bottom: 1rpx solid #f2f2f2;
-}
-
-.limit-item-img,
-.group-item-img {
-    width: 220rpx;
-    height: 220rpx;
-    margin-right: 30rpx;
-    border: 1rpx solid #f5ebe4;
-    border-radius: 10rpx;
-    background: #fdedeb;
-    vertical-align: top;
-    box-sizing: border-box;
-}
-
-.limit-item-content,
-.group-item-content {
-    width: 430rpx;
-    height: 220rpx;
-    vertical-align: top;
-    display: inline-block;
-    position: relative;
-}
-
-.limit-item-name,
-.group-item-name {
-    width: 430rpx;
-    font-size: 30rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.limit-item-desc {
-    width: 430rpx;
-    color: #999999;
-    font-size: 24rpx;
-    line-height: 45rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .limit-item-time {
     width: 430rpx;
     color: #f5333f;
@@ -167,20 +112,7 @@ page {
     }
 }
 
-.coupon-icon-cart {
-    width: 60rpx;
-    height: 60rpx;
-    line-height: 60rpx;
-    text-align: center;
-    color: #ffffff;
-    background: #f5333f;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 20rpx;
-    right: 0;
-}
-
-.coupon-recommend{
+.coupon-recommend {
     width: 690rpx;
     height: 220rpx;
     margin: 20rpx 30rpx;
@@ -188,14 +120,14 @@ page {
     position: relative;
 }
 
-.coupon-recommend-img{
+.coupon-recommend-img {
     width: 690rpx;
     height: 220rpx;
     border-radius: 20rpx 20rpx 0 0;
     background: #fdedeb;
 }
 
-.coupon-recommend-update{
+.coupon-recommend-update {
     width: 690rpx;
     height: 60rpx;
     padding: 10rpx;
@@ -207,23 +139,24 @@ page {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text{
-        color: #999999;
-        height: 40rpx;
-        font-size: 20rpx;
-        line-height: 40rpx;
-        display: inline-block;
-        vertical-align: top;
-    }
 }
 
-.coupon-recommend-avatar{
+.coupon-recommend-avatar {
     width: 40rpx;
     height: 40rpx;
     margin-right: 20rpx;
     border-radius: 50%;
     vertical-align: top;
     background: #fdedeb;
+}
+
+.coupon-recommend-text {
+    color: #999999;
+    height: 40rpx;
+    font-size: 20rpx;
+    line-height: 40rpx;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .group-item:first-child {
@@ -252,7 +185,7 @@ page {
     border-radius: 50%;
     background: #fdedeb;
     margin-right: 10rpx;
-        vertical-align: top;
+    vertical-align: top;
 }
 
 .group-item-ellipsis {
@@ -260,7 +193,7 @@ page {
     height: 35rpx;
     border-radius: 50%;
     margin-right: 20rpx;
-        vertical-align: top;
+    vertical-align: top;
 }
 
 .group-item-price {
@@ -276,7 +209,8 @@ page {
     }
 }
 
-.coupon-quetion-content, .coupon-game-content{
+.coupon-quetion-content,
+.coupon-game-content {
     width: 750rpx;
     height: 300rpx;
     color: #ffffff;
@@ -305,59 +239,53 @@ page {
             <view class="coupon-block coupon-limit">
                 <view class="coupon-block-title">限时秒杀</view>
                 <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text>{{limit.restTime[0]}}</text>:
-                    <text>{{limit.restTime[1]}}</text>:
-                    <text>{{limit.restTime[2]}}</text>
+                    <text>{{limit.restTime[0]}}</text>:<text>{{limit.restTime[1]}}</text>:<text>{{limit.restTime[2]}}</text>
                 </view>
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
-                        <view class="limit-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="limit-item-img" />
-                                <view class="limit-item-content">
-                                    <view class="limit-item-name">{{item.name}}</view>
-                                    <view class="limit-item-desc">{{item.desc}}</view>
-                                    <view class="limit-item-time">{{limit.startTime}} 开抢</view>
-                                    <view class="limit-item-price">¥{{item.price}}
-                                        <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
-                                    </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
+                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc">
+                            <view slot="extra" class="limit-item-time">{{limit.startTime}} 开抢</view>
+                            <view slot="price" class="limit-item-price">
+                                <view class="limit-item-price">¥{{item.price}}
+                                    <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                                 </view>
-                        </view>
+                            </view>
+                        </product>
                     </repeat>
                 </view>
             </view>
             <view class="coupon-recommend">
-                <image src="{{recommend.imgUrl}}" class="coupon-recommend-img" />
-                <view class="coupon-recommend-update">
-                    <image src="{{recommend.update.user.avatar}}" class="coupon-recommend-avatar" />
-                    <text>{{recommend.update.user.name}}【{{recommend.update.product.name}}】商品拼单已成功，商品已售{{recommend.update.product.soldCount}}件</text>
+                <image src="{{recommendImg}}" class="coupon-recommend-img" />
+                <view class="coupon-update">
+                    <swiper vertical="true" autoplay="true" interval="5000" duration="1000" circular="true" class="coupon-recommend-update">
+                        <repeat for="{{update}}" key="index">
+                            <swiper-item class="update-item" catchtouchmove='changeUpdate' @tap="navToProduct({{item.product.id}})">
+                                <image src="{{item.user.avatar}}" class="coupon-recommend-avatar" />
+                                <view class="coupon-recommend-text">{{item.user.name}}【{{item.product.name}}】商品拼单已成功，商品已售{{item.product.soldCount}}件</view>
+                            </swiper-item>
+                        </repeat>
+                    </swiper>
                 </view>
             </view>
             <view class="coupon-block coupon-group">
                 <view class="coupon-block-title">优选拼单购</view>
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
-                        <view class="group-item" @tap="navToProduct({{item.id}})">
-                            <image src="{{item.imgUrl}}" class="group-item-img" />
-                                <view class="group-item-content">
-                                    <view class="group-item-name">{{item.name}}</view>
-                                    <view class="group-item-sold">
-                                        <repeat for="{{item.buyer}}" key="id">
-                                            <image src="{{item.avatar}}" class="group-item-buyer" />
-                                        </repeat>
-                                        <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
-                                            <text>已团{{item.soldCount}}件</text>
-                                    </view>
-                                    <view class="group-item-price">¥{{item.price}}
-                                        <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
-                                    </view>
-                                    <image src="/icons/cart-recommend.png" class="coupon-icon-cart" />
-                                </view>
-                        </view>
+                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name">
+                            <view slot="extra" class="group-item-sold">
+                                <repeat for="{{item.buyer}}" key="id">
+                                    <image src="{{item.avatar}}" class="group-item-buyer" />
+                                </repeat>
+                                <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
+                                <text>已团{{item.soldCount}}件</text>
+                            </view>
+                            <view slot="price" class="group-item-price">¥{{item.price}}
+                                <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
+                            </view>
+                        </product>
                     </repeat>
                 </view>
             </view>
-            
             <view class="coupon-block">
                 <view class="coupon-block-title">有奖知识问答</view>
                 <view class="coupon-quetion-content">敬请期待</view>
@@ -373,15 +301,56 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Product from '@/components/productBlock';
 
 export default class Coupon extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        product: Product
     };
 
     data = {
         couponModule: ['社区积分榜', '限时秒杀', '拼团购', '放心赢红包'],
         curModule: 0,
+        recommendImg: '',
+        update: [
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            },
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            },
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            }
+        ],
         limit: {
             isStarted: false,
             startTime: '7月24日 12：00',
@@ -411,21 +380,6 @@ export default class Coupon extends wepy.page {
                     price: 83.3
                 }
             ]
-        },
-        recommend: {
-            imgUrl: '',
-            update: {
-                user: {
-                    id: '',
-                    avatar: '',
-                    name: '北冥有鱼'
-                },
-                product: {
-                    id: '',
-                    name: '随便阅读灯',
-                    soldCount: 9999
-                }
-            }
         },
         groupProduct: [
             {
@@ -500,6 +454,16 @@ export default class Coupon extends wepy.page {
         chooseModule(index, e) {
             this.curModule = index;
             this.$apply();
+        },
+
+        navToProduct(product, events) {
+            wx.navigateTo({
+                url: '/pages/product/product?id=' + product
+            });
+        },
+
+        changeUpdate(){
+            return false;
         }
     };
 

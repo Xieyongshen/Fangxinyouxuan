@@ -57,6 +57,19 @@
     display: block;
 }
 
+.me-userinfo-login{
+    width: 160rpx;
+    height: 160rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 150rpx;
+    text-align: center;
+    border: 5rpx solid #ffffff;
+    border-radius: 50%;
+    background: #d4d5d2;
+    box-sizing: border-box;
+}
+
 .me-order {
     width: 670rpx;
     height: 160rpx;
@@ -130,8 +143,13 @@
         <view class="me-header">
             <view class="me-invite">邀请好友</view>
             <view class="me-userinfo">
-                <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
-                <button class="userinfo-getbtn" open-type="getUserInfo" bindgetuserinfo="getUserInfoFun"><view class="me-userinfo-name">{{userInfo.name}}</view></button>
+                <block wx:if="{{hasUserInfo === false}}">
+                    <button class="me-userinfo-login" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
+                </block>
+                <block wx:else>
+                    <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
+                    <view class="me-userinfo-name">{{userInfo.name}}</view>
+                </block>
             </view>
             <view class="me-order">
                 <view class="me-order-item" @tap="toOrderList(0)">
@@ -185,6 +203,7 @@ export default class Me extends wepy.page {
     };
 
     data = {
+        hasUserInfo: false,
         userInfo: {
             name: '小鱼',
             avatar: ''
@@ -195,6 +214,8 @@ export default class Me extends wepy.page {
         let self = this;
         let jwt = await log_in.log_in();
         console.log(jwt)
+        this.hasUserInfo = true
+        this.$apply()
         // if (jwt.data.access_token != null) {
         //     let res = await api.login({
         //         query: {
@@ -213,7 +234,8 @@ export default class Me extends wepy.page {
             wx.navigateTo({
                 url: 'orderList/orderList?index=' + index
             });
-        }
+        },
+
     };
 
     events = {};

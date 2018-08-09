@@ -4,6 +4,17 @@ from datetime import datetime
 import uuid
 # Create your models here.
 
+class User(models.Model):
+	user_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	user_name = models.TextField()
+	user_image = models.TextField()
+	#user_address = models.ForeignKey(Address, on_delete=models.CASCADE)
+	user_openid = models.TextField(default='unknown user')
+	create_time = models.DateTimeField(blank=True,default=datetime.now())
+
+	def __str__(self):
+		return self.user_name
+
 class Address(models.Model):
 	address_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	address_contact = models.TextField(blank=True, null=True,)
@@ -11,18 +22,10 @@ class Address(models.Model):
 	address_area = models.TextField(blank=True, null=True,)
 	address_detail = models.TextField(blank=True, null=True,)
 	address_mail = models.TextField(blank=True, null=True,)
-
+	user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
 		return self.address_detail
 
-class User(models.Model):
-	user_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	user_name = models.TextField()
-	user_image = models.TextField()
-	user_address = models.ForeignKey(Address, on_delete=models.CASCADE)
-
-	def __str__(self):
-		return self.user_name
 
 class Shop(models.Model):
 	shop_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)

@@ -36,7 +36,6 @@ export default class extends wepy.app {
             'pages/me/address/address',
             'pages/me/address/addressChange/addressChange',
             'pages/search/search',
-            'pages/product/product',
             'pages/order/order',
             'pages/productList/productList',
             'pages/redPacket/redPacket',
@@ -86,6 +85,7 @@ export default class extends wepy.app {
     constructor() {
         super();
         this.use('requestfix');
+        this.use('promisify');
     }
 
     onLaunch() {

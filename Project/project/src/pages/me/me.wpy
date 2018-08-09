@@ -126,56 +126,58 @@
 <template>
     <view class="container">
         <image src="/icons/me-bg.png" class="me-header-bg" />
-            <navBar navTitle="放心优选"></navBar>
-            <view class="me-header">
-                <view class="me-invite">邀请好友</view>
-                <view class="me-userinfo">
-                    <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
-                        <view class="me-userinfo-name">{{userInfo.name}}</view>
+        <navBar navTitle="放心优选"></navBar>
+        <view class="me-header">
+            <view class="me-invite">邀请好友</view>
+            <view class="me-userinfo">
+                <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
+                <button class="userinfo-getbtn" open-type="getUserInfo" bindgetuserinfo="getUserInfoFun"><view class="me-userinfo-name">{{userInfo.name}}</view></button>
+            </view>
+            <view class="me-order">
+                <view class="me-order-item" @tap="toOrderList(0)">
+                    <image src="/icons/toPay.png" class="me-order-icon" />
+                    <text>待付款</text>
                 </view>
-                <view class="me-order">
-                    <view class="me-order-item" @tap="toOrderList(0)">
-                        <image src="/icons/toPay.png" class="me-order-icon" />
-                            <text>待付款</text>
-                    </view>
-                    <view class="me-order-item" @tap="toOrderList(1)">
-                        <image src="/icons/toReceive.png" class="me-order-icon" />
-                            <text>待收货</text>
-                    </view>
-                    <view class="me-order-item" @tap="toOrderList(2)">
-                        <image src="/icons/toGroup.png" class="me-order-icon" />
-                            <text>待成团</text>
-                    </view>
-                    <view class="me-order-item" @tap="toOrderList(3)">
-                        <image src="/icons/orderAll.png" class="me-order-icon" />
-                            <text>全部订单</text>
-                    </view>
+                <view class="me-order-item" @tap="toOrderList(1)">
+                    <image src="/icons/toReceive.png" class="me-order-icon" />
+                    <text>待收货</text>
                 </view>
-                <view class="me-manage">
-                    <navigator url="balance/balance" class="me-manage-item">
-                        我的余额
-                        <image src="/icons/in.png" class="icon-in" />
-                    </navigator>
-                    <navigator url="../redPacket/redPacket" class="me-manage-item">
-                        我的红包
-                        <image src="/icons/in.png" class="icon-in" />
-                    </navigator>
-                    <navigator class="me-manage-item">
-                        我的优惠券
-                        <image src="/icons/in.png" class="icon-in" />
-                    </navigator>
-                    <navigator url="address/address" class="me-manage-item">
-                        我的地址
-                        <image src="/icons/in.png" class="icon-in" />
-                    </navigator>
+                <view class="me-order-item" @tap="toOrderList(2)">
+                    <image src="/icons/toGroup.png" class="me-order-icon" />
+                    <text>待成团</text>
+                </view>
+                <view class="me-order-item" @tap="toOrderList(3)">
+                    <image src="/icons/orderAll.png" class="me-order-icon" />
+                    <text>全部订单</text>
                 </view>
             </view>
+            <view class="me-manage">
+                <navigator url="balance/balance" class="me-manage-item">
+                    我的余额
+                    <image src="/icons/in.png" class="icon-in" />
+                </navigator>
+                <navigator url="../redPacket/redPacket" class="me-manage-item">
+                    我的红包
+                    <image src="/icons/in.png" class="icon-in" />
+                </navigator>
+                <navigator class="me-manage-item">
+                    我的优惠券
+                    <image src="/icons/in.png" class="icon-in" />
+                </navigator>
+                <navigator url="address/address" class="me-manage-item">
+                    我的地址
+                    <image src="/icons/in.png" class="icon-in" />
+                </navigator>
+            </view>
+        </view>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import log_in from '@/api/login';
+import api from '@/api/api';
 
 export default class Me extends wepy.page {
     components = {
@@ -189,6 +191,23 @@ export default class Me extends wepy.page {
         }
     };
 
+    async getUserInfoFun(e) {
+        let self = this;
+        let jwt = await log_in.log_in();
+        console.log(jwt)
+        // if (jwt.data.access_token != null) {
+        //     let res = await api.login({
+        //         query: {
+        //             access_token: jwt.data.access_token,
+        //             account_id: jwt.data.account_id
+        //         }
+        //     });
+        //     self.globalData.globalUserInfo = res.data;
+        //     self.hasUserInfo = true;
+        //     self.$apply();
+        // }
+    };
+
     methods = {
         toOrderList(index, e) {
             wx.navigateTo({
@@ -199,6 +218,22 @@ export default class Me extends wepy.page {
 
     events = {};
 
-    onLoad() {}
+    async onLoad() {
+        // let jwt = await login.login();
+        var jwt = wx.getStorageSync('jwt');
+        let self = this;
+
+        if (jwt.data.access_token != null) {
+            let res = await api.login({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            self.globalData.globalUserInfo = res.data;
+            self.hasUserInfo = true;
+            self.$apply();
+        }
+    }
 }
 </script>

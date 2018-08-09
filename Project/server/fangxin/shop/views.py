@@ -30,8 +30,8 @@ from shop.models import OrderItem
 
 from shop.models import GroupNorm
 
-APP_ID = '1'
-APP_SECRET = '2'
+# APP_ID = '1'
+# APP_SECRET = '2'
 
 # api = WXAPPAPI(appid=APP_ID,
 #                   app_secret=APP_SECRET)
@@ -52,8 +52,8 @@ def get_wxapp_userinfo(encrypted_data, iv, code):
     from weixin.lib.wxcrypt import WXBizDataCrypt
     from weixin import WXAPPAPI
     from weixin.oauth2 import OAuth2AuthExchangeError
-    appid = 'wx73bdc6a0b793aa42'
-    secret = 'd18f4ce06504cc4d7c2dbb0e06e03929'
+    appid = 'wx2e9255742bd9060a'
+    secret = 'b36deef16567ff06be01673e590ccfcf'
     api = WXAPPAPI(appid=appid, app_secret=secret)
     try:
         # 使用 code  换取 session key    
@@ -79,17 +79,16 @@ def verify_wxapp(encrypted_data, iv, code):
     print(openid)
     if openid:
     	try:
-    		auth = User.objects.get(id=openid)
+    		auth = User.objects.get(user_openid=openid)
     		if not auth:
         		raise Unauthorized('wxapp_not_registered')
     		return auth
     	except User.DoesNotExist:
     		acc = User()
-    		acc.id = openid
-    		acc.nickname = nickname
-    		acc.avatar = avatar
-    		acc.created_time = datetime.now()
-    		acc.updated_time = datetime.now()
+    		acc.user_openid = openid
+    		acc.user_name = nickname
+    		acc.user_image = avatar
+    		acc.create_time = datetime.now()
     		acc.save()
     	
     	raise Unauthorized('invalid_wxapp_code')
@@ -108,16 +107,16 @@ def create_token(request):
     if not account:
         return False, {}
     payload = {
-        "sub": account.id,
-        "nickname": account.nickname,
+        "sub": account.user_openid,
+        "nickname": account.user_name,
         "scopes": ['open']
     }
     token = jwt.encode(payload, 'secret', algorithm='HS256')
     print('----------------------------')
     print(token)
-    print(account.id)
+    print(account.user_openid)
     token = str(token, encoding="utf-8")
-    resp = {'access_token': token, 'account_id': account.id}
+    resp = {'access_token': token, 'account_id': account.user_openid}
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 def verify_token(token):
@@ -158,7 +157,7 @@ def getShopProduct(request):
     hotProducts = list()
     selectedProducts = list()
 
-    
+
 
     res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
     res_json = json.dumps(res_dict)

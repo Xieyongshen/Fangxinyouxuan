@@ -17,9 +17,9 @@
     position: absolute;
     left: 30rpx;
     .icon-out {
-        width: 9px;
-        height: 15px;
-        margin: 15px 0;
+        width: 12px;
+        height: 20px;
+        margin: 11px 0;
     }
 }
 
@@ -42,7 +42,7 @@
 <script>
 import wepy from 'wepy';
 
-export default class navBar extends wepy.component {
+export default class NavBar extends wepy.component {
     props = {
         navTitle: String,
         isChildPage: {

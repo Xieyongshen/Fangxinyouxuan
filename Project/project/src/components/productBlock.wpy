@@ -1,7 +1,7 @@
 <style lang="less">
 .product-item {
     width: 750rpx;
-    padding: 40rpx 30rpx 40rpx 40rpx;
+    padding: 40rpx 30rpx;
     box-sizing: border-box;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .product-item-content {
-    width: 430rpx;
+    width: 440rpx;
     height: 220rpx;
     vertical-align: top;
     display: inline-block;
@@ -29,7 +29,7 @@
 }
 
 .product-item-name {
-    width: 430rpx;
+    width: 440rpx;
     font-size: 30rpx;
     line-height: 45rpx;
     overflow: hidden;
@@ -38,22 +38,13 @@
 }
 
 .product-item-desc {
-    width: 430rpx;
+    width: 440rpx;
     color: #999999;
     font-size: 24rpx;
     line-height: 45rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.product-item-price {
-    color: #f5333f;
-    font-size: 32rpx;
-    line-height: 40rpx;
-    position: absolute;
-    left: 0;
-    bottom: 15rpx;
 }
 
 .product-icon-cart {
@@ -80,7 +71,7 @@
 <script>
 import wepy from 'wepy';
 
-export default class navBar extends wepy.component {
+export default class ProductBlock extends wepy.component {
     props = {
         id: String,
         imgUrl: String,

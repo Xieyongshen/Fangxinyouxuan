@@ -270,53 +270,6 @@ page {
     margin-bottom: 35rpx;
 }
 
-.shoppingCart-recommend-item {
-    width: 355rpx;
-    padding: 0 10rpx;
-    margin-bottom: 30rpx;
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
-}
-
-.shoppingCart-recommend-img {
-    width: 335rpx;
-    height: 335rpx;
-    border-radius: 10rpx;
-    background: #fdedeb;
-}
-
-.shoppingCart-recommend-name {
-    width: 220rpx;
-    font-size: 26rpx;
-    line-height: 45rpx;
-    letter-spacing: 2rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.shoppingCart-recommend-price {
-    color: #f5333f;
-    margin-top: 30rpx;
-    font-size: 26rpx;
-    line-height: 40rpx;
-}
-
-.shoppingCart-icon-cart {
-    width: 55rpx;
-    height: 55rpx;
-    color: #ffffff;
-    font-size: 34rpx;
-    line-height: 55rpx;
-    text-align: center;
-    background: #f5333f;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 10rpx;
-    right: 10rpx;
-}
-
 .shoppingCart-settle {
     width: 750rpx;
     height: 90rpx;
@@ -454,12 +407,7 @@ page {
         <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
-                <view class="shoppingCart-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="shoppingCart-recommend-img" />
-                        <view class="shoppingCart-recommend-name">{{item.name}}</view>
-                        <view class="shoppingCart-recommend-price">￥{{item.price}}</view>
-                        <image src="/icons/cart-recommend.png" class="shoppingCart-icon-cart" />
-                </view>
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
             </repeat>
         </view>
         <view wx:if="{{product.length > 0}}" class="shoppingCart-settle">
@@ -481,10 +429,12 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Recommend from '@/components/recommendBlock';
 
 export default class ShoppingCart extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        recommend: Recommend
     };
 
     data = {
@@ -517,7 +467,7 @@ export default class ShoppingCart extends wepy.page {
                 imgUrl: '',
                 price: 45.0,
                 oriPrice: 99,
-                count: 0
+                count: 2
             }
         ],
         redPacket: {
@@ -598,6 +548,9 @@ export default class ShoppingCart extends wepy.page {
             }
             subtotal = parseInt(subtotal, 10);
             self.subtotal = subtotal / 1000;
+            if(self.product[index].count == 0){
+                self.product.splice(index, 1);
+            }
             self.$apply();
         },
 

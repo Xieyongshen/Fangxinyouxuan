@@ -139,14 +139,6 @@ page {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text {
-        color: #999999;
-        height: 40rpx;
-        font-size: 20rpx;
-        line-height: 40rpx;
-        display: inline-block;
-        vertical-align: top;
-    }
 }
 
 .coupon-recommend-avatar {
@@ -156,6 +148,15 @@ page {
     border-radius: 50%;
     vertical-align: top;
     background: #fdedeb;
+}
+
+.coupon-recommend-text {
+    color: #999999;
+    height: 40rpx;
+    font-size: 20rpx;
+    line-height: 40rpx;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .group-item:first-child {
@@ -238,9 +239,7 @@ page {
             <view class="coupon-block coupon-limit">
                 <view class="coupon-block-title">限时秒杀</view>
                 <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text>{{limit.restTime[0]}}</text>:
-                    <text>{{limit.restTime[1]}}</text>:
-                    <text>{{limit.restTime[2]}}</text>
+                    <text>{{limit.restTime[0]}}</text>:<text>{{limit.restTime[1]}}</text>:<text>{{limit.restTime[2]}}</text>
                 </view>
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
@@ -256,10 +255,16 @@ page {
                 </view>
             </view>
             <view class="coupon-recommend">
-                <image src="{{recommend.imgUrl}}" class="coupon-recommend-img" />
-                <view class="coupon-recommend-update">
-                    <image src="{{recommend.update.user.avatar}}" class="coupon-recommend-avatar" />
-                    <text>{{recommend.update.user.name}}【{{recommend.update.product.name}}】商品拼单已成功，商品已售{{recommend.update.product.soldCount}}件</text>
+                <image src="{{recommendImg}}" class="coupon-recommend-img" />
+                <view class="coupon-update">
+                    <swiper vertical="true" autoplay="true" interval="5000" duration="1000" circular="true" class="coupon-recommend-update">
+                        <repeat for="{{update}}" key="index">
+                            <swiper-item class="update-item" catchtouchmove='changeUpdate' @tap="navToProduct({{item.product.id}})">
+                                <image src="{{item.user.avatar}}" class="coupon-recommend-avatar" />
+                                <view class="coupon-recommend-text">{{item.user.name}}【{{item.product.name}}】商品拼单已成功，商品已售{{item.product.soldCount}}件</view>
+                            </swiper-item>
+                        </repeat>
+                    </swiper>
                 </view>
             </view>
             <view class="coupon-block coupon-group">
@@ -281,7 +286,6 @@ page {
                     </repeat>
                 </view>
             </view>
-
             <view class="coupon-block">
                 <view class="coupon-block-title">有奖知识问答</view>
                 <view class="coupon-quetion-content">敬请期待</view>
@@ -308,6 +312,45 @@ export default class Coupon extends wepy.page {
     data = {
         couponModule: ['社区积分榜', '限时秒杀', '拼团购', '放心赢红包'],
         curModule: 0,
+        recommendImg: '',
+        update: [
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            },
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            },
+            {
+                user: {
+                    id: '',
+                    avatar: '',
+                    name: '北冥有鱼'
+                },
+                product: {
+                    id: '',
+                    name: '随便阅读灯',
+                    soldCount: 9999
+                }
+            }
+        ],
         limit: {
             isStarted: false,
             startTime: '7月24日 12：00',
@@ -337,21 +380,6 @@ export default class Coupon extends wepy.page {
                     price: 83.3
                 }
             ]
-        },
-        recommend: {
-            imgUrl: '',
-            update: {
-                user: {
-                    id: '',
-                    avatar: '',
-                    name: '北冥有鱼'
-                },
-                product: {
-                    id: '',
-                    name: '随便阅读灯',
-                    soldCount: 9999
-                }
-            }
         },
         groupProduct: [
             {
@@ -432,6 +460,10 @@ export default class Coupon extends wepy.page {
             wx.navigateTo({
                 url: '/pages/product/product?id=' + product
             });
+        },
+
+        changeUpdate(){
+            return false;
         }
     };
 

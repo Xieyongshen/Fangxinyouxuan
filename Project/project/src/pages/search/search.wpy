@@ -33,8 +33,7 @@ page {
 .search-bar-input {
     width: 535rpx;
     height: 60rpx;
-    color: #bfbfbf;
-    font-size: 22rpx;
+    font-size: 24rpx;
     line-height: 60rpx;
 }
 
@@ -57,14 +56,14 @@ page {
 .search-hot-title,
 .search-history-title {
     color: #999999;
-    font-size: 20rpx;
+    font-size: 26rpx;
     line-height: 30rpx;
     margin-bottom: 15rpx;
 }
 
 .search-hot-change {
     color: #f5333f;
-    font-size: 20rpx;
+    font-size: 26rpx;
     line-height: 30rpx;
     position: absolute;
     right: 30rpx;
@@ -74,7 +73,7 @@ page {
 .search-hot-item,
 .search-history-item {
     height: 40rpx;
-    font-size: 20rpx;
+    font-size: 24rpx;
     line-height: 40rpx;
     margin-top: 10rpx;
     margin-left: 10rpx;
@@ -409,6 +408,7 @@ export default class Search extends wepy.page {
 
         searchInput(e) {
             var self = this;
+            self.showResult = false;
             self.searchValue = e.detail.value;
             // if (self.searchValue != '') {
             //     self.doMatch(self.searchValue);
@@ -423,6 +423,7 @@ export default class Search extends wepy.page {
 
     doSearch(keyword) {
         var self = this;
+        self.searchValue = keyword;
         self.showResult = true;
         self.$apply();
     }

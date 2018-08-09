@@ -214,12 +214,12 @@ page {
                     <repeat for="{{item.list}}" key="id" item="listItem" index="idx">
                         <image wx:if="{{idx < 5}}" src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img" />
                     </repeat>
-                    <view wx:if="{{index > 0}}" class="order-product-label">{{index == 1 ? '预售款':'拼团中'}}</view>
+                    <view wx:if="{{item.type > 0}}" class="order-product-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
                     <view class="order-product-count">共{{item.list.length}}件
                         <image src="/icons/in.png" class="icon-in" />
                     </view>
                 </view>
-                <block wx:if="{{index == 2}}">
+                <block wx:if="{{item.type == 2}}">
                     <repeat for="{{item.list}}" key="id" item="listItem">
                         <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
                             <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text>
@@ -289,7 +289,7 @@ export default class Order extends wepy.page {
         remain: 8.88,
         product: [
             {
-                type: 'normal',
+                type: 0,
                 sendTime: '7月16号',
                 list: [
                     {
@@ -311,7 +311,7 @@ export default class Order extends wepy.page {
                 ]
             },
             {
-                type: 'preSale',
+                type: 1,
                 sendTime: '7月16号',
                 list: [
                     {
@@ -333,7 +333,7 @@ export default class Order extends wepy.page {
                 ]
             },
             {
-                type: 'group',
+                type: 2,
                 sendTime: '7月16号',
                 list: [
                     {
@@ -344,56 +344,6 @@ export default class Order extends wepy.page {
                         oriPrice: 75,
                         count: 2,
                         people: 7,
-                        maxpeople: 10
-                    },
-                    {
-                        id: '00006',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0,
-                        people: 3,
-                        maxpeople: 10
-                    },
-                    {
-                        id: '000007',
-                        name: '韩国制造，花洒替代品',
-                        imgUrl: '',
-                        price: 39.2,
-                        oriPrice: 75,
-                        count: 2,
-                        people: 7,
-                        maxpeople: 10
-                    },
-                    {
-                        id: '00008',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0,
-                        people: 3,
-                        maxpeople: 10
-                    },
-                    {
-                        id: '00009',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0,
-                        people: 3,
-                        maxpeople: 10
-                    },
-                    {
-                        id: '00010',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0,
-                        people: 3,
                         maxpeople: 10
                     }
                 ]

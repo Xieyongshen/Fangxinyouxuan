@@ -96,48 +96,6 @@ page {
     padding-left: 10rpx;
     margin-bottom: 35rpx;
 }
-
-.redPacket-recommend-item {
-    width: 355rpx;
-    padding: 0 10rpx;
-    margin-bottom: 30rpx;
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
-}
-
-.redPacket-recommend-img {
-    width: 335rpx;
-    height: 335rpx;
-    border-radius: 10rpx;
-    background: #fdedeb;
-}
-
-.redPacket-recommend-name {
-    width: 220rpx;
-    font-size: 26rpx;
-    line-height: 45rpx;
-    letter-spacing: 2rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.redPacket-recommend-price {
-    color: #f5333f;
-    margin-top: 30rpx;
-    font-size: 32rpx;
-    line-height: 40rpx;
-}
-
-.redPacket-icon-cart {
-    width: 55rpx;
-    height: 55rpx;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 10rpx;
-    right: 10rpx;
-}
 </style>
 <template>
     <view class="container">
@@ -161,12 +119,7 @@ page {
         <view class="redPacket-recommend">
             <view class="redPacket-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
-                <view class="redPacket-recommend-item" @tap="navToProduct({{item.id}})">
-                    <image src="{{item.imgUrl}}" mode="aspectFill" class="redPacket-recommend-img" />
-                        <view class="redPacket-recommend-name">{{item.name}}</view>
-                        <view class="redPacket-recommend-price">￥{{item.price}}</view>
-                        <image src="/icons/cart-recommend.png" class="redPacket-icon-cart" />
-                </view>
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
             </repeat>
         </view>
     </view>
@@ -175,10 +128,12 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Recommend from '@/components/recommendBlock';
 
 export default class RedPacket extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        recommend: Recommend
     };
 
     data = {

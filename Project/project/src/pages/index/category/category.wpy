@@ -1,12 +1,14 @@
 <style lang="less">
 .category-content {
-    padding: 0 30rpx;
+    width: 750rpx;
+    height: 100vh;
     background: #ffffff;
 }
 
 .category-header {
+    width: 690rpx;
     height: 75rpx;
-    margin-bottom: 20rpx;
+    margin: 0 30rpx 20rpx 30rpx;
 }
 
 .category-shop {
@@ -15,29 +17,29 @@
 }
 
 .category-icon-position {
-    width: 20rpx;
-    height: 30rpx;
-    margin: 22rpx 0;
+    width: 26rpx;
+    height: 39rpx;
+    margin: 18rpx 0;
     vertical-align: top;
 }
 
 .shop-name {
-    font-size: 26rpx;
+    font-size: 28rpx;
     line-height: 75rpx;
     margin: 0 20rpx;
 }
 
 .category-icon-down {
-    width: 30rpx;
-    height: 30rpx;
-    margin-top: 25rpx;
+    width: 45rpx;
+    height: 45rpx;
+    margin-top: 18rpx;
     vertical-align: top;
 }
 
 .category-icon-search {
-    width: 30rpx;
-    height: 30rpx;
-    margin-top: 25rpx;
+    width: 35rpx;
+    height: 35rpx;
+    margin-top: 20rpx;
     vertical-align: top;
     float: right;
 }
@@ -51,26 +53,26 @@
 .category-banner-img {
     width: 690rpx;
     height: 280rpx;
+    margin: 0 30rpx;
     border-radius: 20rpx;
 }
 
 .category-type {
-    width: 750rpx;
-    height: 145rpx;
-    margin-top: 45rpx;
-    margin-bottom: 80rpx;
-    padding: 0 7rpx;
+    width: 690rpx;
+    height: 155rpx;
+    margin: 45rpx 30rpx 80rpx 30rpx;
     box-sizing: border-box;
 }
 
 .category-type-item {
     width: 100rpx;
+    height: 155rpx;
     text-align: center;
     display: inline-block;
 }
 
 .category-type-item:not(:last-child) {
-    margin-right: 44rpx;
+    margin-right: 47.5rpx;
 }
 
 .category-type-icon {
@@ -93,8 +95,12 @@
     text-align: center;
 }
 
-.category-product-item{
-    margin: 0 -30rpx;
+.category-product-type{
+    font-size: 32rpx;
+    line-height: 30rpx;
+    margin-top: 40rpx;
+    margin-bottom: 10rpx;
+    text-align: center;
 }
 
 .product-item-price {
@@ -117,7 +123,7 @@
 <template>
     <view class="container">
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
-        <view class="category-content">
+        <scroll-view scroll-y scroll-into-view="{{curType}}" scroll-with-animation="true" class="category-content">
             <view class="category-header">
                 <view class="category-shop">
                     <image src="/icons/position.png" class="category-icon-position" />
@@ -135,7 +141,7 @@
             </swiper>
             <view class="category-type">
                 <repeat for="{{type}}" key="index">
-                    <view class="category-type-item">
+                    <view class="category-type-item" @tap="scrollToType({{item.id}})">
                         <image src="{{item.icon}}" class="category-type-icon" />
                         <view class="category-type-text">{{item.name}}</view>
                     </view>
@@ -143,15 +149,18 @@
             </view>
             <view class="category-product">
                 <view class="product-title">{{category}}</view>
-                <repeat for="{{product}}" key="id">
-                    <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
-                        <view slot="price" class="product-item-price">¥{{item.price}}
-                            <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
-                        </view>
-                    </product>
+                <repeat for="{{type}}" key="id" item="type">
+                    <view class="category-product-type" id="{{type.id}}">{{type.name}}</view>
+                    <repeat for="{{product}}" key="id">
+                        <product wx:if="{{item.type == type.id}}" :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
+                            <view slot="price" class="product-item-price">¥{{item.price}}
+                                <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
+                            </view>
+                        </product>
+                    </repeat>
                 </repeat>
             </view>
-        </view>
+        </scroll-view>
     </view>
 </template>
 
@@ -168,6 +177,7 @@ export default class Category extends wepy.page {
     };
 
     data = {
+        curType: '',
         shopChoose: '春树馆街小区',
         category: '',
         banner: [
@@ -190,22 +200,27 @@ export default class Category extends wepy.page {
         ],
         type: [
             {
+                id: 'hot',
                 name: '热卖',
                 icon: '/icons/index/hot.png'
             },
             {
+                id: 'fruit',
                 name: '水果',
                 icon: '/icons/index/fruit.png'
             },
             {
+                id: 'vegetable',
                 name: '鲜蔬',
                 icon: '/icons/index/vegetable.png'
             },
             {
+                id: 'seafood',
                 name: '海鲜',
                 icon: '/icons/index/seafood.png'
             },
             {
+                id: 'other',
                 name: '其他',
                 icon: '/icons/index/other.png'
             }
@@ -213,6 +228,7 @@ export default class Category extends wepy.page {
         product: [
             {
                 id: '00001',
+                type: 'hot',
                 name: '日式蝴蝶结通勤女鞋',
                 desc: '甜美通勤，轻松搭配',
                 imgUrl: '',
@@ -221,6 +237,7 @@ export default class Category extends wepy.page {
             },
             {
                 id: '00002',
+                type: 'hot',
                 name: '随便阅读灯',
                 desc: '无极调光，360°自由旋转',
                 imgUrl: '',
@@ -229,6 +246,7 @@ export default class Category extends wepy.page {
             },
             {
                 id: '00003',
+                type: 'hot',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
@@ -237,6 +255,43 @@ export default class Category extends wepy.page {
             },
             {
                 id: '00004',
+                type: 'fruit',
+                name: '男士都市轻生活弹力牛仔裤',
+                desc: '自如转换多场景，让双腿保持昂扬活力',
+                imgUrl: '',
+                price: 209.3,
+                oriPrice: 499
+            },
+            {
+                id: '00005',
+                type: 'fruit',
+                name: '男士都市轻生活弹力牛仔裤',
+                desc: '自如转换多场景，让双腿保持昂扬活力',
+                imgUrl: '',
+                price: 209.3,
+                oriPrice: 499
+            },
+            {
+                id: '00006',
+                type: 'vegetable',
+                name: '男士都市轻生活弹力牛仔裤',
+                desc: '自如转换多场景，让双腿保持昂扬活力',
+                imgUrl: '',
+                price: 209.3,
+                oriPrice: 499
+            },
+            {
+                id: '00007',
+                type: 'seafood',
+                name: '男士都市轻生活弹力牛仔裤',
+                desc: '自如转换多场景，让双腿保持昂扬活力',
+                imgUrl: '',
+                price: 209.3,
+                oriPrice: 499
+            },
+            {
+                id: '00008',
+                type: 'other',
                 name: '男士都市轻生活弹力牛仔裤',
                 desc: '自如转换多场景，让双腿保持昂扬活力',
                 imgUrl: '',
@@ -249,6 +304,11 @@ export default class Category extends wepy.page {
     computed = {};
 
     methods = {
+        scrollToType(type, e){
+            this.curType = type;
+            this.$apply();
+        },
+
         navToProduct(product, event) {
             wx.navigateTo({
                 url: '/pages/product/product?id=' + product

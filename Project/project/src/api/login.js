@@ -1,6 +1,6 @@
 import wepy from 'wepy';
 
-const login = async (params) => {
+const log_in = async (params) => {
     let login_res = await wepy.login();
     let code = login_res.code
     let get_res = await wepy.getUserInfo()
@@ -8,7 +8,7 @@ const login = async (params) => {
     let iv = get_res.iv || 'iv';
     let jwt = await wepy.request({
         url:
-            'http://127.0.0.0:8000' +
+            'http://127.0.0.1:8000' +
             '/auth/token?code=' +
             code,
         data: {
@@ -32,6 +32,6 @@ const login = async (params) => {
 }
 
 module.exports = {
-    login
+    log_in
 }
 

@@ -147,8 +147,8 @@
                     <button class="me-userinfo-login" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
                 </block>
                 <block wx:else>
-                    <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
-                    <view class="me-userinfo-name">{{userInfo.name}}</view>
+                    <image src="{{globalData.globalUserInfo.avatar}}" class="me-userinfo-avatar" />
+                    <view class="me-userinfo-name">{{globalData.globalUserInfo.nickName}}</view>
                 </block>
             </view>
             <view class="me-order">
@@ -207,26 +207,24 @@ export default class Me extends wepy.page {
         userInfo: {
             name: '小鱼',
             avatar: ''
-        }
+        },
+        globalData: {}
     };
 
     async getUserInfoFun(e) {
         let self = this;
         let jwt = await log_in.log_in();
-        console.log(jwt)
-        this.hasUserInfo = true
-        this.$apply()
-        // if (jwt.data.access_token != null) {
-        //     let res = await api.login({
-        //         query: {
-        //             access_token: jwt.data.access_token,
-        //             account_id: jwt.data.account_id
-        //         }
-        //     });
-        //     self.globalData.globalUserInfo = res.data;
-        //     self.hasUserInfo = true;
-        //     self.$apply();
-        // }
+        if (jwt.data.access_token != null) {
+            let res = await api.login({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            self.globalData.globalUserInfo = res.data;
+            self.hasUserInfo = true;
+            self.$apply();
+        }
     };
 
     methods = {
@@ -241,7 +239,6 @@ export default class Me extends wepy.page {
     events = {};
 
     async onLoad() {
-        // let jwt = await login.login();
         var jwt = wx.getStorageSync('jwt');
         let self = this;
 
@@ -254,6 +251,7 @@ export default class Me extends wepy.page {
             });
             self.globalData.globalUserInfo = res.data;
             self.hasUserInfo = true;
+            console.log(self.globalData.globalUserInfo)
             self.$apply();
         }
     }

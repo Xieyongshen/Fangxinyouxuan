@@ -2,7 +2,6 @@ import wepy from 'wepy';
 
 const log_in = async (params) => {
     let login_res = await wepy.login();
-    console.log(login_res)
     let code = login_res.code
     let get_res = await wepy.getUserInfo()
     let encryptedData = get_res.encryptedData || 'encry';

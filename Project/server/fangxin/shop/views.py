@@ -21,13 +21,13 @@ from shop.models import ShopProduct
 
 from shop.models import ProductGroup
 from shop.models import ProductPicture
-
+from shop.models import limitTimeSale
 from shop.models import ShoppingCart
 from shop.models import CartItem
 from shop.models import RedPack
 from shop.models import Order
 from shop.models import OrderItem
-
+from shop.models import Discount
 from shop.models import GroupNorm
 
 # APP_ID = '1'
@@ -140,9 +140,9 @@ def login(request):
 	print(client_account_id)
 	res_dict = dict()
 	if(verify_token(client_access_token)):
-		the_user = User.objects.get(id=client_account_id)
+		the_user = User.objects.get(user_openid=client_account_id)
 		print(the_user)
-		res_dict = dict(nickName=the_user.nickname,avatarUrl=the_user.avatar,userDesc=the_user.user_des)
+		res_dict = dict(nickName=the_user.user_name,avatar=the_user.user_image)
 	else:
 		print('false')
 	res_json = json.dumps(res_dict)
@@ -156,8 +156,32 @@ def getShopProduct(request):
     todayProducts = list()
     hotProducts = list()
     selectedProducts = list()
+    shop_products = list(ShopProduct.objects.filter(shop__shop_id=shopId))
+    
+    for products in shop_products:
+        if(products.activityType==1):
+            productPics = list(ProductPicture.objects.filter(shop_product__pro_id=products.pro_id))
+            # imgUrl = productPics[0].url
+            imgUrl = ''
+            todayEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=imgUrl,oriPrice=str(products.pro_origin_price),price=str(products.pro_price),count=products.count,remain=products.remain,label=products.comment)
+            todayProducts.append(todayEle)
+    
+    sortedPros = list(ShopProduct.objects.order_by("buyTimes"))
+    hotPros= sortedPros[-5:]
+    returnHotPros = random.sample(hotPros, 3)
+    for products in returnHotPros:
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=products.pro_id))
+        # imgUrl = productPics[0].url
+        imgUrl = ''
+        hotEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=imgUrl,oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
+        hotProducts.append(hotEle)
 
-
+    for products in shop_products:
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=products.pro_id))
+        # imgUrl = productPics[0].url
+        imgUrl = ''
+        selectedEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=imgUrl,oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
+        selectedProducts.append(selectedEle)
 
     res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
     res_json = json.dumps(res_dict)

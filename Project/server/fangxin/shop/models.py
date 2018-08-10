@@ -72,7 +72,12 @@ class ShopProduct(models.Model):
 	on_shelf = models.BooleanField()
 	can_group = models.NullBooleanField(blank=True)
 	activityType = models.IntegerField(blank=True, null=True)
-
+	count = models.IntegerField(blank=True, null=True)
+	remain = models.IntegerField(blank=True, null=True)
+	fullCount = models.IntegerField(blank=True, null=True)
+	fullMinus = models.IntegerField(blank=True, null=True)
+	comment = models.TextField(blank=True, null=True)
+	buyTimes = models.IntegerField(default=0)
 	def __str__(self):
 		return self.pro_name
 
@@ -82,6 +87,13 @@ class GroupProduct(models.Model):
 	comment = models.TextField(default='可拼团')
 	def __str__(self):
 		return self.product.pro_name
+
+class limitTimeSale(models.Model):
+	limit_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE, blank=True, null=True)
+	count = models.IntegerField()
+	remain = models.IntegerField()
+	comment = models.TextField(default="限时出售")
 
 class Discount(models.Model):
 	dis_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)

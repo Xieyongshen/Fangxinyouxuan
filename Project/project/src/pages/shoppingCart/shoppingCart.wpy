@@ -18,13 +18,71 @@ page {
     line-height: 80rpx;
     text-align: center;
     background: #ffffff;
+    .icon-position {
+        width: 20rpx;
+        height: 30rpx;
+        margin: 25rpx 15rpx 25rpx 0;
+        vertical-align: top;
+    }
 }
 
-.shoppingCart-icon-position {
-    width: 20rpx;
-    height: 30rpx;
-    margin: 25rpx 15rpx 25rpx 0;
-    vertical-align: top;
+.shoppingCart-address {
+    width: 750rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.shoppingCart-address-choose {
+    width: 690rpx;
+    height: 110rpx;
+    font-size: 28rpx;
+    line-height: 110rpx;
+    text-align: left;
+    .icon-position {
+        width: 20rpx;
+        height: 30rpx;
+        margin: 40rpx 15rpx 40rpx 0;
+        vertical-align: top;
+    }
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 42.5rpx 0;
+        vertical-align: top;
+        float: right;
+    }
+}
+
+.shoppingCart-address-desc {
+    width: 690rpx;
+    height: 150rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 62.5rpx 0;
+        vertical-align: top;
+        float: right;
+    }
+}
+
+.shoppingCart-address-content {
+    width: 675rpx;
+    height: 150rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.address-desc {
+    font-size: 28rpx;
+    line-height: 70rpx;
+}
+
+.address-user {
+    color: #999999;
+    font-size: 22rpx;
+    line-height: 40rpx;
 }
 
 .shoppingCart-block {
@@ -210,6 +268,7 @@ page {
     width: 15rpx;
     height: 25rpx;
     margin: 32.5rpx 0 32.5rpx 10rpx;
+    float: right;
     vertical-align: top;
 }
 
@@ -335,74 +394,90 @@ page {
         <navBar navTitle="放心优选"></navBar>
         <view wx:if="{{product.length > 0}}" class="shoppingCart-content">
             <image src="/icons/address-bg.png" class="shoppingCart-header" />
-                <view class="shoppingCart-block shoppingCart-shop">
-                    <image src="/icons/position.png" class="shoppingCart-icon-position" />
-                        <text class="shop-name">{{shopChoose}}</text>
+            <view wx:if="{{deliverChoose < 1}}" class="shoppingCart-block shoppingCart-shop">
+                <image src="/icons/position.png" class="icon-position" />
+                <text class="shop-name">{{shopChoose}}</text>
+            </view>
+            <navigator wx:else url="../me/address/address" class="shoppingCart-block shoppingCart-address">
+                <view wx:if="{{addressChoose.id == ''}}" class="shoppingCart-address-choose">
+                    <image src="/icons/position.png" class="icon-position" />
+                    <text>请点击选择收货地址</text>
+                    <image src="/icons/in.png" class="icon-in" />
                 </view>
-                <view class="shoppingCart-block shoppingCart-product">
-                    <view class="shoppingCart-item shoppingCart-product-manage">
-                        <view class="shoppingCart-product-selectAll">
-                            <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
-                                <text>全选</text>
+                <view wx:else class="shoppingCart-address-desc">
+                    <view class="shoppingCart-address-content">
+                        <view class="address-desc">{{addressChoose.desc}}</view>
+                        <view class="address-user">{{addressChoose.name}} {{addressChoose.phone}}</view>
+                    </view>
+                    <image src="/icons/in.png" class="icon-in" />
+                </view>
+            </navigator>
+            <view class="shoppingCart-block shoppingCart-product">
+                <view class="shoppingCart-item shoppingCart-product-manage">
+                    <view class="shoppingCart-product-selectAll">
+                        <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
+                        <text>全选</text>
+                    </view>
+                    <view class="shoppingCart-product-tip">
+                        <text>满{{discount.count}}减{{discount.minus}}</text>
+                        <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
+                        <image src="/icons/in.png" class="icon-in" />
+                    </view>
+                </view>
+                <view class="shoppingCart-product-list">
+                    <repeat for="{{product}}" key="id">
+                        <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
+                            <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
+                            <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
+                            <view class="product-item-content">
+                                <view class="product-item-name">{{item.name}}</view>
+                                <view class="product-item-price">￥{{item.price}}
+                                    <text>￥{{item.oriPrice}}</text>
+                                </view>
+                                <view class="product-item-count">
+                                    <image wx:if="{{item.count > 0}}" src="/icons/Reduce.png" class="count-reduce" @tap.stop="countMinus({{index}})" />
+                                    <text>{{item.count}}</text>
+                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countPlus({{index}})" />
+                                </view>
+                            </view>
                         </view>
-                        <view class="shoppingCart-product-tip">
-                            <text>满{{discount.count}}减{{discount.minus}}</text>
-                            <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
+                    </repeat>
+                </view>
+                <view class="shoppingCart-product-subtotal">
+                    <text>小计：</text>￥{{subtotal}}
+                </view>
+            </view>
+            <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
+                <view class="shoppingCart-item">
+                    <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon" /> 红包
+                    <image src="/icons/in.png" class="icon-in" />
+                    <text class="{{redPacket.id == '' ? 'status-false' : 'status-true'}}">
+                        <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
+                        <block wx:else>{{redPacket.count}}元</block>
+                    </text>
+                </view>
+            </navigator>
+            <view class="shoppingCart-block shoppingCart-result">
+                <view class="shoppingCart-item shoppingCart-result-total">商品实付
+                    <text>￥{{total}}</text>
+                </view>
+                <view wx:if="{{deliverChoose > 0}}" class="shoppingCart-item">配送费用
+                    <text>￥{{freightChoose}}</text>
+                </view>
+                <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
+                    <picker mode="selector" range="{{deliverList}}" range-key="name" bindchange="bindDeliverChange" value="{{deliverList[deliverChoose].name}}" class="shoppingCart-deliver-input">
+                        <view class="input-picker {{deliverChoose < 0 ? 'picker-null' : ''}}">
+                            <block wx:if="{{deliverChoose >= 0}}">{{deliverList[deliverChoose].name}}</block>
+                            <block wx:else>请选择配送方式</block>
                             <image src="/icons/in.png" class="icon-in" />
                         </view>
-                    </view>
-                    <view class="shoppingCart-product-list">
-                        <repeat for="{{product}}" key="id">
-                            <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
-                                <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
-                                    <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
-                                        <view class="product-item-content">
-                                            <view class="product-item-name">{{item.name}}</view>
-                                            <view class="product-item-price">￥{{item.price}}
-                                                <text>￥{{item.oriPrice}}</text>
-                                            </view>
-                                            <view class="product-item-count">
-                                                <image wx:if="{{item.count > 0}}" src="/icons/Reduce.png" class="count-reduce" @tap.stop="countMinus({{index}})" />
-                                                    <text>{{item.count}}</text>
-                                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countPlus({{index}})" />
-                                            </view>
-                                        </view>
-                            </view>
-                        </repeat>
-                    </view>
-                    <view class="shoppingCart-product-subtotal">
-                        <text>小计：</text>￥{{subtotal}}
-                    </view>
+                    </picker>
                 </view>
-                <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
-                    <view class="shoppingCart-item">
-                        <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon" />
-                            红包
-                            <image src="/icons/in.png" class="icon-in" />
-                                <text class="{{redPacket.id == '' ? 'status-false' : 'status-true'}}">
-                                    <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
-                                    <block wx:else>{{redPacket.count}}元</block>
-                                </text>
-                    </view>
-                </navigator>
-                <view class="shoppingCart-block shoppingCart-result">
-                    <view class="shoppingCart-item shoppingCart-result-total">商品实付
-                        <text>￥{{total}}</text>
-                    </view>
-                    <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
-                        <picker mode="selector" range="{{deliverList}}" range-key="" bindchange="bindDeliverChange" value="{{deliverList[deliver.choose]}}" class="shoppingCart-deliver-input">
-                            <view class="input-picker {{deliver.choose < 0 ? 'picker-null' : ''}}">
-                                <block wx:if="{{deliver.choose >= 0}}">{{deliverList[deliver.choose]}}</block>
-                                <block wx:else>请选择配送方式</block>
-                                <image src="/icons/in.png" class="icon-in" />
-                            </view>
-                        </picker>
-                    </view>
-                </view>
+            </view>
         </view>
         <view wx:else class="shoppingCart-empty">
             <image src="/icons/shoppingCart-empty.png" class="shoppingCart-empty-img" />
-                <view class="shoppingCart-empty-text">购物车空空如也~</view>
+            <view class="shoppingCart-empty-text">购物车空空如也~</view>
         </view>
         <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
@@ -413,13 +488,13 @@ page {
         <view wx:if="{{product.length > 0}}" class="shoppingCart-settle">
             <view class="shoppingCart-settle-selectAll">
                 <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
-                    <text>全选</text>
+                <text>全选</text>
             </view>
             <view class="shoppingCart-settle-price">
                 <view class="price-total">合计:
                     <text>￥{{priceFinal}}</text>
                 </view>
-                <view class="price-freight">运费￥{{deliver.freight}}</view>
+                <view class="price-freight">运费￥{{freightChoose}}</view>
             </view>
             <navigator url="../order/order" class="shoppingCart-settle-btn">去结算</navigator>
         </view>
@@ -445,11 +520,25 @@ export default class ShoppingCart extends wepy.page {
         },
         subtotal: 0,
         total: 0,
-        deliverList: ['到店自提', '送货上门'],
-        deliver: {
-            choose: -1,
-            freight: 0
+        deliverList: [
+            {
+                name: '到店自提',
+                freight: 0
+            },
+            {
+                name: '送货上门',
+                freight: 15
+            },
+            {
+                name: '快递到家',
+                freight: 15
+            }
+        ],
+        addressChoose: {
+            id: ''
         },
+        deliverChoose: -1,
+        freightChoose: 0,
         isChoosen: [],
         chooseAll: true,
         product: [
@@ -472,7 +561,7 @@ export default class ShoppingCart extends wepy.page {
         ],
         redPacket: {
             id: '',
-            count: 5
+            count: 0
         },
         recommend: [
             {
@@ -507,7 +596,10 @@ export default class ShoppingCart extends wepy.page {
             if (this.subtotal <= this.redPacket.count) return 0;
             var self = this;
             var subtotal = self.subtotal * 100;
-            var redPacket = self.redPacket.count * 100;
+            var redPacket = 0;
+            if (self.redPacket.id != '') {
+                redPacket = self.redPacket.count * 100;
+            }
             var discount = self.discount.minus * 100;
             var total = subtotal - redPacket;
             if (self.subtotal >= self.discount.count) {
@@ -519,8 +611,8 @@ export default class ShoppingCart extends wepy.page {
 
         priceFinal() {
             var total = this.total * 100;
-            var freight = this.deliver.freight * 100;
-            var priceFinal = total - freight;
+            var freight = this.freightChoose * 100;
+            var priceFinal = total + freight;
             priceFinal = parseInt(priceFinal, 10);
             return priceFinal / 100;
         },
@@ -548,7 +640,7 @@ export default class ShoppingCart extends wepy.page {
             }
             subtotal = parseInt(subtotal, 10);
             self.subtotal = subtotal / 1000;
-            if(self.product[index].count == 0){
+            if (self.product[index].count == 0) {
                 self.product.splice(index, 1);
             }
             self.$apply();
@@ -587,7 +679,8 @@ export default class ShoppingCart extends wepy.page {
         },
 
         bindDeliverChange(e) {
-            this.deliver.choose = e.detail.value;
+            this.deliverChoose = e.detail.value;
+            this.freightChoose = this.deliverList[this.deliverChoose].freight;
             this.$apply();
         }
     };
@@ -608,6 +701,26 @@ export default class ShoppingCart extends wepy.page {
 
     events = {};
 
+    onShow() {
+        var self = this;
+        wx.getStorage({
+            key: 'address',
+            success: function(res) {
+                console.log(res.data);
+                self.addressChoose = res.data;
+                self.$apply();
+            }
+        });
+        wx.getStorage({
+            key: 'redPacket',
+            success: function(res) {
+                console.log(res.data);
+                self.redPacket = res.data;
+                self.$apply();
+            }
+        });
+    }
+
     onLoad(option) {
         var self = this;
         self.product.forEach(element => {
@@ -617,6 +730,14 @@ export default class ShoppingCart extends wepy.page {
         self.updateTotal();
         self.total = self.subtotal;
         self.$apply();
+        wx.setStorage({
+            key: 'address',
+            data: self.addressChoose
+        });
+        wx.setStorage({
+            key: 'redPacket',
+            data: self.redPacket
+        });
     }
 }
 </script>

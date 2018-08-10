@@ -263,7 +263,7 @@ page {
             </view>
             <view class="search-history">
                 <view class="search-history-title">历史搜索</view>
-                <image src="/icons/delete.png" class="search-history-clear" />
+                <image src="/icons/delete.png" class="search-history-clear" @tap="clearHistory()" />
                 <view class="search-history-keyword">
                     <repeat for="{{history}}" key="index">
                         <view class="search-history-item" @tap="chooseSearch({{item}})">{{item}}</view>
@@ -418,6 +418,15 @@ export default class Search extends wepy.page {
 
         searchResult(e) {
             this.doSearch(e.detail.value);
+        },
+
+        clearHistory(){
+            this.history = [];
+            wx.setStorage({
+                key: 'history',
+                data: history
+            });
+            this.$apply();
         }
     };
 
@@ -425,7 +434,12 @@ export default class Search extends wepy.page {
         var self = this;
         self.searchValue = keyword;
         self.showResult = true;
+        self.history.push(keyword);
         self.$apply();
+        wx.setStorage({
+            key: 'history',
+            data: history
+        });
     }
 
     events = {};

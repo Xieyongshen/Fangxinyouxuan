@@ -305,6 +305,7 @@ export default class Category extends wepy.page {
 
     methods = {
         scrollToType(type, e){
+            this.curType = '';
             this.curType = type;
             this.$apply();
         },

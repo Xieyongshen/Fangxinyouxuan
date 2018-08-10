@@ -3,10 +3,16 @@ page {
     background: #ffffff;
 }
 
+.container {
+    height: 100vh;
+}
+
 .coupon-module {
     width: 750rpx;
     height: 65rpx;
     background: #ffffff;
+    position: fixed;
+    z-index: 90;
 }
 
 .coupon-module-item {
@@ -43,10 +49,23 @@ page {
     }
 }
 
+.coupon-content {
+    width: 750rpx;
+    height: 100%;
+    padding-top: 65rpx;
+    box-sizing: border-box;
+}
+
 .coupon-rank {
+    width: 750rpx;
+    height: 348rpx;
+    padding: 20rpx 30rpx;
+    box-sizing: border-box;
+}
+
+.coupon-rank-container {
     width: 690rpx;
     height: 308rpx;
-    margin: 20rpx 30rpx;
     padding: 30rpx 0;
     box-sizing: border-box;
     border-radius: 20rpx;
@@ -68,7 +87,8 @@ page {
 
 .coupon-block {
     width: 750rpx;
-    margin-top: 60rpx;
+    margin-top: 40rpx;
+    padding-top: 20rpx;
 }
 
 .coupon-block-title {
@@ -224,22 +244,26 @@ page {
     <view class="container">
         <navBar navTitle="放心优选"></navBar>
         <view class="coupon-module">
-            <repeat for="{{couponModule}}" key="index">
+            <repeat for="{{couponModule}}" key="id">
                 <view class="coupon-module-item {{index == curModule ? 'coupon-module-cur' : ''}}" @tap="chooseModule({{index}})">
-                    <text>{{item}}</text>
+                    <text>{{item.name}}</text>
                     <view class="coupon-module-bar"></view>
                 </view>
             </repeat>
         </view>
-        <view wx:if="{{curModule == 0}}" class="coupon-content">
-            <view class="coupon-rank">
-                <view class="coupon-rank-title">王者社区排行榜</view>
-                <view class="coupon-rank-content">敬请期待</view>
+        <scroll-view scroll-y scroll-into-view="{{scrollToModule}}" scroll-with-animation="true" bindscroll="moduleScroll" class="coupon-content">
+            <view class="coupon-rank coupon-module-block" id="{{couponModule[0].id}}">
+                <view class="coupon-rank-container">
+                    <view class="coupon-rank-title">王者社区排行榜</view>
+                    <view class="coupon-rank-content">敬请期待</view>
+                </view>
             </view>
-            <view class="coupon-block coupon-limit">
+            <view class="coupon-block coupon-limit coupon-module-block" id="{{couponModule[1].id}}">
                 <view class="coupon-block-title">限时秒杀</view>
                 <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text>{{limit.restTime[0]}}</text>:<text>{{limit.restTime[1]}}</text>:<text>{{limit.restTime[2]}}</text>
+                    <text>{{limit.restTime[0]}}</text>:
+                    <text>{{limit.restTime[1]}}</text>:
+                    <text>{{limit.restTime[2]}}</text>
                 </view>
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
@@ -267,7 +291,7 @@ page {
                     </swiper>
                 </view>
             </view>
-            <view class="coupon-block coupon-group">
+            <view class="coupon-block coupon-group coupon-module-block" id="{{couponModule[2].id}}">
                 <view class="coupon-block-title">优选拼单购</view>
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
@@ -286,7 +310,7 @@ page {
                     </repeat>
                 </view>
             </view>
-            <view class="coupon-block">
+            <view class="coupon-block coupon-module-block" id="{{couponModule[3].id}}">
                 <view class="coupon-block-title">有奖知识问答</view>
                 <view class="coupon-quetion-content">敬请期待</view>
             </view>
@@ -294,7 +318,7 @@ page {
                 <view class="coupon-block-title">游戏赢大奖</view>
                 <view class="coupon-game-content">敬请期待</view>
             </view>
-        </view>
+        </scroll-view>
     </view>
 </template>
 
@@ -310,8 +334,14 @@ export default class Coupon extends wepy.page {
     };
 
     data = {
-        couponModule: ['社区积分榜', '限时秒杀', '拼团购', '放心赢红包'],
+        couponModule: [
+            { id: 'module1', name: '社区积分榜' },
+            { id: 'module2', name: '限时秒杀' },
+            { id: 'module3', name: '拼团购' },
+            { id: 'module4', name: '放心赢红包' }
+        ],
         curModule: 0,
+        scrollToModule: '',
         recommendImg: '',
         update: [
             {
@@ -447,13 +477,39 @@ export default class Coupon extends wepy.page {
                     }
                 ]
             }
-        ]
+        ],
+        moduleTop: [],
+        moveStartPos: 0
     };
 
     methods = {
         chooseModule(index, e) {
+            this.scrollToModule = this.couponModule[index].id;
             this.curModule = index;
             this.$apply();
+        },
+
+        moduleScroll(e) {
+            var self = this;
+            let scrollTop = e.detail.scrollTop;
+            let nextTop =
+                self.curModule < self.moduleTop.length - 1
+                    ? self.moduleTop[self.curModule + 1].top
+                    : self.moduleTop[self.curModule].top;
+            let curTop = self.moduleTop[self.curModule].top;
+            if (scrollTop > self.moveStartPos) {
+                self.moveStartPos = scrollTop;
+                if (scrollTop > nextTop - 10) {
+                    self.curModule++;
+                    self.$apply();
+                }
+            } else if (scrollTop < self.moveStartPos) {
+                self.moveStartPos = scrollTop;
+                if (scrollTop < curTop - 10) {
+                    self.curModule--;
+                    self.$apply();
+                }
+            }
         },
 
         navToProduct(product, events) {
@@ -462,13 +518,36 @@ export default class Coupon extends wepy.page {
             });
         },
 
-        changeUpdate(){
+        changeUpdate() {
             return false;
         }
     };
 
     events = {};
 
-    onLoad() {}
+    onLoad() {
+        var self = this;
+        self.curModule = 0;
+        self.scrollToModule = self.couponModule[0].id;
+        self.$apply();
+
+        var query = wx.createSelectorQuery();
+        var top = 0;
+        self.moduleTop = [];
+        query
+            .selectAll('.coupon-module-block')
+            .boundingClientRect(rect => {
+                rect.forEach((item, index) => {
+                    if (index == 0) {
+                        top = item.top;
+                        self.$apply();
+                    }
+                    self.moduleTop.push({ top: item.top - top });
+                });
+            })
+            .exec();
+        console.log(self.moduleTop);
+        self.$apply();
+    }
 }
 </script>

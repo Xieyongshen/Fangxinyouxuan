@@ -22,7 +22,7 @@
     display: inline-block;
 }
 
-.address-edit{
+.address-edit {
     width: 60rpx;
     height: 80rpx;
     padding: 25rpx 0;
@@ -31,14 +31,14 @@
     display: inline-block;
 }
 
-.address-edit-img{
+.address-edit-img {
     width: 30rpx;
     height: 30rpx;
     margin: 0;
     float: right;
 }
 
-.address-add{
+.address-add {
     width: 690rpx;
     height: 88rpx;
     margin: 30rpx;
@@ -55,12 +55,14 @@
         <navBar navTitle="我的地址" isChildPage="y"></navBar>
         <view class="address-content">
             <repeat for="{{address}}" key="index">
-                <view class="address-item">
+                <view class="address-item" @tap="chooseAddress({{item.id}}, {{item.name}}, {{item.phone}}, {{item.desc}})">
                     <view class="address-detail">
                         <view>{{item.name}} {{item.phone}}</view>
                         <view>{{item.desc}}</view>
                     </view>
-                    <view class="address-edit" @tap="addressEdit"><image src="/icons/edit.png" class="address-edit-img" /></view>
+                    <view class="address-edit" @tap="addressEdit">
+                        <image src="/icons/edit.png" class="address-edit-img" />
+                    </view>
                 </view>
             </repeat>
         </view>
@@ -80,13 +82,13 @@ export default class Address extends wepy.page {
     data = {
         address: [
             {
-            id: '000001',
+                id: '000001',
                 name: '墨小刀',
                 phone: '13000000000',
                 desc: '北京市朝阳区宇宙火星村166号'
             },
             {
-            id: '000002',
+                id: '000002',
                 name: '墨小刀',
                 phone: '13000000000',
                 desc: '北京市朝阳区宇宙火星村166号'
@@ -95,16 +97,32 @@ export default class Address extends wepy.page {
     };
 
     methods = {
-        addressAdd(){
+        addressAdd() {
             wx.navigateTo({
                 url: 'addressChange/addressChange?type=0'
             });
         },
-        
-        addressEdit(){
+
+        addressEdit() {
             wx.navigateTo({
                 url: 'addressChange/addressChange?type=1'
             });
+        },
+
+        chooseAddress(id, name, phone, desc, e) {
+            wx.setStorage({
+                key: 'address',
+                data: {
+                    'id': id,
+                    'name': name,
+                    'phone': phone,
+                    'desc': desc
+                }
+            });
+
+            wx.navigateBack({
+                delta: 1
+            })
         }
     };
 

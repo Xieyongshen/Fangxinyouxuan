@@ -236,7 +236,7 @@
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
                 <image wx:if="{{order.status > 0}}" src="/icons/in.png" class="icon-in" />
             </view>
-            <view wx:if="{{order.type != 2 && order.status != 0 && order.status != 2 }}" class="orderDetail-shop">
+            <view class="orderDetail-shop">
                 <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" />
                     <text>{{order.shop.name}}</text>
                     <image src="/icons/phone.png" class="orderDetail-icon-phone" />
@@ -464,6 +464,7 @@ export default class OrderDetail extends wepy.page {
     onLoad(options) {
         var self = this;
         self.order.status = options.status;
+        self.order.type = options.type;
         console.log(options.status);
         self.$apply();
     }

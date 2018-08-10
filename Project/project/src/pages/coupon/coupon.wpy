@@ -525,6 +525,13 @@ export default class Coupon extends wepy.page {
 
     events = {};
 
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/coupon/coupon'
+        };
+    }
+
     onLoad() {
         var self = this;
         self.curModule = 0;

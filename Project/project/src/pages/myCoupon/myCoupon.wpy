@@ -1,0 +1,78 @@
+<style lang="less">
+page {
+    padding-bottom: 20rpx;
+}
+
+.myCoupon-recommend {
+    padding: 35rpx 20rpx 0 20rpx;
+    background: #ffffff;
+}
+
+.myCoupon-recommend-title {
+    font-size: 32rpx;
+    line-height: 45rpx;
+    padding-left: 10rpx;
+    margin-bottom: 35rpx;
+}
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="放心优选" isChildPage="y"></navBar>
+        <view class="myCoupon-recommend">
+            <view class="myCoupon-recommend-title">推荐商品</view>
+            <repeat for="{{recommend}}" key="id">
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
+            </repeat>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+import Recommend from '@/components/recommendBlock';
+
+export default class MyCoupon extends wepy.page {
+    components = {
+        navBar: NavBar,
+        recommend: Recommend
+    };
+
+    data = {
+        recommend: [
+            {
+                id: '000001',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000002',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000003',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000004',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            }
+        ]
+    };
+
+    methods = {
+
+    };
+
+    events = {};
+
+    onLoad() {}
+}
+</script>

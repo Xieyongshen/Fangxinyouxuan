@@ -24,21 +24,22 @@ import 'wepy-async-function';
 export default class extends wepy.app {
     config = {
         pages: [
-            'pages/shoppingCart/shoppingCart',
             'pages/index/index',
             'pages/index/category/category',
             'pages/coupon/coupon',
+            'pages/shoppingCart/shoppingCart',
             'pages/me/me',
             'pages/me/balance/balance',
             'pages/me/orderList/orderList',
             'pages/me/orderDetail/orderDetail',
-            'pages/me/address/address',
-            'pages/me/address/addressChange/addressChange',
+            'pages/address/address',
+            'pages/address/addressChange/addressChange',
             'pages/search/search',
+            'pages/product/product',
             'pages/order/order',
             'pages/productList/productList',
             'pages/redPacket/redPacket',
-            'pages/product/product'
+            'pages/myCoupon/myCoupon'
         ],
         window: {
             navigationBarTextStyle: 'black',
@@ -84,7 +85,6 @@ export default class extends wepy.app {
     constructor() {
         super();
         this.use('requestfix');
-        this.use('promisify');
     }
 
     onLaunch() {

@@ -1,0 +1,95 @@
+<style lang="less">
+.tabbar-content {
+    width: 750rpx;
+    height: 92rpx;
+    padding: 5rpx 1rpx 0 1rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-top: 1px solid #cccccc;
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+}
+
+.tabbar-item {
+    width: 187rpx;
+    height: 90rpx;
+    text-align: center;
+    display: inline-block;
+}
+
+.tabbar-img {
+    width: 50rpx;
+    height: 50rpx;
+    margin: 0;
+}
+
+.tabbar-text {
+    color: #999999;
+    font-size: 20rpx;
+    line-height: 20rpx;
+}
+
+.text-choose {
+    color: #f5333f;
+}
+</style>
+<template>
+    <view class="tabbar-content">
+        <repeat for="{{tabbar}}" key="index">
+            <view class="tabbar-item" @tap="navToTab({{item.pagePath}})">
+                <image src="{{index == curTab ? item.selectedIconPath : item.iconPath}}" class="tabbar-img" />
+                <view class="tabbar-text {{index == curTab ? 'text-choose' : ''}}">{{item.text}}</view>
+            </view>
+        </repeat>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class Tabbar extends wepy.component {
+    data = {
+        tabbar: [
+            {
+                pagePath: '/pages/index/index',
+                text: '首页',
+                iconPath: '/icons/tabbar/home.png',
+                selectedIconPath: '/icons/tabbar/home-selected.png'
+            },
+            {
+                pagePath: '/pages/coupon/coupon',
+                text: '优惠券',
+                iconPath: '/icons/tabbar/coupon.png',
+                selectedIconPath: '/icons/tabbar/coupon-selected.png'
+            },
+            {
+                pagePath: '/pages/shoppingCart/shoppingCart',
+                text: '购物车',
+                iconPath: '/icons/tabbar/shoppingCart.png',
+                selectedIconPath: '/icons/tabbar/shoppingCart-selected.png'
+            },
+            {
+                pagePath: '/pages/me/me',
+                text: '我的',
+                iconPath: '/icons/tabbar/user.png',
+                selectedIconPath: '/icons/tabbar/user-selected.png'
+            }
+        ]
+    };
+
+    props = {
+        curTab: {
+            type: String,
+            default: 0
+        }
+    };
+
+    methods = {
+        navToTab(path, e){
+            wx.switchTab({
+                url: path
+            })
+        }
+    }
+}
+</script>

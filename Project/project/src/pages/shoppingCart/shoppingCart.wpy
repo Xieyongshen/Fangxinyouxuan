@@ -398,7 +398,7 @@ page {
                 <image src="/icons/position.png" class="icon-position" />
                 <text class="shop-name">{{shopChoose}}</text>
             </view>
-            <navigator wx:else url="../me/address/address" class="shoppingCart-block shoppingCart-address">
+            <navigator wx:else url="../address/address" class="shoppingCart-block shoppingCart-address">
                 <view wx:if="{{addressChoose.id == ''}}" class="shoppingCart-address-choose">
                     <image src="/icons/position.png" class="icon-position" />
                     <text>请点击选择收货地址</text>
@@ -700,6 +700,13 @@ export default class ShoppingCart extends wepy.page {
     }
 
     events = {};
+
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/shoppingCart/shoppingCart'
+        };
+    }
 
     onShow() {
         var self = this;

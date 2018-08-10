@@ -178,11 +178,11 @@
                     我的红包
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
-                <navigator class="me-manage-item">
+                <navigator url="../myCoupon/myCoupon" class="me-manage-item">
                     我的优惠券
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
-                <navigator url="address/address" class="me-manage-item">
+                <navigator url="../address/address" class="me-manage-item">
                     我的地址
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
@@ -237,6 +237,13 @@ export default class Me extends wepy.page {
     };
 
     events = {};
+
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/me/me'
+        };
+    }
 
     async onLoad() {
         var jwt = wx.getStorageSync('jwt');

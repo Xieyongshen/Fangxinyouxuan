@@ -1,7 +1,11 @@
 <style lang="less">
+.container {
+    height: 100vh;
+}
+
 .category-content {
     width: 750rpx;
-    height: 100vh;
+    height: 100%;
     background: #ffffff;
 }
 
@@ -95,7 +99,7 @@
     text-align: center;
 }
 
-.category-product-type{
+.category-product-type {
     font-size: 32rpx;
     line-height: 30rpx;
     margin-top: 40rpx;
@@ -161,18 +165,21 @@
                 </repeat>
             </view>
         </scroll-view>
+        <tabbar curTab="0"></tabbar>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import Tabbar from '@/components/tabbar';
 import Product from '@/components/productBlock';
 
 export default class Category extends wepy.page {
     config = {};
     components = {
         navBar: NavBar,
+        tabbar: Tabbar,
         product: Product
     };
 
@@ -304,7 +311,7 @@ export default class Category extends wepy.page {
     computed = {};
 
     methods = {
-        scrollToType(type, e){
+        scrollToType(type, e) {
             this.curType = '';
             this.curType = type;
             this.$apply();

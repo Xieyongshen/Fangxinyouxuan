@@ -79,7 +79,11 @@ export default class extends wepy.app {
     };
 
     globalData = {
-        userInfo: null
+        userInfo: null,
+        color: {
+            red: '#f5333f',
+            yellow: '#ffba00'
+        }
     };
 
     constructor() {

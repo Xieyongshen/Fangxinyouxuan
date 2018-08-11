@@ -69,7 +69,10 @@
 }
 
 .index-category {
-    padding: 25rpx 10rpx;
+    padding: 25rpx 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .category-item {
@@ -87,10 +90,6 @@
         line-height: 30rpx;
         display: block;
     }
-}
-
-.category-item:not(:first-child) {
-    margin-left: 42.5rpx;
 }
 
 .index-today,
@@ -117,7 +116,6 @@
     text-align: center;
     margin-top: 20rpx;
     margin-bottom: 10rpx;
-    background: #f5333f;
     border-radius: 10rpx;
     text {
         line-height: 80rpx;
@@ -143,7 +141,6 @@
     position: relative;
     text {
         width: 250rpx;
-        color: #f5333f;
         font-size: 26rpx;
         line-height: 18px;
         text-align: center;
@@ -170,10 +167,10 @@
 
 .today-price-ori {
     color: #999999;
-    font-size: 24rpx;
+    font-size: 22rpx;
     line-height: 30rpx;
     text {
-        font-size: 30rpx;
+        font-size: 24rpx;
         line-height: 35rpx;
         text-decoration: line-through;
     }
@@ -186,7 +183,8 @@
     background: #fdedeb;
 }
 
-.hot-item-label, .selected-item-label {
+.hot-item-label,
+.selected-item-label {
     width: 110rpx;
     height: 30rpx;
     margin: 5rpx;
@@ -196,7 +194,6 @@
     text-align: center;
     vertical-align: top;
     border-radius: 5rpx;
-    background: #ffba00;
     display: inline-block;
 }
 
@@ -209,21 +206,18 @@
 
 .hot-item-oriPrice,
 .selected-item-oriPrice {
-    color: #f5333f;
     font-size: 26rpx;
     line-height: 30rpx;
 }
 
 .hot-item-curPrice,
 .selected-item-curPrice {
-    color: #ffba00;
     font-size: 32rpx;
     line-height: 40rpx;
 }
 
 .hot-item-nowPrice,
 .selected-item-nowPrice {
-    color: #f5333f;
     font-size: 32rpx;
     line-height: 40rpx;
     text {
@@ -265,7 +259,7 @@
             </view>
             <view class="index-today">
                 <view class="today-title">今日热卖</view>
-                <view class="today-time">
+                <view class="today-time" style="background:{{color.red}}">
                     <text>距离活动结束还剩：</text>
                     <text class="today-time-num">{{todayTime}}</text>
                 </view>
@@ -273,10 +267,10 @@
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
                         <view wx:if="{{item.isLimited == false}}" slot="extra" class="today-item-remain">
                             <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
-                            <text>还剩{{item.remain}}份</text>
+                            <text style="color:{{color.red}}">还剩{{item.remain}}份</text>
                         </view>
                         <view slot="price" class="today-item-price">
-                            <view class="today-price-cur">限时价
+                            <view class="today-price-cur" style="color:{{color.yellow}}">限时价
                                 <text>¥{{item.price}}</text>
                             </view>
                             <view wx:if="{{item.oriPrice > 0}}" class="today-price-ori">原价
@@ -291,14 +285,14 @@
                 <view class="hot-title">热卖爆款</view>
                 <repeat for="{{hot}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                        <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label">{{item.label}}</view>
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
                         <view slot="price" class="hot-item-price">
                             <block wx:if="{{item.label != ''}}">
-                                <view class="hot-item-oriPrice">¥{{item.oriPrice}}</view>
-                                <view wx:if="{{item.price >= 0}}" class="hot-item-curPrice">¥{{item.price}}</view>
+                                <view class="hot-item-oriPrice" style="color:{{color.red}}">¥{{item.oriPrice}}</view>
+                                <view wx:if="{{item.price >= 0}}" class="hot-item-curPrice" style="color:{{color.yellow}}">¥{{item.price}}</view>
                             </block>
                             <block wx:else>
-                                <view class="hot-item-nowPrice">¥{{item.price}}
+                                <view class="hot-item-nowPrice" style="color:{{color.red}}">¥{{item.price}}
                                     <text>¥{{item.oriPrice}}</text>
                                 </view>
                             </block>
@@ -311,14 +305,14 @@
                 <view class="selected-title">放心精选</view>
                 <repeat for="{{selected}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                        <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label">{{item.label}}</view>
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
                         <view slot="price" class="selected-item-price">
                             <block wx:if="{{item.label != ''}}">
-                                <view class="selected-item-oriPrice">¥{{item.oriPrice}}</view>
-                                <view wx:if="{{item.price >= 0}}" class="selected-item-curPrice">¥{{item.price}}</view>
+                                <view class="selected-item-oriPrice" style="color:{{color.red}}">¥{{item.oriPrice}}</view>
+                                <view wx:if="{{item.price >= 0}}" class="selected-item-curPrice" style="color:{{color.yellow}}">¥{{item.price}}</view>
                             </block>
                             <block wx:else>
-                                <view class="selected-item-nowPrice">¥{{item.price}}
+                                <view class="selected-item-nowPrice" style="color:{{color.red}}">¥{{item.price}}
                                     <text>¥{{item.oriPrice}}</text>
                                 </view>
                             </block>
@@ -500,7 +494,8 @@ export default class Index extends wepy.page {
                 price: 209.3,
                 label: '甄选优品'
             }
-        ]
+        ],
+        color: {}
     };
 
     computed = {};
@@ -534,12 +529,18 @@ export default class Index extends wepy.page {
     //     });
     //     console.log(res);
     // }
-    
+
     onShareAppMessage() {
         return {
             title: '放心优选',
             path: '/pages/index/index'
         };
+    }
+
+    onLoad(){
+        let self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
     }
 
     // async onLoad() {

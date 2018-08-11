@@ -66,6 +66,9 @@
     height: 155rpx;
     margin: 45rpx 30rpx 80rpx 30rpx;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .category-type-item {
@@ -73,10 +76,6 @@
     height: 155rpx;
     text-align: center;
     display: inline-block;
-}
-
-.category-type-item:not(:last-child) {
-    margin-right: 47.5rpx;
 }
 
 .category-type-icon {
@@ -323,6 +322,13 @@ export default class Category extends wepy.page {
             });
         }
     };
+    
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/index/index'
+        };
+    }
 
     onLoad(options) {
         this.category = options.name;

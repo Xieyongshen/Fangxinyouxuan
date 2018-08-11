@@ -520,18 +520,6 @@ export default class Index extends wepy.page {
         }
     };
 
-<<<<<<< HEAD
-    // async onLoad() {
-    //     let self = this;
-    //     let res = await api.getShopProduct({
-    //         query: {
-    //             shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
-    //         }
-    //     });
-    //     console.log(res);
-    // }
-
-=======
     async onLoad() {
         let self = this;
         let categories = await api.getShopCategory();
@@ -543,9 +531,10 @@ export default class Index extends wepy.page {
             }
         });
         console.log(res);
+        self.color = self.$parent.globalData.color;
+        self.$apply();
     }
     
->>>>>>> a9814cdc25d56f1785975615f8954c326d2bcf37
     onShareAppMessage() {
         return {
             title: '放心优选',
@@ -555,8 +544,6 @@ export default class Index extends wepy.page {
 
     onLoad(){
         let self = this;
-        self.color = self.$parent.globalData.color;
-        self.$apply();
     }
 
     // async onLoad() {

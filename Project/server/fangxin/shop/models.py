@@ -74,6 +74,7 @@ class ShopProduct(models.Model):
 	activityType = models.IntegerField(blank=True, null=True)
 	count = models.IntegerField(blank=True, null=True)
 	remain = models.IntegerField(blank=True, null=True)
+	group_price = models.DecimalField(default=0,max_digits=10, decimal_places=2)
 	fullCount = models.IntegerField(blank=True, null=True)
 	fullMinus = models.IntegerField(blank=True, null=True)
 	comment = models.TextField(blank=True, null=True)
@@ -116,7 +117,7 @@ class ProductGroup(models.Model):
 	group_status = models.IntegerField()
 
 	def __str__(self):
-		return self.group_number
+		return self.group_code
 
 
 class ProductPicture(models.Model):

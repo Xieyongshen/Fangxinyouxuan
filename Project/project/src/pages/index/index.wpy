@@ -525,15 +525,18 @@ export default class Index extends wepy.page {
         }
     };
 
-    // async onLoad() {
-    //     let self = this;
-    //     let res = await api.getShopProduct({
-    //         query: {
-    //             shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
-    //         }
-    //     });
-    //     console.log(res);
-    // }
+    async onLoad() {
+        let self = this;
+        let categories = await api.getShopCategory();
+        console.log(categories)
+
+        let res = await api.getShopProduct({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        });
+        console.log(res);
+    }
     
     onShareAppMessage() {
         return {

@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/token', fangxin_views.create_token, name='token'),
     path('api/login', fangxin_views.login),
+    path('api/getShopCategory', fangxin_views.getShopCategory),
     path('api/getShopProduct', fangxin_views.getShopProduct),
+    path('api/getCategoryProduct', fangxin_views.getCategoryProduct),
+    path('api/getProductDetail', fangxin_views.getProductDetail),
 ]

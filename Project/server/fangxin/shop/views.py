@@ -186,3 +186,62 @@ def getShopProduct(request):
     res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
+
+def getShopCategory(request):
+    res_dict = list()
+    categories = list(ProductType.objects.all())
+    for category in categories:
+        res_dict.append(dict(title=category.type_name,id=str(category.type_id)))
+
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)
+
+def getCategoryProduct(request):
+    res_dict = dict()
+    typeDict = list()
+    productDict = list()
+    shopIdstr = request.GET['shopId']
+    categoryIdstr = request.GET['categoryId']
+    shopId = uuid.UUID(shopIdstr)
+    categoryId = uuid.UUID(categoryIdstr)
+    typeList = list(ProductType.objects.filter(parent__type_id=categoryId))
+    for types in typeList:
+        typeEle = dict(id=str(types.type_id),name=types.type_name)
+        typeDict.append(typeEle)
+
+    productList = list(ShopProduct.objects.filter(shop__shop_id=shopId,pro_type__parent__type_id=categoryId))
+    for products in productList:
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=products.pro_id))
+        # imgUrl = productPics[0].url
+        imgUrl = ''
+        productEle = dict(id=str(products.pro_id),type=products.pro_type.type_name,name=products.pro_name,desc=products.pro_desc,imgUrl=imgUrl,oriPrice=str(products.pro_origin_price),price=str(products.pro_price))
+        productDict.append(productEle)
+
+    res_dict = dict(type=typeDict,product=productDict)
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)
+
+def getProductDetail(request):
+    res_dict = dict()
+    productIdstr = request.GET['productId']
+    productId = uuid.UUID(productIdstr)
+    the_product = ShopProduct.objects.get(pro_id=productId)
+    if(the_product.activityType==2):
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
+        imgUrls = list()
+        for images in productPics:
+            imgUrls.append(dict(imgUrl=images.url,url=''))
+        productgroups = ProductGroup.objects.filter(group_product__pro_id=the_product.pro_id)
+        groupList = list()
+        for productgroup in productgroups:
+            groupList.append(dict(head=dict(name=productgroup.group_monitor.user_name,avatar=productgroup.group_monitor.user_image),count=productgroup.group_number,endTime=productgroup.end_time.strftime("%Y-%m-%d %H:%M:%S")))
+        groupDetail = dict(price=str(the_product.group_price),list=groupList,count=len(groupList))
+        res_dict = dict(id=productIdstr,type=0,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,weight=the_product.pro_weight,package=the_product.pro_package,life=the_product.pro_life,store=the_product.pro_store_method,image=imgUrls,detail=groupDetail)
+    else:
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
+        imgUrls = list()
+        for images in productPics:
+            imgUrls.append(dict(imgUrl=images.url,url=''))
+        res_dict = dict(id=productIdstr,type=0,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,weight=the_product.pro_weight,package=the_product.pro_package,life=the_product.pro_life,store=the_product.pro_store_method,image=imgUrls,label=dict(name='会员专享',price='39.2'))
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)

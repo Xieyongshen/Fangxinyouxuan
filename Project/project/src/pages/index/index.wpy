@@ -542,10 +542,6 @@ export default class Index extends wepy.page {
         };
     }
 
-    onLoad(){
-        let self = this;
-    }
-
     // async onLoad() {
     //     let self = this;
     //     let res = await api.getShopProduct();

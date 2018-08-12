@@ -2,7 +2,8 @@
 .orderDetail-header,
 .orderDetail-product,
 .orderDetail-pay,
-.orderDetail-detail {
+.orderDetail-detail,
+.orderDetail-refund {
     width: 750rpx;
     padding: 0 30rpx;
     box-sizing: border-box;
@@ -227,19 +228,75 @@
 .orderDetail-detail {
     color: #808080;
 }
+
+.orderDetail-refund-reason{
+    width: 690rpx;
+    height: 86rpx;
+    padding: 10rpx 0;
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.reason-item{
+    width: 140rpx;
+    height: 65rpx;
+    font-size: 24rpx;
+    line-height: 61rpx;
+    text-align: center;
+    border: 2rpx solid #cccccc;
+    border-radius: 4rpx;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.reason-item:not(:first-child){
+    margin-left: 40rpx;
+}
+
+.reason-checked{
+    color: #f5333f;
+    border: 2rpx solid #f5333f;
+}
+
+.orderDetail-refund-more{
+    width: 690rpx;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.refund-more-input{
+    height: auto;
+    font-size: 26rpx;
+    line-height: 50rpx;
+}
+
+.refund-more-update{
+    width: 120rpx;
+    height: 120rpx;
+    color: #bfbfbf;
+    text-align: center;
+    line-height: 118rpx;
+    margin-top: 20rpx;
+    border: 1rpx solid #bfbfbf;
+    border-radius: 3rpx;
+}
+
+.orderDetail-refund-submit{
+    width: 690rpx;
+    padding: 20rpx 0;
+}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="订单详情" isChildPage="y"></navBar>
         <view class="orderDetail-header">
-            <view wx:if="{{order.type == 2 && order.status == 3}}" class="orderDetail-status">拼单成功</view>
+            <view wx:if="{{order.type == 2 && order.status == 5}}" class="orderDetail-status">拼单成功</view>
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
                 <image wx:if="{{order.status > 0}}" src="/icons/in.png" class="icon-in" />
             </view>
             <view class="orderDetail-shop">
                 <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" />
-                    <text>{{order.shop.name}}</text>
-                    <image src="/icons/phone.png" class="orderDetail-icon-phone" />
+                <text>{{order.shop.name}}</text>
+                <image src="/icons/phone.png" class="orderDetail-icon-phone" />
             </view>
         </view>
         <view wx:if="{{order.type != 2}}" class="orderDetail-product">
@@ -276,7 +333,7 @@
                 </view>
             </view>
             <view class="orderDetail-group-status">
-                <block wx:if="{{order.status == 2}}">还差{{order.group.users.length - order.group.count}}人拼单成功，分享好友一起拼</block>
+                <block wx:if="{{order.status == 1}}">还差{{order.group.users.length - order.group.count}}人拼单成功，分享好友一起拼</block>
                 <block wx:else>拼单成功</block>
             </view>
         </view>
@@ -285,9 +342,8 @@
                 <text>￥{{order.total}}</text>
             </view>
             <view class="orderDetail-item">
-                <image src="/icons/redPacket.png" class="orderDetail-redPacket-icon" />
-                    红包
-                    <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
+                <image src="/icons/redPacket.png" class="orderDetail-redPacket-icon" /> 红包
+                <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
             </view>
             <view wx:if="{{order.type < 2}}" class="orderDetail-item">满减优惠
                 <text>-￥{{order.discount}}</text>
@@ -295,10 +351,10 @@
             <view class="orderDetail-item">商品实付
                 <text>￥{{payFinal}}</text>
             </view>
-            <view class="orderDetail-item">
+            <view wx:if="{{order.status != 4}}" class="orderDetail-item">
                 <view wx:if="{{order.status == 0}}" class="orderDetail-btn">立即支付</view>
-                <view wx:elif="{{order.status == 5}}" class="orderDetail-btn">退款成功</view>
-                <view wx:else class="orderDetail-btn">申请退款</view>
+                <view wx:elif="{{isRefund && order.status == 5}}" class="orderDetail-btn">退款成功</view>
+                <view wx:else class="orderDetail-btn" @tap="orderRefund()">申请退款</view>
                 <text wx:if="{{order.status == 0}}" class="orderDetail-majorInfo">请在15分（倒计时）内支付</text>
             </view>
         </view>
@@ -332,6 +388,26 @@
                 </view>
             </block>
         </view>
+        <view wx:if="{{order.status == 4}}" class="orderDetail-refund">
+            <view class="orderDetail-item">选择退款原因</view>
+            <view class="orderDetail-refund-reason">
+                <radio-group bindchange="reasonChange">
+                    <repeat for="{{refundReasons}}" key="index">
+                        <label class="reason-item {{item.id == reasonChoose? 'reason-checked' : ''}}">
+                            <view class="reason-text">{{item.name}}</view>
+                            <radio value="{{item.id}}" style="display:none;" />
+                        </label>
+                    </repeat>
+                </radio-group>
+            </view>
+            <view class="orderDetail-refund-more">
+                <textarea auto-height placeholder="补充详细信息以使商家更快帮您处理" class="refund-more-input" />
+                <view class="refund-more-update">+</view>
+            </view>
+            <view class="orderDetail-item">
+                <view class="orderDetail-btn" @tap="refundSubmit">提交申请</view>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -348,12 +424,19 @@ export default class OrderDetail extends wepy.page {
         orderID: '000001',
         orderStatus: [
             '订单待支付',
-            '订单已支付',
             '拼单还未成功',
-            '订单已签收',
+            '订单待发货',
+            '订单配送中',
             '申请售后',
-            '申请售后'
+            '订单已完成'
         ],
+        refundReasons: [
+            { id: '01', name: '商品拍错'},
+            { id: '02', name: '商品损坏'},
+            { id: '03', name: '货品发错'},
+            { id: '04', name: '有异物'}
+        ],
+        reasonChoose: '',
         order: {
             type: 0,
             status: 0,
@@ -364,6 +447,7 @@ export default class OrderDetail extends wepy.page {
             redPacket: 5,
             pay: '在线支付',
             remark: '',
+            isRefund: false,
             shop: {
                 avatar: '',
                 name: '朴美琴（小区店长）',
@@ -456,6 +540,28 @@ export default class OrderDetail extends wepy.page {
             wx.navigateTo({
                 url: '../../productList/productList'
             });
+        },
+
+        orderRefund() {
+            var self = this;
+            wx.showModal({
+                title: '申请退款',
+                content: '确认申请退款吗？',
+                success: function(res) {
+                    if (res.confirm) {
+                        self.order.status = 4;
+                        self.$apply();
+                    } else if (res.cancel) {
+                        console.log('refund cancel');
+                    }
+                }
+            });
+        },
+
+        reasonChange(e) {
+            console.log(e.detail.value);
+            this.reasonChoose = e.detail.value;
+            this.$apply();
         }
     };
 

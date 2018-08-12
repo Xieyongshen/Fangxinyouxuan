@@ -65,7 +65,7 @@ export default class RecommendBlock extends wepy.component {
     methods = {
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=' + product
+                url: '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
             });
         }
     }

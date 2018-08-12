@@ -543,7 +543,6 @@ export default class Coupon extends wepy.page {
                 });
             })
             .exec();
-        console.log(self.moduleTop);
         self.$apply();
     }
 }

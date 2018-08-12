@@ -56,7 +56,7 @@ page {
     width: 30rpx;
     height: 30rpx;
     margin-right: 10rpx;
-        vertical-align: top;
+    vertical-align: top;
 }
 
 .product-intro-name {
@@ -377,7 +377,7 @@ page {
         <view class="product-intro">
             <view class="product-intro-share">
                 <image src="/icons/share.png" class="product-icon-share" />
-                    <text>分享</text>
+                <text>分享</text>
             </view>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
@@ -410,11 +410,11 @@ page {
             <repeat for="{{product.group.list}}" key="index">
                 <view class="product-group-item">
                     <image src="{{item.head.avatar}}" class="product-group-avatar" />
-                        <view class="product-group-content">
-                            <view class="product-group-head">{{item.head.name}}</view>
-                            <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
-                        </view>
-                        <view class="product-group-btn">去参团</view>
+                    <view class="product-group-content">
+                        <view class="product-group-head">{{item.head.name}}</view>
+                        <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
+                    </view>
+                    <view class="product-group-btn">去参团</view>
                 </view>
             </repeat>
         </view>
@@ -430,12 +430,12 @@ page {
         <view class="product-recommend">
             <view class="product-recommend-title">推荐搭配商品</view>
             <scroll-view scroll-x="true" class="product-recommend-content">
-                <repeat for="{{product.recommend}}" key="id">
+                <repeat for="{{recommend}}" key="id">
                     <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
                         <image src="{{item.imgUrl}}" class="product-recommend-img" />
-                            <view class="product-recommend-name">{{item.name}}</view>
-                            <view class="product-recommend-price">￥{{item.price}}</view>
-                            <image src="/icons/cart-recommend.png" class="product-recommend-cart" />
+                        <view class="product-recommend-name">{{item.name}}</view>
+                        <view class="product-recommend-price">￥{{item.price}}</view>
+                        <image src="/icons/cart-recommend.png" class="product-recommend-cart" />
                     </view>
                 </repeat>
             </scroll-view>
@@ -451,7 +451,7 @@ page {
             <block wx:else>
                 <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
                     <image src="/icons/shoppingCart.png" class="product-btn-cart" />
-                        <text>购物车</text>
+                    <text>购物车</text>
                 </view>
                 <view class="product-btn-addToCart">加入购物车</view>
                 <navigator url="../order/order" class="product-btn-purchase">立即购买</navigator>
@@ -474,57 +474,38 @@ export default class Product extends wepy.page {
         curImage: 0,
         productID: '',
         product: {
-            id: '000001',
-            type: 2,
-            name: '日式纯棉色织条纹围裙',
-            desc: '100%全棉，双层加厚',
-            price: 49,
+            id: '',
+            type: 0,
+            name: '',
+            desc: '',
+            price: 0,
             label: {
-                name: '会员专享',
-                price: 39.2
+                name: '',
+                price: 0
             },
-            soldCount: 10785,
-            remain: 10,
+            soldCount: 0,
+            remain: 0,
             preSale: {
-                reachTime: 1,
-                label: ['国贸店']
+                reachTime: 0,
+                label: ['']
             },
             group: {
-                price: 9.9,
-                count: 3,
+                price: 0,
+                count: 0,
                 list: [
                     {
                         head: {
-                            name: '小鱼',
+                            name: '',
                             avatar: ''
                         },
-                        count: 2,
-                        restTime: '5:41:43'
-                    },
-                    {
-                        head: {
-                            name: '小鱼',
-                            avatar: ''
-                        },
-                        count: 1,
-                        restTime: '5:41:43'
-                    },
-                    {
-                        head: {
-                            name: '小鱼',
-                            avatar: ''
-                        },
-                        count: 2,
-                        restTime: '5:41:43'
+                        count: 0,
+                        restTime: ''
                     }
                 ]
             },
             detail: {
-                text: '重量：\n\n包装：\n\n保质期：\n\n贮存方法：\n',
+                text: '',
                 imgList: [
-                    {
-                        imgUrl: ''
-                    },
                     {
                         imgUrl: ''
                     }
@@ -534,51 +515,35 @@ export default class Product extends wepy.page {
                 {
                     imgUrl: '',
                     url: ''
-                },
-                {
-                    imgUrl: '',
-                    url: ''
-                },
-                {
-                    imgUrl: '',
-                    url: ''
-                },
-                {
-                    imgUrl: '',
-                    url: ''
-                },
-                {
-                    imgUrl: '',
-                    url: ''
-                }
-            ],
-            recommend: [
-                {
-                    id: '000001',
-                    name: '韩国制造，花洒替代品',
-                    price: 39.2,
-                    imgUrl: ''
-                },
-                {
-                    id: '000002',
-                    name: '韩国制造，花洒替代品',
-                    price: 39.2,
-                    imgUrl: ''
-                },
-                {
-                    id: '000003',
-                    name: '韩国制造，花洒替代品',
-                    price: 39.2,
-                    imgUrl: ''
-                },
-                {
-                    id: '000004',
-                    name: '韩国制造，花洒替代品',
-                    price: 39.2,
-                    imgUrl: ''
                 }
             ]
-        }
+        },
+        recommend: [
+            {
+                id: '000001',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000002',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000003',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            },
+            {
+                id: '000004',
+                name: '韩国制造，花洒替代品',
+                price: 39.2,
+                imgUrl: ''
+            }
+        ]
     };
 
     methods = {
@@ -589,7 +554,7 @@ export default class Product extends wepy.page {
 
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=' + product
+                url: '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
             });
         },
 
@@ -601,7 +566,7 @@ export default class Product extends wepy.page {
     };
 
     events = {};
-    
+
     onShareAppMessage() {
         return {
             title: '放心优选',
@@ -610,15 +575,17 @@ export default class Product extends wepy.page {
     }
 
     async onLoad(options) {
-        this.productID = options.id;
-        console.log(this.productID);
+        let self = this;
+        self.productID = options.id;
+        console.log(self.productID);
         let productDetail = await api.getProductDetail({
             query: {
-                productId: 'b86e64c7-7da6-4829-9045-43855dc3a8f9'
+                productId: self.productID
             }
         });
-        console.log(productDetail)
-        this.$apply();
+        console.log(productDetail);
+        self.product = productDetail.data;
+        self.$apply();
     }
 }
 </script>

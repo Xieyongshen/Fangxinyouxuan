@@ -197,22 +197,23 @@
                             <image src="/icons/pay.png" class="status-icon" />
                             <view class="status-text">已支付</view>
                         </view>
-                        <view wx:if="{{item.status > 0 && item.status != 2 }}" class="status-label">
+                        <view wx:if="{{item.status > 2}}" class="status-label">
                             <image src="/icons/deliver.png" class="status-icon" />
                             <view class="status-text">配送中</view>
                         </view>
-                        <view wx:if="{{item.status > 2}}" class="status-label">
+                        <view wx:if="{{item.status > 3}}" class="status-label">
                             <image src="/icons/received.png" class="status-icon" />
                             <view class="status-text">已签收</view>
                         </view>
                         <view class="orderList-item-total">￥{{item.total}}</view>
                     </view>
                     <view class="orderList-item-operation">
-                        <block wx:if="{{item.status == 2}}">如未成功自动退款</block>
+                        <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
                         <view wx:if="{{item.status == 0}}" class="operation-btn btn-major">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
-                        <view class="operation-btn" @tap="toOrderDetail({{item.status}}, {{item.type}})">查看详情</view>
-                        <view wx:if="{{item.status == 3}}" class="operation-btn">申请退款</view>
+                        <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}}, {{item.type}})">查看详情</view>
+                        <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
+                        <view wx:if="{{item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}}, {{item.type}})">申请退款</view>
                     </view>
                 </view>
             </repeat>
@@ -229,8 +230,8 @@ export default class OrderList extends wepy.page {
         navBar: NavBar
     };
     data = {
-        orderType: ['待付款', '待收货', '待成团', '全部订单'],
-        //订单状态：待付款0，待收货1，待成团2，已签收3, 售后中4, 退款成功5
+        orderType: ['待付款', '待成团', '待收货', '全部订单'],
+        //订单状态：待付款0，待成团1，待发货2，配送中3, 售后中4, 已完成5
         curType: 3,
         orderList: [
             {
@@ -261,7 +262,7 @@ export default class OrderList extends wepy.page {
             },
             {
                 id: '000002',
-                type: 1,
+                type: 2,
                 status: 1,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
@@ -279,7 +280,7 @@ export default class OrderList extends wepy.page {
             },
             {
                 id: '000003',
-                type: 2,
+                type: 1,
                 status: 2,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
@@ -314,6 +315,42 @@ export default class OrderList extends wepy.page {
                         count: 2
                     }
                 ]
+            },
+            {
+                id: '000005',
+                type: 0,
+                status: 4,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        id: '000007',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    }
+                ]
+            },
+            {
+                id: '000006',
+                type: 0,
+                status: 5,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        id: '000008',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    }
+                ]
             }
         ]
     };
@@ -328,7 +365,30 @@ export default class OrderList extends wepy.page {
 
         toOrderDetail(status, type, e) {
             wx.navigateTo({
-                url: '../orderDetail/orderDetail?status=' + status + '&type=' + type
+                url:
+                    '../orderDetail/orderDetail?status=' +
+                    status +
+                    '&type=' +
+                    type
+            });
+        },
+
+        toOrderRefund(status, type, e) {
+            var self = this;
+            wx.showModal({
+                title: '申请退款',
+                content: '确认申请退款吗？',
+                success: function(res) {
+                    if (res.confirm) {
+                        wx.navigateTo({
+                            url:
+                                '../orderDetail/orderDetail?status=4&type=' + type
+                        });
+                        self.$apply();
+                    } else if (res.cancel) {
+                        console.log('refund cancel');
+                    }
+                }
             });
         }
     };

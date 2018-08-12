@@ -263,7 +263,7 @@
                     <text>距离活动结束还剩：</text>
                     <text class="today-time-num">{{todayTime}}</text>
                 </view>
-                <repeat for="{{today}}" key="id" index="i">
+                <repeat for="{{product.today}}" key="id" index="i">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
                         <view wx:if="{{item.isLimited == false}}" slot="extra" class="today-item-remain">
                             <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
@@ -283,7 +283,7 @@
             <image class="index-banner-middle" />
             <view class="index-hot">
                 <view class="hot-title">热卖爆款</view>
-                <repeat for="{{hot}}" key="id">
+                <repeat for="{{product.hot}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
                         <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
                         <view slot="price" class="hot-item-price">
@@ -303,7 +303,7 @@
             <image class="index-banner-middle" />
             <view class="index-selected">
                 <view class="selected-title">放心精选</view>
-                <repeat for="{{selected}}" key="id">
+                <repeat for="{{product.selected}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
                         <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
                         <view slot="price" class="selected-item-price">
@@ -362,6 +362,11 @@ export default class Index extends wepy.page {
             }
         ],
         todayTime: '01:23:09',
+        product: {
+            hot: [],
+            today: [],
+            selected: []
+        },
         today: [
             {
                 id: '00001',
@@ -420,42 +425,42 @@ export default class Index extends wepy.page {
             }
         ],
         hot: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                desc: '甜美通勤，轻松搭配',
-                imgUrl: '',
-                oriPrice: 399,
-                price: 153.3,
-                label: '可拼团'
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                desc: '无极调光，360°自由旋转',
-                imgUrl: '',
-                oriPrice: 45,
-                price: 30,
-                label: ''
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                oriPrice: 103.3,
-                price: 83.3,
-                label: '满20减5'
-            },
-            {
-                id: '00004',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                oriPrice: 499,
-                price: 209.3,
-                label: '甄选优品'
-            }
+            // {
+            //     id: '00001',
+            //     name: '日式蝴蝶结通勤女鞋',
+            //     desc: '甜美通勤，轻松搭配',
+            //     imgUrl: '',
+            //     oriPrice: 399,
+            //     price: 153.3,
+            //     label: '可拼团'
+            // },
+            // {
+            //     id: '00002',
+            //     name: '随便阅读灯',
+            //     desc: '无极调光，360°自由旋转',
+            //     imgUrl: '',
+            //     oriPrice: 45,
+            //     price: 30,
+            //     label: ''
+            // },
+            // {
+            //     id: '00003',
+            //     name: '男士都市轻生活弹力牛仔裤',
+            //     desc: '自如转换多场景，让双腿保持昂扬活力',
+            //     imgUrl: '',
+            //     oriPrice: 103.3,
+            //     price: 83.3,
+            //     label: '满20减5'
+            // },
+            // {
+            //     id: '00004',
+            //     name: '男士都市轻生活弹力牛仔裤',
+            //     desc: '自如转换多场景，让双腿保持昂扬活力',
+            //     imgUrl: '',
+            //     oriPrice: 499,
+            //     price: 209.3,
+            //     label: '甄选优品'
+            // }
         ],
         selected: [
             {
@@ -531,6 +536,7 @@ export default class Index extends wepy.page {
             }
         });
         console.log(res);
+        self.product = res.data;
         self.color = self.$parent.globalData.color;
         self.$apply();
     }

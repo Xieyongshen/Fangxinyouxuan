@@ -26,12 +26,6 @@
     margin-right: 10rpx;
 }
 
-.orderList-type-cur text {
-    color: #f5333f;
-    border-bottom: 4rpx solid #f5333f;
-    box-sizing: border-box;
-}
-
 .orderList-item {
     width: 750rpx;
     margin-top: 20rpx;
@@ -49,7 +43,6 @@
     box-sizing: border-box;
     border-bottom: 1rpx solid #f2f2f2;
     text {
-        color: #f5333f;
         height: 90rpx;
         font-size: 28rpx;
         line-height: 90rpx;
@@ -127,7 +120,6 @@
 }
 
 .orderList-item-total {
-    color: #f5333f;
     font-size: 28rpx;
     line-height: 110rpx;
     float: right;
@@ -156,19 +148,14 @@
     box-sizing: border-box;
     float: right;
 }
-
-.btn-major {
-    color: #f5333f;
-    border: 2rpx solid #f5333f;
-}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="全部订单" isChildPage="y"></navBar>
         <view class="orderList-type">
             <repeat for="{{orderType}}" key="index">
-                <view class="orderList-type-item {{index == curType ? 'orderList-type-cur' : ''}}" @tap="chooseType({{index}})">
-                    <text>{{item}}</text>
+                <view class="orderList-type-item" @tap="chooseType({{index}})">
+                    <text style="{{index == curType ? 'color:' + color.red + ';border-bottom: 4rpx solid ' + color.red + ';' : ''}}">{{item}}</text>
                 </view>
             </repeat>
         </view>
@@ -177,8 +164,8 @@
                 <view wx:if="{{curType == 3 || (curType == item.status)}}" class="orderList-item">
                     <view class="orderList-item-type">
                         {{item.createTime}}
-                        <text wx:if="{{item.status == 2}}">拼团中</text>
-                        <text wx:else>{{item.deliverTime}}</text>
+                        <text wx:if="{{item.status == 2}}" style="color:{{color.red}}">拼团中</text>
+                        <text wx:else style="color:{{color.red}}">{{item.deliverTime}}</text>
                     </view>
                     <view wx:if="{{item.type == 1 || item.type == 2}}" class="orderList-productAll-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
                     <scroll-view class="orderList-item-list">
@@ -197,22 +184,23 @@
                             <image src="/icons/pay.png" class="status-icon" />
                             <view class="status-text">已支付</view>
                         </view>
-                        <view wx:if="{{item.status > 0 && item.status != 2 }}" class="status-label">
+                        <view wx:if="{{item.status > 2}}" class="status-label">
                             <image src="/icons/deliver.png" class="status-icon" />
                             <view class="status-text">配送中</view>
                         </view>
-                        <view wx:if="{{item.status > 2}}" class="status-label">
+                        <view wx:if="{{item.status > 3}}" class="status-label">
                             <image src="/icons/received.png" class="status-icon" />
                             <view class="status-text">已签收</view>
                         </view>
-                        <view class="orderList-item-total">￥{{item.total}}</view>
+                        <view class="orderList-item-total" style="color:{{color.red}}">￥{{item.total}}</view>
                     </view>
                     <view class="orderList-item-operation">
-                        <block wx:if="{{item.status == 2}}">如未成功自动退款</block>
-                        <view wx:if="{{item.status == 0}}" class="operation-btn btn-major">去支付</view>
+                        <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
+                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
-                        <view class="operation-btn" @tap="toOrderDetail({{item.status}}, {{item.type}})">查看详情</view>
-                        <view wx:if="{{item.status == 3}}" class="operation-btn">申请退款</view>
+                        <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}}, {{item.type}})">查看详情</view>
+                        <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
+                        <view wx:if="{{item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}}, {{item.type}})">申请退款</view>
                     </view>
                 </view>
             </repeat>
@@ -262,7 +250,7 @@ export default class OrderList extends wepy.page {
             },
             {
                 id: '000002',
-                type: 1,
+                type: 2,
                 status: 1,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
@@ -280,7 +268,7 @@ export default class OrderList extends wepy.page {
             },
             {
                 id: '000003',
-                type: 2,
+                type: 1,
                 status: 2,
                 total: 247.6,
                 createTime: '2018-06-29 19:43:18',
@@ -315,8 +303,45 @@ export default class OrderList extends wepy.page {
                         count: 2
                     }
                 ]
+            },
+            {
+                id: '000005',
+                type: 0,
+                status: 4,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        id: '000007',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    }
+                ]
+            },
+            {
+                id: '000006',
+                type: 0,
+                status: 5,
+                total: 247.6,
+                createTime: '2018-06-29 19:43:18',
+                deliverTime: '7月16号(明天)',
+                product: [
+                    {
+                        id: '000008',
+                        name: '韩国制造，花洒替代品',
+                        imgUrl: '',
+                        price: 39.2,
+                        oriPrice: 75,
+                        count: 2
+                    }
+                ]
             }
-        ]
+        ],
+        color: {}
     };
 
     computed = {};
@@ -327,9 +352,32 @@ export default class OrderList extends wepy.page {
             this.$apply();
         },
 
-        toOrderDetail(status, type, e) {
+        toOrderDetail(id, status, type, e) {
             wx.navigateTo({
-                url: '../orderDetail/orderDetail?status=' + status + '&type=' + type
+                url:
+                    '../orderDetail/orderDetail?status=' +
+                    status +
+                    '&type=' +
+                    type
+            });
+        },
+
+        toOrderRefund(status, type, e) {
+            var self = this;
+            wx.showModal({
+                title: '申请退款',
+                content: '确认申请退款吗？',
+                success: function(res) {
+                    if (res.confirm) {
+                        wx.navigateTo({
+                            url:
+                                '../orderDetail/orderDetail?status=4&type=' + type
+                        });
+                        self.$apply();
+                    } else if (res.cancel) {
+                        console.log('refund cancel');
+                    }
+                }
             });
         }
     };
@@ -355,6 +403,7 @@ export default class OrderList extends wepy.page {
             console.log("jwt is null")
         }
         self.curType = options.index;
+        self.color = self.$parent.globalData.color;
         self.$apply();
     }
 }

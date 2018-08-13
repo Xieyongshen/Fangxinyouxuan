@@ -35,7 +35,6 @@ page {
         font-size: 22rpx;
         line-height: 30rpx;
         color: #ffffff;
-        background: #f5333f;
         margin: 7rpx 0 7rpx 10rpx;
         padding: 0 10rpx;
         border-radius: 5rpx;
@@ -80,10 +79,6 @@ page {
 .order-total,
 .order-final {
     padding-left: 30rpx;
-}
-
-.order-product-deliver text {
-    color: #f5333f;
 }
 
 .order-product-items {
@@ -139,10 +134,6 @@ page {
     }
 }
 
-.order-total-redPacket text {
-    color: #f5333f;
-}
-
 .order-total-redPacket .icon-in {
     width: 15rpx;
     height: 25rpx;
@@ -154,14 +145,6 @@ page {
     width: 25rpx;
     height: 30rpx;
     margin-right: 10rpx;
-}
-
-.status-false {
-    color: #bfbfbf;
-}
-
-.status-true {
-    color: #f5333f;
 }
 
 .order-pay {
@@ -180,9 +163,6 @@ page {
 
 .order-pay-total {
     display: inline-block;
-    text {
-        color: #f5333f;
-    }
 }
 
 .order-pay-btn {
@@ -190,7 +170,6 @@ page {
     height: 90rpx;
     text-align: center;
     color: #ffffff;
-    background: #f5333f;
     vertical-align: top;
     float: right;
 }
@@ -201,14 +180,14 @@ page {
             <image src="/icons/address-bg.png" class="order-header" />
         <view class="order-block order-info">
             <view class="order-address">{{address}} {{shop.name}}
-                <text>{{deliver.name}}</text>
+                <text style="background:{{color.red}}">{{deliver.name}}</text>
             </view>
             <view class="order-shopkeeper">{{shop.keeper}} {{shop.phone}}</view>
         </view>
         <repeat for="{{product}}" key="type">
             <view class="order-block order-product">
                 <view class="order-product-deliver order-item">送达时间
-                    <text>{{item.sendTime}}</text>
+                    <text style="color:{{color.red}}">{{item.sendTime}}</text>
                 </view>
                 <view class="order-product-items" @tap="navToProductList()">
                     <repeat for="{{item.list}}" key="id" item="listItem" index="idx">
@@ -236,8 +215,8 @@ page {
                 <image src="/icons/redPacket.png" class="order-redPacket-icon" />
                     红包
                     <image src="/icons/in.png" class="icon-in" />
-                        <text class="{{redPacket.count == 0 ? 'status-false' : 'status-true'}}">
-                            <block wx:if="{{redPacket.count == 0}}">无可使用红包</block>
+                        <text style="color:{{redPacket.count == 0 ? '#bfbfbf' : color.red}}">
+                            <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
                             <block wx:else>{{redPacket.count}}元</block>
                         </text>
             </view>
@@ -255,9 +234,9 @@ page {
         </view>
         <view class="order-pay">
             <view class="order-pay-total">合计:
-                <text>￥{{total}}</text>
+                <text style="color:{{color.red}}">￥{{total}}</text>
             </view>
-            <view class="order-pay-btn">去支付</view>
+            <view class="order-pay-btn" style="background:{{color.red}}">去支付</view>
         </view>
     </view>
 </template>
@@ -283,8 +262,8 @@ export default class Order extends wepy.page {
             freight: 0
         },
         redPacket: {
-            id: '000001',
-            count: 5
+            id: '',
+            count: 0
         },
         remain: 8.88,
         product: [
@@ -349,7 +328,8 @@ export default class Order extends wepy.page {
                 ]
             }
         ],
-        subtotal: 0
+        subtotal: 0,
+        color: {}
     };
 
     computed = {
@@ -392,8 +372,22 @@ export default class Order extends wepy.page {
 
     events = {};
 
+    onShow(){
+        var self = this;
+        wx.getStorage({
+            key: 'redPacket',
+            success: function(res) {
+                console.log(res.data);
+                self.redPacket = res.data;
+                self.$apply();
+            }
+        });
+    }
+
     onLoad() {
         var self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
         self.updateTotal();
     }
 }

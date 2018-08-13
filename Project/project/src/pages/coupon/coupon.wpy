@@ -42,13 +42,6 @@ page {
     margin: 0 40rpx;
 }
 
-.coupon-module-cur {
-    color: #f5333f;
-    .coupon-module-bar {
-        background: #f5333f;
-    }
-}
-
 .coupon-content {
     width: 750rpx;
     height: 100%;
@@ -70,7 +63,6 @@ page {
     box-sizing: border-box;
     border-radius: 20rpx;
     color: #ffffff;
-    background: #f5333f;
 }
 
 .coupon-rank-title {
@@ -107,7 +99,6 @@ page {
         height: 44rpx;
         color: #ffffff;
         margin: 0 10rpx;
-        background: #f5333f;
         border-radius: 50%;
         display: inline-block;
     }
@@ -115,7 +106,6 @@ page {
 
 .limit-item-time {
     width: 430rpx;
-    color: #f5333f;
     font-size: 24rpx;
     line-height: 25rpx;
     margin-top: 50rpx;
@@ -217,7 +207,6 @@ page {
 }
 
 .group-item-price {
-    color: #f5333f;
     font-size: 30rpx;
     line-height: 65rpx;
     margin-top: 60rpx;
@@ -237,7 +226,6 @@ page {
     font-size: 32rpx;
     line-height: 300rpx;
     text-align: center;
-    background: #f5333f;
 }
 </style>
 <template>
@@ -245,15 +233,15 @@ page {
         <navBar navTitle="放心优选"></navBar>
         <view class="coupon-module">
             <repeat for="{{couponModule}}" key="id">
-                <view class="coupon-module-item {{index == curModule ? 'coupon-module-cur' : ''}}" @tap="chooseModule({{index}})">
+                <view class="coupon-module-item" style="{{index == curModule ? 'color:' + color.red : ''}}" @tap="chooseModule({{index}})">
                     <text>{{item.name}}</text>
-                    <view class="coupon-module-bar"></view>
+                    <view class="coupon-module-bar" style="{{index == curModule ? 'background:' + color.red : ''}}"></view>
                 </view>
             </repeat>
         </view>
         <scroll-view scroll-y scroll-into-view="{{scrollToModule}}" scroll-with-animation="true" bindscroll="moduleScroll" class="coupon-content">
             <view class="coupon-rank coupon-module-block" id="{{couponModule[0].id}}">
-                <view class="coupon-rank-container">
+                <view class="coupon-rank-container" style="background:{{color.red}}">
                     <view class="coupon-rank-title">王者社区排行榜</view>
                     <view class="coupon-rank-content">敬请期待</view>
                 </view>
@@ -261,14 +249,14 @@ page {
             <view class="coupon-block coupon-limit coupon-module-block" id="{{couponModule[1].id}}">
                 <view class="coupon-block-title">限时秒杀</view>
                 <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text>{{limit.restTime[0]}}</text>:
-                    <text>{{limit.restTime[1]}}</text>:
-                    <text>{{limit.restTime[2]}}</text>
+                    <text style="background:{{color.red}}">{{limit.restTime[0]}}</text>:
+                    <text style="background:{{color.red}}">{{limit.restTime[1]}}</text>:
+                    <text style="background:{{color.red}}">{{limit.restTime[2]}}</text>
                 </view>
                 <view class="coupon-limit-product">
                     <repeat for="{{limit.product}}" key="id">
                         <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc">
-                            <view slot="extra" class="limit-item-time">{{limit.startTime}} 开抢</view>
+                            <view slot="extra" class="limit-item-time" style="color:{{color.red}}">{{limit.startTime}} 开抢</view>
                             <view slot="price" class="limit-item-price">
                                 <view class="limit-item-price">¥{{item.price}}
                                     <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
@@ -303,7 +291,7 @@ page {
                                 <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
                                 <text>已团{{item.soldCount}}件</text>
                             </view>
-                            <view slot="price" class="group-item-price">¥{{item.price}}
+                            <view slot="price" class="group-item-price" style="color:{{color.red}}">¥{{item.price}}
                                 <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
                             </view>
                         </product>
@@ -312,11 +300,11 @@ page {
             </view>
             <view class="coupon-block coupon-module-block" id="{{couponModule[3].id}}">
                 <view class="coupon-block-title">有奖知识问答</view>
-                <view class="coupon-quetion-content">敬请期待</view>
+                <view class="coupon-quetion-content" style="background:{{color.red}}">敬请期待</view>
             </view>
             <view class="coupon-block">
                 <view class="coupon-block-title">游戏赢大奖</view>
-                <view class="coupon-game-content">敬请期待</view>
+                <view class="coupon-game-content" style="background:{{color.red}}">敬请期待</view>
             </view>
         </scroll-view>
     </view>
@@ -479,7 +467,8 @@ export default class Coupon extends wepy.page {
             }
         ],
         moduleTop: [],
-        moveStartPos: 0
+        moveStartPos: 0,
+        color: {}
     };
 
     methods = {
@@ -536,6 +525,7 @@ export default class Coupon extends wepy.page {
         var self = this;
         self.curModule = 0;
         self.scrollToModule = self.couponModule[0].id;
+        self.color = self.$parent.globalData.color;
         self.$apply();
 
         var query = wx.createSelectorQuery();
@@ -553,7 +543,6 @@ export default class Coupon extends wepy.page {
                 });
             })
             .exec();
-        console.log(self.moduleTop);
         self.$apply();
     }
 }

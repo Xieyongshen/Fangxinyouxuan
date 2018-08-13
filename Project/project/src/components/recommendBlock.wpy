@@ -26,7 +26,6 @@
 }
 
 .recommend-item-price {
-    color: #f5333f;
     margin-top: 30rpx;
     font-size: 32rpx;
     line-height: 40rpx;
@@ -46,7 +45,7 @@
         <image src="{{imgUrl}}" class="recommend-item-img" />
         <view class="recommend-item-content">
             <view class="recommend-item-name">{{name}}</view>
-            <view class="recommend-item-price">￥{{price}}</view>
+            <view class="recommend-item-price" style="color:{{priceColor}}">￥{{price}}</view>
             <image src="/icons/cart-recommend.png" class="recommend-icon-cart" />
         </view>
     </view>
@@ -55,17 +54,24 @@
 import wepy from 'wepy';
 
 export default class RecommendBlock extends wepy.component {
+    data = {
+    }
+
     props = {
         id: String,
         imgUrl: String,
         name: String,
-        price: String
+        price: String,
+        priceColor: {
+            type: String,
+            default: '#f5333f'
+        }
     };
 
     methods = {
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=' + product
+                url: '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
             });
         }
     }

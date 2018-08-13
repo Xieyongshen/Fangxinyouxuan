@@ -58,11 +58,9 @@
 
 .addressChange-save {
     color: #ffffff;
-    background: #f5333f;
 }
 
 .addressChange-delete {
-    color: #f5333f;
     background: #ffffff;
 }
 
@@ -105,8 +103,8 @@
                     <input type="text" value="{{address.postalCode}}" placeholder="邮政编码（选填）" class="addressChange-item-input" />
                 </view>
             </view>
-            <button class="addressChange-btn addressChange-save">保存</button>
-            <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete">删除收货地址</view>
+            <button class="addressChange-btn addressChange-save" style="background:{{color.red}}">保存</button>
+            <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete" style="color:{{color.red}}">删除收货地址</view>
         </form>
     </view>
 </template>
@@ -130,7 +128,8 @@ export default class Coupon extends wepy.page {
             region: ['北京市', '北京市', '朝阳区'],
             desc: '北京市朝阳区宇宙火星村166号',
             postalCode: ''
-        }
+        },
+        color: {}
     };
 
     methods = {
@@ -144,6 +143,7 @@ export default class Coupon extends wepy.page {
 
     onLoad(options) {
         var self = this;
+        self.color = self.$parent.globalData.color;
         self.type = options.type;
         if (self.type == 0) {
             self.title = '添加收货地址';

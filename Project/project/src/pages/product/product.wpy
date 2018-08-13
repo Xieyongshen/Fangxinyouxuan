@@ -72,13 +72,11 @@ page {
 }
 
 .product-intro-price {
-    color: #f5333f;
     font-size: 26rpx;
     line-height: 35rpx;
 }
 
 .product-intro-label {
-    color: #ffba00;
     font-size: 32rpx;
     line-height: 45rpx;
     vertical-align: top;
@@ -91,7 +89,6 @@ page {
         font-size: 22rpx;
         line-height: 25rpx;
         text-align: center;
-        background: #ffba00;
         display: inline-block;
     }
 }
@@ -194,7 +191,6 @@ page {
     line-height: 40rpx;
     text-align: center;
     border-radius: 20rpx;
-    background: #f5333f;
     float: right;
 }
 
@@ -304,7 +300,6 @@ page {
     font-size: 32rpx;
     line-height: 90rpx;
     text-align: center;
-    background: #f5333f;
 }
 
 .product-btn-separate,
@@ -355,11 +350,6 @@ page {
 .product-btn-addToCart {
     background: #ff6670;
 }
-
-.product-btn-group,
-.product-btn-purchase {
-    background: #f5333f;
-}
 </style>
 <template>
     <view class="container">
@@ -382,9 +372,9 @@ page {
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
             <block wx:if="{{product.type == 0}}">
-                <view class="product-intro-price">￥{{product.price}}</view>
-                <view class="product-intro-label">￥{{product.label.price}}
-                    <text>{{product.label.name}}</text>
+                <view class="product-intro-price" style="color:{{color.red}}">￥{{product.price}}</view>
+                <view class="product-intro-label" style="color:{{color.yellow}}">￥{{product.label.price}}
+                    <text style="background:{{color.yellow}}">{{product.label.name}}</text>
                 </view>
             </block>
             <block wx:else>
@@ -414,7 +404,7 @@ page {
                         <view class="product-group-head">{{item.head.name}}</view>
                         <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
                     </view>
-                    <view class="product-group-btn">去参团</view>
+                    <view class="product-group-btn" style="background:{{color.red}}">去参团</view>
                 </view>
             </repeat>
         </view>
@@ -442,11 +432,11 @@ page {
         </view>
         <view class="product-btn">
             <block wx:if="{{product.remain == 0}}">
-                <view class="product-empty">已售罄</view>
+                <view class="product-empty" style="background:{{color.red}}">已售罄</view>
             </block>
             <block wx:elif="{{product.type == 2}}">
                 <view class="product-btn-separate">单独购买 ￥{{product.price}}</view>
-                <view class="product-btn-group">拼单购 ￥{{product.group.price}}</view>
+                <view class="product-btn-group" style="background:{{color.red}}">拼单购 ￥{{product.group.price}}</view>
             </block>
             <block wx:else>
                 <view class="product-btn-shoppingCart" @tap="navToShoppingCart()">
@@ -454,7 +444,7 @@ page {
                     <text>购物车</text>
                 </view>
                 <view class="product-btn-addToCart">加入购物车</view>
-                <navigator url="../order/order" class="product-btn-purchase">立即购买</navigator>
+                <navigator url="../order/order" class="product-btn-purchase" style="background:{{color.red}}">立即购买</navigator>
             </block>
         </view>
     </view>
@@ -543,7 +533,8 @@ export default class Product extends wepy.page {
                 price: 39.2,
                 imgUrl: ''
             }
-        ]
+        ],
+        color: {}
     };
 
     methods = {
@@ -585,6 +576,7 @@ export default class Product extends wepy.page {
         });
         console.log(productDetail);
         self.product = productDetail.data;
+        self.color = self.$parent.globalData.color;
         self.$apply();
     }
 }

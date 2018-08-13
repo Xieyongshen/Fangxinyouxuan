@@ -26,12 +26,6 @@
     margin-right: 10rpx;
 }
 
-.orderList-type-cur text {
-    color: #f5333f;
-    border-bottom: 4rpx solid #f5333f;
-    box-sizing: border-box;
-}
-
 .orderList-item {
     width: 750rpx;
     margin-top: 20rpx;
@@ -49,7 +43,6 @@
     box-sizing: border-box;
     border-bottom: 1rpx solid #f2f2f2;
     text {
-        color: #f5333f;
         height: 90rpx;
         font-size: 28rpx;
         line-height: 90rpx;
@@ -127,7 +120,6 @@
 }
 
 .orderList-item-total {
-    color: #f5333f;
     font-size: 28rpx;
     line-height: 110rpx;
     float: right;
@@ -156,19 +148,14 @@
     box-sizing: border-box;
     float: right;
 }
-
-.btn-major {
-    color: #f5333f;
-    border: 2rpx solid #f5333f;
-}
 </style>
 <template>
     <view class="container">
         <navBar navTitle="全部订单" isChildPage="y"></navBar>
         <view class="orderList-type">
             <repeat for="{{orderType}}" key="index">
-                <view class="orderList-type-item {{index == curType ? 'orderList-type-cur' : ''}}" @tap="chooseType({{index}})">
-                    <text>{{item}}</text>
+                <view class="orderList-type-item" @tap="chooseType({{index}})">
+                    <text style="{{index == curType ? 'color:' + color.red + ';border-bottom: 4rpx solid ' + color.red + ';' : ''}}">{{item}}</text>
                 </view>
             </repeat>
         </view>
@@ -177,8 +164,8 @@
                 <view wx:if="{{curType == 3 || (curType == item.status)}}" class="orderList-item">
                     <view class="orderList-item-type">
                         {{item.createTime}}
-                        <text wx:if="{{item.status == 2}}">拼团中</text>
-                        <text wx:else>{{item.deliverTime}}</text>
+                        <text wx:if="{{item.status == 2}}" style="color:{{color.red}}">拼团中</text>
+                        <text wx:else style="color:{{color.red}}">{{item.deliverTime}}</text>
                     </view>
                     <view wx:if="{{item.type == 1 || item.type == 2}}" class="orderList-productAll-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
                     <scroll-view class="orderList-item-list">
@@ -205,11 +192,11 @@
                             <image src="/icons/received.png" class="status-icon" />
                             <view class="status-text">已签收</view>
                         </view>
-                        <view class="orderList-item-total">￥{{item.total}}</view>
+                        <view class="orderList-item-total" style="color:{{color.red}}">￥{{item.total}}</view>
                     </view>
                     <view class="orderList-item-operation">
                         <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
-                        <view wx:if="{{item.status == 0}}" class="operation-btn btn-major">去支付</view>
+                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
                         <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}}, {{item.type}})">查看详情</view>
                         <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
@@ -352,7 +339,8 @@ export default class OrderList extends wepy.page {
                     }
                 ]
             }
-        ]
+        ],
+        color: {}
     };
 
     computed = {};
@@ -363,7 +351,7 @@ export default class OrderList extends wepy.page {
             this.$apply();
         },
 
-        toOrderDetail(status, type, e) {
+        toOrderDetail(id, status, type, e) {
             wx.navigateTo({
                 url:
                     '../orderDetail/orderDetail?status=' +
@@ -398,6 +386,7 @@ export default class OrderList extends wepy.page {
     onLoad(options) {
         var self = this;
         self.curType = options.index;
+        self.color = self.$parent.globalData.color;
         self.$apply();
     }
 }

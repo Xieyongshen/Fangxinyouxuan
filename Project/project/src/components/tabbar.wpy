@@ -25,13 +25,8 @@
 }
 
 .tabbar-text {
-    color: #999999;
     font-size: 20rpx;
     line-height: 20rpx;
-}
-
-.text-choose {
-    color: #f5333f;
 }
 </style>
 <template>
@@ -39,7 +34,7 @@
         <repeat for="{{tabbar}}" key="index">
             <view class="tabbar-item" @tap="navToTab({{item.pagePath}})">
                 <image src="{{index == curTab ? item.selectedIconPath : item.iconPath}}" class="tabbar-img" />
-                <view class="tabbar-text {{index == curTab ? 'text-choose' : ''}}">{{item.text}}</view>
+                <view class="tabbar-text" style="color:{{index == curTab ? selectedColor : color}}">{{item.text}}</view>
             </view>
         </repeat>
     </view>
@@ -78,6 +73,14 @@ export default class Tabbar extends wepy.component {
     };
 
     props = {
+        color: {
+            type: String,
+            default: '#999999'
+        },
+        selectedColor: {
+            type: String,
+            default: '#f5333f'
+        },
         curTab: {
             type: String,
             default: 0

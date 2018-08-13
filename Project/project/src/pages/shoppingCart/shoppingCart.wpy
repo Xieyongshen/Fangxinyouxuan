@@ -141,7 +141,6 @@ page {
 .shoppingCart-product-tip {
     max-width: 550rpx;
     height: 90rpx;
-    color: #f5333f;
     font-size: 24rpx;
     line-height: 90rpx;
     float: right;
@@ -205,7 +204,6 @@ page {
 }
 
 .product-item-price {
-    color: #f5333f;
     font-size: 26rpx;
     line-height: 45rpx;
     margin-top: 75rpx;
@@ -270,14 +268,6 @@ page {
     margin: 32.5rpx 0 32.5rpx 10rpx;
     float: right;
     vertical-align: top;
-}
-
-.status-false {
-    color: #bfbfbf;
-}
-
-.status-true {
-    color: #f5333f;
 }
 
 .shoppingCart-result {
@@ -366,9 +356,10 @@ page {
 .price-total {
     font-size: 26rpx;
     line-height: 30rpx;
-    text {
-        color: #f5333f;
-    }
+    max-width: 300rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .price-freight {
@@ -384,7 +375,6 @@ page {
     line-height: 90rpx;
     text-align: center;
     color: #ffffff;
-    background: #f5333f;
     vertical-align: top;
     float: right;
 }
@@ -418,7 +408,7 @@ page {
                         <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
                         <text>全选</text>
                     </view>
-                    <view class="shoppingCart-product-tip">
+                    <view class="shoppingCart-product-tip" style="color:{{color.red}}">
                         <text>满{{discount.count}}减{{discount.minus}}</text>
                         <text wx:if="{{subtotal < discount.count}}">，还差{{difference}}，去凑单</text>
                         <image src="/icons/in.png" class="icon-in" />
@@ -431,7 +421,7 @@ page {
                             <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
                             <view class="product-item-content">
                                 <view class="product-item-name">{{item.name}}</view>
-                                <view class="product-item-price">￥{{item.price}}
+                                <view class="product-item-price" style="color:{{color.red}}">￥{{item.price}}
                                     <text>￥{{item.oriPrice}}</text>
                                 </view>
                                 <view class="product-item-count">
@@ -451,7 +441,7 @@ page {
                 <view class="shoppingCart-item">
                     <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon" /> 红包
                     <image src="/icons/in.png" class="icon-in" />
-                    <text class="{{redPacket.id == '' ? 'status-false' : 'status-true'}}">
+                    <text style="color:{{redPacket.count == 0 ? '#bfbfbf' : color.red}}">
                         <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
                         <block wx:else>{{redPacket.count}}元</block>
                     </text>
@@ -482,7 +472,7 @@ page {
         <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
-                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price" :priceColor.sync="color.red"></recommend>
             </repeat>
         </view>
         <view wx:if="{{product.length > 0}}" class="shoppingCart-settle">
@@ -492,11 +482,11 @@ page {
             </view>
             <view class="shoppingCart-settle-price">
                 <view class="price-total">合计:
-                    <text>￥{{priceFinal}}</text>
+                    <text style="color:{{color.red}}">￥{{priceFinal}}</text>
                 </view>
                 <view class="price-freight">运费￥{{freightChoose}}</view>
             </view>
-            <navigator url="../order/order" class="shoppingCart-settle-btn">去结算</navigator>
+            <navigator url="../order/order" class="shoppingCart-settle-btn" style="background:{{color.red}}">去结算</navigator>
         </view>
     </view>
 </template>
@@ -588,7 +578,8 @@ export default class ShoppingCart extends wepy.page {
                 price: 39.2,
                 imgUrl: ''
             }
-        ]
+        ],
+        color: {}
     };
 
     computed = {
@@ -736,6 +727,7 @@ export default class ShoppingCart extends wepy.page {
         });
         self.updateTotal();
         self.total = self.subtotal;
+        self.color = self.$parent.globalData.color;
         self.$apply();
         wx.setStorage({
             key: 'address',

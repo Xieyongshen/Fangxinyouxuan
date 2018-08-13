@@ -62,7 +62,6 @@ page {
 }
 
 .search-hot-change {
-    color: #f5333f;
     font-size: 26rpx;
     line-height: 30rpx;
     position: absolute;
@@ -159,7 +158,6 @@ page {
 }
 
 .recommend-item-price {
-    color: #f5333f;
     font-size: 30rpx;
     line-height: 65rpx;
     margin-top: 75rpx;
@@ -237,7 +235,6 @@ page {
 }
 
 .search-result-price {
-    color: #f5333f;
     font-size: 32rpx;
     line-height: 40rpx;
     margin-top: 85rpx;
@@ -256,7 +253,7 @@ page {
         <view wx:if="{{searchValue == ''}}" class="search-initial">
             <view class="search-hot">
                 <view class="search-hot-title">热门搜索</view>
-                <view class="search-hot-change">换一批</view>
+                <view class="search-hot-change" style="color:{{color.red}}">换一批</view>
                 <repeat for="{{hot}}" key="index">
                     <view class="search-hot-item" @tap="chooseSearch({{item}})">{{item}}</view>
                 </repeat>
@@ -275,7 +272,7 @@ page {
                 <view class="search-recommend-product">
                     <repeat for="{{recommend}}" key="id">
                         <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                            <view slot="price" class="recommend-item-price">¥{{item.price}}
+                            <view slot="price" class="recommend-item-price" style="color:{{color.red}}">¥{{item.price}}
                                 <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                             </view>
                         </product>
@@ -291,7 +288,7 @@ page {
         <view wx:else class="search-result">
             <repeat for="{{result}}" key="id">
                 <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                    <view slot="price" class="search-result-price">¥{{item.price}}</view>
+                    <view slot="price" class="search-result-price" style="color:{{color.red}}">¥{{item.price}}</view>
                 </product>
             </repeat>
         </view>
@@ -391,7 +388,8 @@ export default class Search extends wepy.page {
                 imgUrl: '',
                 price: 499
             }
-        ]
+        ],
+        color: {}
     };
 
     methods = {
@@ -444,6 +442,10 @@ export default class Search extends wepy.page {
 
     events = {};
 
-    onLoad() {}
+    onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
+    }
 }
 </script>

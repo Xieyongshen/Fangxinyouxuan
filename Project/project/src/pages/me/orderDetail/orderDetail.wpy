@@ -78,10 +78,6 @@
     color: #999999;
 }
 
-.orderDetail-majorInfo {
-    color: #f5333f;
-}
-
 .orderDetail-product-group {
     width: 750rpx;
     margin-top: 20rpx;
@@ -168,7 +164,6 @@
     line-height: 90rpx;
     text-align: center;
     padding: 0 30rpx;
-    background: #f5333f;
     box-sizing: border-box;
 }
 
@@ -252,11 +247,6 @@
     margin-left: 40rpx;
 }
 
-.reason-checked{
-    color: #f5333f;
-    border: 2rpx solid #f5333f;
-}
-
 .orderDetail-refund-more{
     width: 690rpx;
     padding: 20rpx 0;
@@ -301,7 +291,7 @@
         </view>
         <view wx:if="{{order.type != 2}}" class="orderDetail-product">
             <view class="orderDetail-item">商品信息
-                <text class="orderDetail-majorInfo">{{order.deliverTime}}</text>
+                <text style="color:{{color.red}}">{{order.deliverTime}}</text>
             </view>
             <view class="orderDetail-product-list" @tap="navToProductList()">
                 <repeat for="{{order.product}}" key="type">
@@ -332,7 +322,7 @@
                     </repeat>
                 </view>
             </view>
-            <view class="orderDetail-group-status">
+            <view class="orderDetail-group-status" style="background:{{color.red}}">
                 <block wx:if="{{order.status == 1}}">还差{{order.group.users.length - order.group.count}}人拼单成功，分享好友一起拼</block>
                 <block wx:else>拼单成功</block>
             </view>
@@ -343,7 +333,7 @@
             </view>
             <view class="orderDetail-item">
                 <image src="/icons/redPacket.png" class="orderDetail-redPacket-icon" /> 红包
-                <text class="orderDetail-majorInfo">￥{{order.redPacket}}</text>
+                <text style="color:{{color.red}}">￥{{order.redPacket}}</text>
             </view>
             <view wx:if="{{order.type < 2}}" class="orderDetail-item">满减优惠
                 <text>-￥{{order.discount}}</text>
@@ -355,7 +345,7 @@
                 <view wx:if="{{order.status == 0}}" class="orderDetail-btn">立即支付</view>
                 <view wx:elif="{{isRefund && order.status == 5}}" class="orderDetail-btn">退款成功</view>
                 <view wx:else class="orderDetail-btn" @tap="orderRefund()">申请退款</view>
-                <text wx:if="{{order.status == 0}}" class="orderDetail-majorInfo">请在15分（倒计时）内支付</text>
+                <text wx:if="{{order.status == 0}}" style="color:{{color.red}}">请在15分（倒计时）内支付</text>
             </view>
         </view>
         <view class="orderDetail-detail">
@@ -393,7 +383,7 @@
             <view class="orderDetail-refund-reason">
                 <radio-group bindchange="reasonChange">
                     <repeat for="{{refundReasons}}" key="index">
-                        <label class="reason-item {{item.id == reasonChoose? 'reason-checked' : ''}}">
+                        <label class="reason-item" style="{{item.id == reasonChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}">
                             <view class="reason-text">{{item.name}}</view>
                             <radio value="{{item.id}}" style="display:none;" />
                         </label>
@@ -524,7 +514,8 @@ export default class OrderDetail extends wepy.page {
                     maxpeople: 10
                 }
             ]
-        }
+        },
+        color: {}
     };
 
     computed = {
@@ -571,6 +562,7 @@ export default class OrderDetail extends wepy.page {
         var self = this;
         self.order.status = options.status;
         self.order.type = options.type;
+        self.color = self.$parent.globalData.color;
         console.log(options.status);
         self.$apply();
     }

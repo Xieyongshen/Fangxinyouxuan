@@ -15,7 +15,6 @@
 }
 
 .balance-count{
-    color: #f5333f;
     font-size: 50rpx;
     line-height: 70rpx;
     font-weight: 700;
@@ -28,7 +27,7 @@
         <navBar navTitle="放心优选" isChildPage="y"></navBar>
         <view class="balance-content">
             <view class="balance-title">优选储值余额</view>
-            <view class="balance-count">￥{{balance}}</view>
+            <view class="balance-count" style="color:{{color.red}}">￥{{balance}}</view>
         </view>
   </view>
 </template>
@@ -44,7 +43,8 @@ import NavBar from '@/components/navBar'
     }
 
     data = {
-        balance: 32.9
+        balance: 32.9,
+        color: {}
     }
 
     methods = {
@@ -56,7 +56,9 @@ import NavBar from '@/components/navBar'
     }
 
     onLoad() {
-        
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
     }
   }
 </script>

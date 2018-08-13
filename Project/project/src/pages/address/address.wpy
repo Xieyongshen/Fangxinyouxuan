@@ -46,7 +46,6 @@
     font-size: 32rpx;
     line-height: 88rpx;
     text-align: center;
-    background: #f5333f;
     border-radius: 10rpx;
 }
 </style>
@@ -66,7 +65,7 @@
                 </view>
             </repeat>
         </view>
-        <view class="address-add" @tap="addressAdd">新增收货地址</view>
+        <view class="address-add" style="background:{{color.red}}" @tap="addressAdd">新增收货地址</view>
     </view>
 </template>
 

@@ -1,6 +1,7 @@
 <style lang="less">
 .container {
     height: 100vh;
+    padding-bottom: 90rpx;
 }
 
 .category-content {
@@ -107,7 +108,6 @@
 }
 
 .product-item-price {
-    color: #f5333f;
     font-size: 30rpx;
     line-height: 30rpx;
     position: absolute;
@@ -156,7 +156,7 @@
                     <view class="category-product-type" id="{{type.id}}">{{type.name}}</view>
                     <repeat for="{{product}}" key="id">
                         <product wx:if="{{item.type == type.id}}" :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
-                            <view slot="price" class="product-item-price">¥{{item.price}}
+                            <view slot="price" class="product-item-price" style="color:{{color.red}}">¥{{item.price}}
                                 <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
                             </view>
                         </product>
@@ -164,7 +164,7 @@
                 </repeat>
             </view>
         </scroll-view>
-        <tabbar curTab="0"></tabbar>
+        <tabbar curTab="0" :selectedColor.sync="color.red"></tabbar>
     </view>
 </template>
 
@@ -305,7 +305,8 @@ export default class Category extends wepy.page {
                 price: 209.3,
                 oriPrice: 499
             }
-        ]
+        ],
+        color: {}
     };
 
     computed = {};
@@ -332,8 +333,10 @@ export default class Category extends wepy.page {
     }
 
     async onLoad(options) {
-        this.category = options.name;
-        this.$apply();
+        var self = this;
+        self.category = options.name;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
         let res = await api.getCategoryProduct({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',

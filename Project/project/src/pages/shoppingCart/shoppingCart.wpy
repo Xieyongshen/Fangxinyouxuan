@@ -495,6 +495,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Recommend from '@/components/recommendBlock';
+import api from '@/api/api'
 
 export default class ShoppingCart extends wepy.page {
     components = {
@@ -719,7 +720,7 @@ export default class ShoppingCart extends wepy.page {
         });
     }
 
-    onLoad(option) {
+    async onLoad(option) {
         var self = this;
         self.product.forEach(element => {
             self.isChoosen.push(true);
@@ -737,6 +738,22 @@ export default class ShoppingCart extends wepy.page {
             key: 'redPacket',
             data: self.redPacket
         });
+
+        var jwt = wx.getStorageSync('jwt');
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.getShoppingCart({
+                    query: {
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id
+                    }
+                });
+                console.log(res)
+                self.$apply();
+            }
+        } catch (error) {
+            console.log("jwt is null")
+        }
     }
 }
 </script>

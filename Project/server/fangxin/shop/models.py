@@ -154,7 +154,6 @@ class CartItem(models.Model):
 	pro_price = models.IntegerField()
 	is_checked = models.BooleanField()
 	create_time = models.DateTimeField()
-
 	def __str__(self):
 		return self.product.pro_name
 

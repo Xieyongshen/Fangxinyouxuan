@@ -27,4 +27,5 @@ urlpatterns = [
     path('api/getProductDetail', fangxin_views.getProductDetail),
     path('api/getOrderList', fangxin_views.getOrderList),
     path('api/getOrderDetail', fangxin_views.getOrderDetail),
+    path('api/getShoppingCart', fangxin_views.getShoppingCart),
 ]

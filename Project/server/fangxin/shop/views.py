@@ -313,3 +313,15 @@ def getOrderDetail(request):
         res_dict=dict(status=the_order.order_status,total=str(totalPrice),createTime=the_order.create_time.strftime("%Y-%m-%d %H:%M:%S"),deliverTime=the_order.send_time.strftime("%Y-%m-%d"),discount=str(totalOffer),redPacket=str(totalPacket),pay='在线支付',remark='',shop=dict(avatar=the_order.shop.shop_man_avatar,name=the_order.shop.shop_man_name,phone=the_order.shop.shop_man_phone),group='',product=productList)
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
+
+def getShoppingCart(request):
+    res_dict = list()
+    client_access_token = request.GET['access_token']
+    client_account_id = request.GET['account_id']
+    if(verify_token(client_access_token)):
+        theShoppingCart = ShoppingCart.objects.get(user__user_openid=client_account_id)
+        cartItemList = list(CartItem.objects.filter(cart__cart_id=theShoppingCart.cart_id))
+        for cartItems in cartItemList:
+            res_dict.append(dict(id=str(cartItems.product.pro_id),name=cartItems.product.pro_name,imgUrl='',price=str(cartItems.product.pro_price),oriPrice=str(cartItems.product.pro_origin_price),count=cartItems.pro_count))
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)

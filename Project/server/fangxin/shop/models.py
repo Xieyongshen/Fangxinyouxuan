@@ -31,6 +31,9 @@ class Shop(models.Model):
 	shop_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	shop_name = models.TextField()
 	shop_area = models.TextField()
+	shop_man_name = models.TextField(blank=True,null=True)
+	shop_man_phone = models.TextField(blank=True,null=True)
+	shop_man_avatar = models.TextField(blank=True,null=True)
 
 	def __str__(self):
 		return self.shop_name
@@ -51,6 +54,7 @@ class AbstractType(models.Model):
 class ProductType(AbstractType):
 	type_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	type_name = models.TextField()
+	type_level = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.type_name
@@ -112,12 +116,18 @@ class ProductGroup(models.Model):
 	group_product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE)
 	group_code = models.TextField()
 	group_number = models.IntegerField()
+	group_maxNum = models.IntegerField(default=10)
 	create_time = models.DateTimeField()
 	end_time = models.DateTimeField()
 	group_status = models.IntegerField()
 
 	def __str__(self):
 		return self.group_code
+
+class GroupUser(models.Model):
+	groupUsers_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	productGroup = models.ForeignKey(ProductGroup, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class ProductPicture(models.Model):
@@ -156,15 +166,13 @@ class RedPack(models.Model):
 	is_used = models.BooleanField()
 
 	def __str__(self):
-		return self.red_amount
+		return str(self.red_amount)
 
 class Order(models.Model):
 	order_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	order_num = models.IntegerField()
+	order_num = models.TextField()
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	order_status = models.IntegerField()
-	order_redpack = models.ForeignKey(RedPack, on_delete=models.CASCADE)
-	order_offer = models.DecimalField(max_digits=10, decimal_places=2)
 	order_totalprice = models.DecimalField(max_digits=10, decimal_places=2)
 	payment = models.DecimalField(max_digits=10, decimal_places=2)
 	pay_time = models.DateTimeField()
@@ -174,6 +182,7 @@ class Order(models.Model):
 	create_time = models.DateTimeField()
 	update_time = models.DateTimeField()
 	order_comment = models.TextField()
+	shop = models.ForeignKey(Shop, on_delete=models.CASCADE, blank=True, null=True)
 
 	def __str__(self):
 		return self.order_num
@@ -182,6 +191,8 @@ class OrderItem(models.Model):
 	orderitem_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	order = models.ForeignKey(Order, on_delete=models.CASCADE)
 	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE)
+	order_redpack = models.ForeignKey(RedPack, on_delete=models.CASCADE, blank=True, null=True)
+	order_offer = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	quantity = models.IntegerField()
 	totalPrice = models.DecimalField(max_digits=10, decimal_places=2)
 	create_time = models.DateTimeField()

@@ -2,7 +2,7 @@ import {
     wxRequest
 } from '@/api/wxRequest';
 
-const apiFanxin = 'http://119.23.225.244:80'
+const apiFanxin = 'http://127.0.0.1:8000'
 //获取首页店铺商品分类
 const getShopCategory = (params) => wxRequest(params, apiFanxin + "/api/getShopCategory");
 //获取首页当前店铺下的商品
@@ -15,11 +15,17 @@ const getCategoryProduct = (params) => wxRequest(params, apiFanxin + "/api/getCa
 const getProductDetail = (params) => wxRequest(params, apiFanxin + "/api/getProductDetail");
 
 
+//获取用户订单列表
+const getOrderList = (params) => wxRequest(params, apiFanxin + "/api/getOrderList");
+//获取订单详情
+const getOrderDetail = (params) => wxRequest(params, apiFanxin + "/api/getOrderDetail");
 
 export default {
     getShopCategory,
     getShopProduct,
     login,
     getCategoryProduct,
-    getProductDetail
+    getProductDetail,
+    getOrderList,
+    getOrderDetail
 }

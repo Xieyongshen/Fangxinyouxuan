@@ -338,7 +338,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-
+import api from "@/api/api"
 export default class OrderDetail extends wepy.page {
     components = {
         navBar: NavBar
@@ -355,7 +355,7 @@ export default class OrderDetail extends wepy.page {
             '申请售后'
         ],
         order: {
-            type: 0,
+            type: 2,
             status: 0,
             total: 247.6,
             createTime: '2018-06-29 19:43:18',
@@ -461,11 +461,18 @@ export default class OrderDetail extends wepy.page {
 
     events = {};
 
-    onLoad(options) {
+    async onLoad(options) {
         var self = this;
         self.order.status = options.status;
         self.order.type = options.type;
         console.log(options.status);
+
+        let orderDtail = await api.getOrderDetail({
+            query: {
+                orderId: '4322a503-dbb0-4b72-83d3-18184e681473'
+            }
+        })
+        console.log(orderDtail)
         self.$apply();
     }
 }

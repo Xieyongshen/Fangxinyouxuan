@@ -223,6 +223,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import api from '@/api/api';
 
 export default class OrderList extends wepy.page {
     components = {
@@ -230,7 +231,7 @@ export default class OrderList extends wepy.page {
     };
     data = {
         orderType: ['待付款', '待收货', '待成团', '全部订单'],
-        //订单状态：待付款0，待收货1，待成团2，已签收3, 售后中4, 退款成功5
+        //订单状态：待付款0，待成团1，待发货2，发货中（待收货）3, 售后中4, 已完成5
         curType: 3,
         orderList: [
             {
@@ -335,8 +336,24 @@ export default class OrderList extends wepy.page {
 
     events = {};
 
-    onLoad(options) {
-        var self = this;
+    async onLoad(options) {
+        var jwt = wx.getStorageSync('jwt');
+        let self = this;
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.getOrderList({
+                    query: {
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id
+                    }
+                });
+                console.log(res)
+                // self.orderList = res.data;
+                self.$apply();
+            }
+        } catch (error) {
+            console.log("jwt is null")
+        }
         self.curType = options.index;
         self.$apply();
     }

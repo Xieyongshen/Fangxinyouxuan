@@ -272,11 +272,9 @@ page {
 
 .product-detail-content {
     margin-top: 35rpx;
-    text {
-        color: #808080;
-        font-size: 26rpx;
-        line-height: 45rpx;
-    }
+    color: #808080;
+    font-size: 26rpx;
+    line-height: 45rpx;
     image {
         width: 690rpx;
         background: #fdedeb;
@@ -409,9 +407,10 @@ page {
             </repeat>
         </view>
         <view class="product-detail">
-            <view class="product-detail-title">规格</view>
+            <view class="product-detail-title">详情</view>
             <view class="product-detail-content">
-                <text>{{product.detail.text}}</text>
+                <view>规格：{{product.weight}}</view>
+                <view>产地：{{product.package}}</view>
                 <repeat for="{{product.detail.imgList}}">
                     <image mode="widthFix" src="{{item.imgUrl}}" />
                 </repeat>
@@ -545,7 +544,8 @@ export default class Product extends wepy.page {
 
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
+                url:
+                    '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
             });
         },
 

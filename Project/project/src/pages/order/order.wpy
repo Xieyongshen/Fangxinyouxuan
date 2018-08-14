@@ -253,6 +253,7 @@ export default class Order extends wepy.page {
     data = {
         address: '春树馆街小区',
         shop: {
+            id: '',
             name: '果多美门店',
             keeper: '小鱼',
             phone: '13000000000'
@@ -374,6 +375,14 @@ export default class Order extends wepy.page {
 
     onShow(){
         var self = this;
+        
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shop.id = shop.id;
+            self.shop.name = shop.name;
+            self.$apply();
+        }
+
         wx.getStorage({
             key: 'redPacket',
             success: function(res) {

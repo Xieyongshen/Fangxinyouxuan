@@ -1,0 +1,235 @@
+<style lang="less">
+.shop-content {
+    width: 750rpx;
+}
+
+.shop-area {
+    width: 750rpx;
+    height: 85rpx;
+    background: #ffffff;
+    border-top: 1rpx solid #f2f2f2;
+    border-bottom: 1rpx solid #f2f2f2;
+}
+
+.shop-area-item {
+    width: 150rpx;
+    height: 80rpx;
+    font-size: 28rpx;
+    line-height: 75rpx;
+    text-align: center;
+    display: inline-block;
+    border-bottom: 5rpx solid #ffffff;
+    box-sizing: border-box;
+}
+
+.shop-list {
+    width: 750rpx;
+}
+
+.shop-item {
+    width: 750rpx;
+    height: 161rpx;
+    padding: 20rpx 30rpx;
+    border-bottom: 1rpx solid #f2f2f2;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.shop-item-img {
+    width: 120rpx;
+    height: 120rpx;
+    margin-right: 30rpx;
+    background: #fdedeb;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+.shop-item-content {
+    width: 400rpx;
+    height: 120rpx;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+}
+
+.shop-item-name {
+    width: 300rpx;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shop-item-address {
+    width: 400rpx;
+    color: #999999;
+    font-size: 26rpx;
+    line-height: 30rpx;
+    margin-top: 20rpx;
+}
+
+.shop-item-distance {
+    font-size: 24rpx;
+    line-height: 40rpx;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.shop-item-choose {
+    width: 100rpx;
+    height: 60rpx;
+    font-size: 26rpx;
+    line-height: 58rpx;
+    text-align: center;
+    margin: 30rpx 0 30rpx 40rpx;
+    border: 1rpx solid #cccccc;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    vertical-align: top;
+    display: inline-block;
+}
+</style>
+<template>
+    <view class="container">
+        <navBar navTitle="选择门店" isChildPage="y"></navBar>
+        <view class="shop-content">
+            <view class="shop-area">
+                <repeat for="{{area}}" key="index">
+                    <view class="shop-area-item" style="{{item == areaChoose ? 'color:' + color.red + ';border-bottom:5rpx solid ' + color.red + ';' : ''}}" @tap="chooseArea({{item}})">{{item}}</view>
+                </repeat>
+            </view>
+            <view class="shop-list">
+                <repeat for="{{shop}}" key="id">
+                    <view wx:if="{{item.area == areaChoose}}" class="shop-item">
+                        <image src="" class="shop-item-img" />
+                        <view class="shop-item-content">
+                            <view class="shop-item-name">{{item.name}}</view>
+                            <view class="shop-item-address">{{item.address}}</view>
+                            <view class="shop-item-distance" style="color:{{color.red}};">{{item.distance}}</view>
+                        </view>
+                        <view class="shop-item-choose" @tap="chooseShop({{item.id}}, {{item.name}})">选择</view>
+                    </view>
+                </repeat>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import NavBar from '@/components/navBar';
+
+export default class Shop extends wepy.page {
+    components = {
+        navBar: NavBar
+    };
+
+    data = {
+        areaChoose: '海淀区',
+        area: ['海淀区', '朝阳区', '西城区'],
+        shop: [
+            {
+                id: '000001',
+                area: '海淀区',
+                name: '果多美门店(海淀1号店)',
+                address: '春树馆街小区6号楼101室',
+                distance: 205
+            },
+            {
+                id: '000002',
+                area: '海淀区',
+                name: '果多美门店(海淀2号店)',
+                address: '春树馆街小区6号楼102室',
+                distance: 11800
+            },
+            {
+                id: '000003',
+                area: '海淀区',
+                name: '果多美门店(海淀3号店)',
+                address: '春树馆街小区6号楼103室',
+                distance: 12800
+            },
+            {
+                id: '000004',
+                area: '海淀区',
+                name: '果多美门店(海淀4号店)',
+                address: '春树馆街小区6号楼104室',
+                distance: 13800
+            },
+            {
+                id: '000005',
+                area: '朝阳区',
+                name: '果多美门店(朝阳1号店)',
+                address: '春树馆街小区6号楼105室',
+                distance: 14800
+            },
+            {
+                id: '000006',
+                area: '朝阳区',
+                name: '果多美门店(朝阳2号店)',
+                address: '春树馆街小区6号楼106室',
+                distance: 15800
+            },
+            {
+                id: '000007',
+                area: '朝阳区',
+                name: '果多美门店(朝阳3号店)',
+                address: '春树馆街小区6号楼107室',
+                distance: 16800
+            },
+            {
+                id: '000008',
+                area: '西城区',
+                name: '果多美门店(西城1号店)',
+                address: '春树馆街小区6号楼108室',
+                distance: 17800
+            },
+            {
+                id: '000009',
+                area: '西城区',
+                name: '果多美门店(西城2号店)',
+                address: '春树馆街小区6号楼109室',
+                distance: 18800
+            }
+        ],
+        color: {}
+    };
+
+    methods = {
+        chooseArea(area, e) {
+            this.areaChoose = area;
+            this.$apply();
+        },
+
+        chooseShop(shop, name, e) {
+            wx.setStorageSync('shopChoose', { 'id': shop, 'name': name });
+            wx.navigateBack({
+                delta: 1
+            });
+        }
+    };
+
+    events = {};
+
+    onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
+
+        var dis = 0;
+        self.shop.forEach(element => {
+            if(element.distance < 1000){
+                element.distance += 'm';
+            }else{
+                dis = element.distance / 1000;
+                dis = parseInt(dis, 10);
+                dis++;
+                element.distance = '<' + dis + '公里';
+            }
+            self.$apply();
+        });
+    }
+}
+</script>

@@ -18,17 +18,14 @@ from shop.models import ShopBannar
 from shop.models import AbstractType
 from shop.models import ProductType
 from shop.models import ShopProduct
-
 from shop.models import ProductGroup
 from shop.models import ProductPicture
-from shop.models import limitTimeSale
 from shop.models import ShoppingCart
 from shop.models import CartItem
 from shop.models import RedPack
 from shop.models import Order
 from shop.models import OrderItem
-from shop.models import Discount
-from shop.models import GroupNorm
+
 
 # APP_ID = '1'
 # APP_SECRET = '2'

@@ -7,18 +7,14 @@ from .models import ShopBannar
 from .models import AbstractType
 from .models import ProductType
 from .models import ShopProduct
-from .models import GroupProduct
 from .models import ProductGroup
 from .models import ProductPicture
-from .models import limitTimeSale
 from .models import ShoppingCart
 from .models import CartItem
-from .models import Discount
 from .models import RedPack
 from .models import Order
 from .models import OrderItem
 
-from .models import GroupNorm
 # Register your models here.
 
 
@@ -28,15 +24,11 @@ admin.site.register(Shop)
 admin.site.register(ShopBannar)
 admin.site.register(ProductType)
 admin.site.register(ShopProduct)
-admin.site.register(GroupProduct)
 admin.site.register(ProductGroup)
 admin.site.register(ProductPicture)
-admin.site.register(limitTimeSale)
 admin.site.register(ShoppingCart)
 admin.site.register(CartItem)
-admin.site.register(Discount)
 admin.site.register(RedPack)
 admin.site.register(Order)
 admin.site.register(OrderItem)
 
-admin.site.register(GroupNorm)

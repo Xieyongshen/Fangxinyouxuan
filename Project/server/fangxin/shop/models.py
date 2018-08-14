@@ -68,47 +68,26 @@ class ShopProduct(models.Model):
 	pro_remain = models.IntegerField()
 	pro_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
 	pro_desc = models.TextField(blank=True, null=True,)
-	pro_spec = models.TextField(blank=True, null=True,)
-	pro_weight = models.TextField(blank=True, null=True,)
-	pro_package = models.TextField(blank=True, null=True,)
-	pro_life = models.TextField(blank=True, null=True,)
-	pro_store_method = models.TextField(blank=True, null=True,)
+	pro_detail = models.TextField(blank=True, null=True,)
+	pro_norm = models.TextField(blank=True, null=True,)
+	pro_producer = models.TextField(blank=True, null=True,)
+	pro_img = models.TextField(blank=True,null=True)
 	on_shelf = models.BooleanField()
-	can_group = models.NullBooleanField(blank=True)
 	activityType = models.IntegerField(blank=True, null=True)
-	count = models.IntegerField(blank=True, null=True)
-	remain = models.IntegerField(blank=True, null=True)
-	group_price = models.DecimalField(default=0,max_digits=10, decimal_places=2)
+	limitCount = models.IntegerField(blank=True, null=True)
+	limitRemain = models.IntegerField(blank=True, null=True)
+	limitTime = models.DateTimeField(default=datetime.now())
+	limitPrice = models.DecimalField(default=0,max_digits=10, decimal_places=2)
+	groupPrice = models.DecimalField(default=0,max_digits=10, decimal_places=2)
 	fullCount = models.IntegerField(blank=True, null=True)
 	fullMinus = models.IntegerField(blank=True, null=True)
 	comment = models.TextField(blank=True, null=True)
 	buyTimes = models.IntegerField(default=0)
+
+
 	def __str__(self):
 		return self.pro_name
 
-class GroupProduct(models.Model):
-	pro_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE, blank=True, null=True)
-	comment = models.TextField(default='可拼团')
-	def __str__(self):
-		return self.product.pro_name
-
-class limitTimeSale(models.Model):
-	limit_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE, blank=True, null=True)
-	count = models.IntegerField()
-	remain = models.IntegerField()
-	comment = models.TextField(default="限时出售")
-
-class Discount(models.Model):
-	dis_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	count = models.IntegerField()
-	minus = models.IntegerField()
-	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE)
-	comment = models.TextField(default='满50减20')
-
-	def __str__(self):
-		return self.product.pro_name
 
 class ProductGroup(models.Model):
 	groupuser_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
@@ -134,6 +113,7 @@ class ProductPicture(models.Model):
 	pic_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	shop_product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE)
 	url = models.TextField()
+	pictureType = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.url
@@ -171,6 +151,7 @@ class Order(models.Model):
 	order_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	order_num = models.TextField()
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	order_type = models.IntegerField(default=0)
 	order_status = models.IntegerField()
 	order_totalprice = models.DecimalField(max_digits=10, decimal_places=2)
 	payment = models.DecimalField(max_digits=10, decimal_places=2)
@@ -181,6 +162,7 @@ class Order(models.Model):
 	create_time = models.DateTimeField()
 	update_time = models.DateTimeField()
 	order_comment = models.TextField()
+	order_redpack = models.ForeignKey(RedPack, on_delete=models.CASCADE, blank=True, null=True)
 	shop = models.ForeignKey(Shop, on_delete=models.CASCADE, blank=True, null=True)
 
 	def __str__(self):
@@ -190,7 +172,6 @@ class OrderItem(models.Model):
 	orderitem_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	order = models.ForeignKey(Order, on_delete=models.CASCADE)
 	product = models.ForeignKey(ShopProduct, on_delete=models.CASCADE)
-	order_redpack = models.ForeignKey(RedPack, on_delete=models.CASCADE, blank=True, null=True)
 	order_offer = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 	quantity = models.IntegerField()
 	totalPrice = models.DecimalField(max_digits=10, decimal_places=2)
@@ -198,12 +179,3 @@ class OrderItem(models.Model):
 
 	def __str__(self):
 		return self.product.pro_name
-
-
-class GroupNorm(models.Model):
-	norm_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	norm_name = models.TextField()
-	norm_size = models.IntegerField()
-
-	def __str__(self):
-		return self.norm_name

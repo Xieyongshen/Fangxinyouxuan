@@ -9,6 +9,7 @@
     background: #ffffff;
     border-top: 1rpx solid #f2f2f2;
     border-bottom: 1rpx solid #f2f2f2;
+    white-space: nowrap;
 }
 
 .shop-area-item {
@@ -95,11 +96,11 @@
     <view class="container">
         <navBar navTitle="选择门店" isChildPage="y"></navBar>
         <view class="shop-content">
-            <view class="shop-area">
+            <scroll-view scroll-x class="shop-area">
                 <repeat for="{{area}}" key="index">
                     <view class="shop-area-item" style="{{item == areaChoose ? 'color:' + color.red + ';border-bottom:5rpx solid ' + color.red + ';' : ''}}" @tap="chooseArea({{item}})">{{item}}</view>
                 </repeat>
-            </view>
+            </scroll-view>
             <view class="shop-list">
                 <repeat for="{{shop}}" key="id">
                     <view wx:if="{{item.area == areaChoose}}" class="shop-item">
@@ -135,63 +136,63 @@ export default class Shop extends wepy.page {
                 area: '海淀区',
                 name: '果多美门店(海淀1号店)',
                 address: '春树馆街小区6号楼101室',
-                distance: 205
+                distance: 201
             },
             {
                 id: '000002',
                 area: '海淀区',
                 name: '果多美门店(海淀2号店)',
                 address: '春树馆街小区6号楼102室',
-                distance: 11800
+                distance: 1802
             },
             {
                 id: '000003',
                 area: '海淀区',
                 name: '果多美门店(海淀3号店)',
                 address: '春树馆街小区6号楼103室',
-                distance: 12800
+                distance: 2803
             },
             {
                 id: '000004',
                 area: '海淀区',
                 name: '果多美门店(海淀4号店)',
                 address: '春树馆街小区6号楼104室',
-                distance: 13800
+                distance: 10804
             },
             {
                 id: '000005',
                 area: '朝阳区',
                 name: '果多美门店(朝阳1号店)',
                 address: '春树馆街小区6号楼105室',
-                distance: 14800
+                distance: 11805
             },
             {
                 id: '000006',
                 area: '朝阳区',
                 name: '果多美门店(朝阳2号店)',
                 address: '春树馆街小区6号楼106室',
-                distance: 15800
+                distance: 12806
             },
             {
                 id: '000007',
                 area: '朝阳区',
                 name: '果多美门店(朝阳3号店)',
                 address: '春树馆街小区6号楼107室',
-                distance: 16800
+                distance: 16807
             },
             {
                 id: '000008',
                 area: '西城区',
                 name: '果多美门店(西城1号店)',
                 address: '春树馆街小区6号楼108室',
-                distance: 17800
+                distance: 17808
             },
             {
                 id: '000009',
                 area: '西城区',
                 name: '果多美门店(西城2号店)',
                 address: '春树馆街小区6号楼109室',
-                distance: 18800
+                distance: 18809
             }
         ],
         color: {}
@@ -222,11 +223,17 @@ export default class Shop extends wepy.page {
         self.shop.forEach(element => {
             if(element.distance < 1000){
                 element.distance += 'm';
+            }else if(element.distance < 10000){
+                dis = element.distance / 10;
+                dis = parseInt(dis, 10);
+                dis = dis / 100;
+                dis++;
+                element.distance = dis + 'km';
             }else{
                 dis = element.distance / 1000;
                 dis = parseInt(dis, 10);
                 dis++;
-                element.distance = '<' + dis + '公里';
+                element.distance = '<' + dis + 'km';
             }
             self.$apply();
         });

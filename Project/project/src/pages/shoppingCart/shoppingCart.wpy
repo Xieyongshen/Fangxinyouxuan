@@ -506,7 +506,7 @@ export default class ShoppingCart extends wepy.page {
     data = {
         shopChoose: {
             id: '',
-            name: '春树馆街小区'
+            name: ''
         },
         discount: {
             count: 120,

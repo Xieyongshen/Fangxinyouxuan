@@ -296,6 +296,7 @@ page {
 .product-btn {
     width: 750rpx;
     height: 90rpx;
+    background: #ffffff;
     border-top: 1rpx solid #e3e3e3;
     position: fixed;
     bottom: 0;
@@ -358,6 +359,157 @@ page {
 .product-btn-separate,
 .product-btn-addToCart {
     background: #ff6670;
+}
+
+.product-select {
+    width: 750rpx;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.product-select-container {
+    width: 750rpx;
+    padding-top: 30rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+}
+
+.product-select-close {
+    width: 80rpx;
+    height: 80rpx;
+    font-size: 60rpx;
+    font-weight: 900;
+    line-height: 80rpx;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: -40rpx;
+    right: 60rpx;
+}
+
+.product-select-content {
+    max-height: 80vh;
+    overflow: scroll;
+}
+
+.product-select-img {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 30rpx;
+    vertical-align: top;
+}
+
+.product-select-info {
+    width: 500rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 0;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-name {
+    width: 500rpx;
+    height: 45rpx;
+    color: #999999;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 60rpx;
+}
+
+.product-select-price {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-remain {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    margin-right: 30rpx;
+    float: right;
+}
+
+.product-select-spec {
+    width: 750rpx;
+    margin-top: 45rpx;
+    padding: 0 30rpx;
+}
+
+.product-spec-title {
+    font-size: 28rpx;
+    line-height: 50rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-spec-content {
+    display: inline-block;
+}
+
+.product-spec-item {
+    height: 64rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    margin-left: 20rpx;
+    padding: 0 50rpx;
+    border: 2rpx solid #cccccc;
+    display: inline-block;
+}
+
+.product-select-count {
+    width: 750rpx;
+    margin-top: 35rpx;
+    padding: 0 30rpx;
+    text-align: right;
+    text {
+        font-size: 28rpx;
+        line-height: 64rpx;
+        margin-right: 40rpx;
+        display: inline-block;
+    }
+}
+
+.product-count-choose {
+    height: 64rpx;
+    display: inline-block;
+}
+
+.product-count-reduce,
+.product-count-current,
+.product-count-add {
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    text-align: center;
+    border: 2rpx solid #cccccc;
+    box-sizing: content-box;
+    display: inline-block;
+}
+
+.product-count-current,
+.product-count-add {
+    border-left: none;
+}
+
+.product-select-buy {
+    width: 750rpx;
+    height: 100rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 100rpx;
+    text-align: center;
+    margin: 20rpx 0;
 }
 </style>
 <template>
@@ -456,11 +608,40 @@ page {
                     <image src="/icons/shoppingCart.png" class="product-btn-cart" />
                     <text>购物车</text>
                 </view>
-                <view hover-class="navigator-hover" class="product-btn-addToCart" @tap.stop="addToCart({{productID}})">加入购物车</view>
+                <view hover-class="navigator-hover" class="product-btn-addToCart" @tap="chooseSpec()">加入购物车</view>
                 <navigator url="../order/order" class="product-btn-purchase" style="background:{{color.red}}">立即购买</navigator>
             </block>
         </view>
-
+        <view wx:if="{{isChoosing}}" class="product-select">
+            <view class="product-select-container">
+                <view class="product-select-close" @tap="selectClose()">×</view>
+                <view class="product-select-content">
+                    <image mode="aspectFill" src="{{product.image[0].imgUrl}}" class="product-select-img" />
+                    <view class="product-select-info">
+                        <view class="product-select-name">{{product.name}}</view>
+                        <view class="product-select-price" style="color:{{color.red}}">￥{{curPrice}}</view>
+                        <view class="product-select-remain">库存：{{product.remain}}</view>
+                    </view>
+                    <view class="product-select-spec">
+                        <view class="product-spec-title">规格：</view>
+                        <view class="product-spec-content">
+                            <repeat for="{{product.spec}}" key="index">
+                                <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
+                            </repeat>
+                        </view>
+                    </view>
+                    <view class="product-select-count">
+                        <text>数量：</text>
+                        <view class="product-count-choose">
+                            <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus()">-</view>
+                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <view class="product-count-add" style="{{count < product.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus()">+</view>
+                        </view>
+                    </view>
+                    <view class="product-select-buy" style="background:{{color.red}}" @tap.stop="addToCart({{productID}})">加入购物车</view>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -477,6 +658,8 @@ export default class Product extends wepy.page {
     data = {
         curImage: 0,
         isChoosing: false,
+        specChoose: 0,
+        count: 1,
         productID: '',
         product: {
             id: '',
@@ -494,6 +677,16 @@ export default class Product extends wepy.page {
                 reachTime: 0,
                 label: ['']
             },
+            spec: [
+                {
+                    name: '10个装',
+                    price: 9.9
+                },
+                {
+                    name: '20个装',
+                    price: 16.9
+                }
+            ],
             group: {
                 price: 0,
                 count: 0,
@@ -526,6 +719,12 @@ export default class Product extends wepy.page {
         color: {}
     };
 
+    computed = {
+        curPrice() {
+            return this.product.spec[this.specChoose].price;
+        }
+    };
+
     methods = {
         imageChange(e) {
             this.curImage = e.detail.current;
@@ -534,8 +733,7 @@ export default class Product extends wepy.page {
 
         navToProduct(product, event) {
             wx.navigateTo({
-                url:
-                    '/pages/product/product?id=' + product
+                url: '/pages/product/product?id=' + product
             });
         },
 
@@ -558,7 +756,14 @@ export default class Product extends wepy.page {
                 urls: preImgList
             });
         },
-        
+
+        chooseSpec(){
+            this.isChoosing = true;
+            this.specChoose = 0;
+            this.count = 1;
+            this.$apply();
+        },
+
         addToCart(productID, e) {
             var self = this;
             var shoppingCart = wx.getStorageSync('shoppingCart');
@@ -567,11 +772,7 @@ export default class Product extends wepy.page {
                 shoppingCart.forEach(element => {
                     if (element.id == productID) {
                         hasCur = true;
-                        wx.showToast({
-                            title: '商品已经在购物车中了',
-                            icon: 'none',
-                            duration: 1000
-                        });
+                        element.count += self.count;
                         return;
                     }
                 });
@@ -582,17 +783,46 @@ export default class Product extends wepy.page {
             if (hasCur == false) {
                 shoppingCart.push({
                     id: productID,
-                    count: 1
-                });
-                wx.setStorageSync('shoppingCart', shoppingCart);
-                wx.showToast({
-                    title: '添加成功',
-                    icon: 'success',
-                    duration: 1000
+                    spec: self.product.spec[self.specChoose].name,
+                    price: self.product.spec[self.specChoose].price,
+                    count: self.count
                 });
             }
 
+            wx.setStorageSync('shoppingCart', shoppingCart);
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000
+            });
+
             console.log(shoppingCart);
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        selectClose() {
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        specChoose(spec, e) {
+            this.specChoose = spec;
+            this.$apply();
+        },
+
+        countMinus() {
+            if (this.count > 1) {
+                this.count--;
+                this.$apply();
+            }
+        },
+
+        countPlus() {
+            if (this.count < this.product.remain) {
+                this.count++;
+                this.$apply();
+            }
         }
     };
 
@@ -617,12 +847,23 @@ export default class Product extends wepy.page {
         console.log(productDetail);
         self.product = productDetail.data;
         self.product.image.forEach(element => {
-            element.imgUrl = "http://119.23.225.244/uploads/" + element.imgUrl;
+            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
         });
         self.product.recommend.forEach(element => {
-            element.imgUrl = "http://119.23.225.244/uploads/" + element.imgUrl;
+            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
         });
         self.color = self.$parent.globalData.color;
+
+        self.product.spec = [
+            {
+                name: '10个装',
+                price: 9.9
+            },
+            {
+                name: '20个装',
+                price: 16.9
+            }
+        ];
         self.$apply();
     }
 }

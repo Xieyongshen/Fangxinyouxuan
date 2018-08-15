@@ -110,7 +110,7 @@
                             <view class="shop-item-address">{{item.address}}</view>
                             <view class="shop-item-distance" style="color:{{color.red}};">{{item.distance}}</view>
                         </view>
-                        <view class="shop-item-choose" @tap="chooseShop({{item.id}}, {{item.name}})">选择</view>
+                        <view class="shop-item-choose" @tap="chooseShop({{index}})">选择</view>
                     </view>
                 </repeat>
             </view>
@@ -136,6 +136,11 @@ export default class Shop extends wepy.page {
                 area: '海淀区',
                 name: '果多美门店(海淀1号店)',
                 address: '春树馆街小区6号楼101室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 201
             },
             {
@@ -143,6 +148,11 @@ export default class Shop extends wepy.page {
                 area: '海淀区',
                 name: '果多美门店(海淀2号店)',
                 address: '春树馆街小区6号楼102室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 1802
             },
             {
@@ -150,6 +160,11 @@ export default class Shop extends wepy.page {
                 area: '海淀区',
                 name: '果多美门店(海淀3号店)',
                 address: '春树馆街小区6号楼103室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 2803
             },
             {
@@ -157,6 +172,11 @@ export default class Shop extends wepy.page {
                 area: '海淀区',
                 name: '果多美门店(海淀4号店)',
                 address: '春树馆街小区6号楼104室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 10804
             },
             {
@@ -164,6 +184,11 @@ export default class Shop extends wepy.page {
                 area: '朝阳区',
                 name: '果多美门店(朝阳1号店)',
                 address: '春树馆街小区6号楼105室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 11805
             },
             {
@@ -171,6 +196,11 @@ export default class Shop extends wepy.page {
                 area: '朝阳区',
                 name: '果多美门店(朝阳2号店)',
                 address: '春树馆街小区6号楼106室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 12806
             },
             {
@@ -178,6 +208,11 @@ export default class Shop extends wepy.page {
                 area: '朝阳区',
                 name: '果多美门店(朝阳3号店)',
                 address: '春树馆街小区6号楼107室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 16807
             },
             {
@@ -185,6 +220,11 @@ export default class Shop extends wepy.page {
                 area: '西城区',
                 name: '果多美门店(西城1号店)',
                 address: '春树馆街小区6号楼108室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 17808
             },
             {
@@ -192,6 +232,11 @@ export default class Shop extends wepy.page {
                 area: '西城区',
                 name: '果多美门店(西城2号店)',
                 address: '春树馆街小区6号楼109室',
+                shopkeeper: {
+                    name: '小鱼',
+                    phone: '13000000000',
+                    avatar: ''
+                },
                 distance: 18809
             }
         ],
@@ -204,8 +249,9 @@ export default class Shop extends wepy.page {
             this.$apply();
         },
 
-        chooseShop(shop, name, e) {
-            wx.setStorageSync('shopChoose', { 'id': shop, 'name': name });
+        chooseShop(index, e) {
+            var self = this;
+            wx.setStorageSync('shopChoose', self.shop[index]);
             wx.navigateBack({
                 delta: 1
             });
@@ -221,15 +267,15 @@ export default class Shop extends wepy.page {
 
         var dis = 0;
         self.shop.forEach(element => {
-            if(element.distance < 1000){
+            if (element.distance < 1000) {
                 element.distance += 'm';
-            }else if(element.distance < 10000){
+            } else if (element.distance < 10000) {
                 dis = element.distance / 10;
                 dis = parseInt(dis, 10);
                 dis = dis / 100;
                 dis++;
                 element.distance = dis + 'km';
-            }else{
+            } else {
                 dis = element.distance / 1000;
                 dis = parseInt(dis, 10);
                 dis++;

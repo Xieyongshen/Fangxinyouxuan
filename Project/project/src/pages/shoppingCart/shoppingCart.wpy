@@ -386,7 +386,7 @@ page {
             <image src="/icons/address-bg.png" class="shoppingCart-header" />
             <view wx:if="{{deliverChoose < 1}}" class="shoppingCart-block shoppingCart-shop">
                 <image src="/icons/position.png" class="icon-position" />
-                <text class="shop-name">{{shopChoose}}</text>
+                <text class="shop-name">{{shopChoose.name}}</text>
             </view>
             <navigator wx:else url="../address/address" class="shoppingCart-block shoppingCart-address">
                 <view wx:if="{{addressChoose.id == ''}}" class="shoppingCart-address-choose">
@@ -495,7 +495,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Recommend from '@/components/recommendBlock';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class ShoppingCart extends wepy.page {
     components = {
@@ -504,7 +504,10 @@ export default class ShoppingCart extends wepy.page {
     };
 
     data = {
-        shopChoose: '春树馆街小区',
+        shopChoose: {
+            id: '',
+            name: '春树馆街小区'
+        },
         discount: {
             count: 120,
             minus: 20
@@ -550,6 +553,7 @@ export default class ShoppingCart extends wepy.page {
                 count: 2
             }
         ],
+        shoppingCart: [],
         redPacket: {
             id: '',
             count: 0
@@ -700,12 +704,26 @@ export default class ShoppingCart extends wepy.page {
         };
     }
 
+    // async getProduct(id) {
+    //     let productDetail = await api.getProductDetail({
+    //         query: {
+    //             productId: element.id
+    //         }
+    //     });
+    //     console.log(productDetail);
+    // }
+
     onShow() {
         var self = this;
+        self.shoppingCart = wx.getStorageSync('shoppingCart');
+        self.$apply();
+        console.log(self.shoppingCart);
+        self.shoppingCart.forEach(element => {
+            // getProduct(element.id);
+        });
         wx.getStorage({
             key: 'address',
             success: function(res) {
-                console.log(res.data);
                 self.addressChoose = res.data;
                 self.$apply();
             }
@@ -713,11 +731,19 @@ export default class ShoppingCart extends wepy.page {
         wx.getStorage({
             key: 'redPacket',
             success: function(res) {
-                console.log(res.data);
                 self.redPacket = res.data;
                 self.$apply();
             }
         });
+    }
+
+    onShow() {
+        var self = this;
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
     }
 
     async onLoad(option) {
@@ -748,11 +774,11 @@ export default class ShoppingCart extends wepy.page {
                         account_id: jwt.data.account_id
                     }
                 });
-                console.log(res)
+                console.log(res);
                 self.$apply();
             }
         } catch (error) {
-            console.log("jwt is null")
+            console.log('jwt is null');
         }
     }
 }

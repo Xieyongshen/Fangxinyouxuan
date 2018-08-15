@@ -168,7 +168,7 @@
                         <text wx:else style="color:{{color.red}}">{{item.deliverTime}}</text>
                     </view>
                     <view wx:if="{{item.type == 1 || item.type == 2}}" class="orderList-productAll-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
-                    <scroll-view class="orderList-item-list">
+                    <scroll-view scroll-x class="orderList-item-list">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
                             <view class="orderList-product">
                                 <image src="{{product.imgUrl}}" mode="aspectFill" class="orderList-product-img" />

@@ -6,7 +6,7 @@
 
 .page-body {
     height: 100%;
-    padding-bottom: 360rpx;
+    padding-bottom: 240rpx;
     box-sizing: border-box;
 }
 
@@ -28,7 +28,6 @@
             <map id="myMap" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location="true"></map>
             <view class="btn-area">
                 <button bindtap="getCenterLocation" class="page-body-button" type="primary">获取位置</button>
-                <button bindtap="translateMarker" class="page-body-button" type="primary">移动标注</button>
                 <button bindtap="pointClosest" class="page-body-button" type="primary">显示最近标记点</button>
             </view>
         </view>

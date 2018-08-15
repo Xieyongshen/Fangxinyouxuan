@@ -16,7 +16,7 @@ page {
     color: transparent;
 }
 
-view{
+view {
     box-sizing: border-box;
 }
 </style>
@@ -39,6 +39,7 @@ export default class extends wepy.app {
             'pages/me/orderDetail/orderDetail',
             'pages/address/address',
             'pages/address/addressChange/addressChange',
+            'pages/shop/shop',
             'pages/search/search',
             'pages/product/product',
             'pages/order/order',

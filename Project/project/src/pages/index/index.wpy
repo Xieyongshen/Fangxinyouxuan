@@ -237,11 +237,11 @@
         <navBar navTitle="放心优选"></navBar>
         <view class="index-content">
             <view class="index-header">
-                <view class="index-shop">
+                <navigator url="../shop/shop" hover-class="none" class="index-shop">
                     <image src="/icons/position.png" class="index-icon-position" />
-                    <text class="shop-name">{{shopChoose}}</text>
+                    <text class="shop-name">{{shopChoose.name}}</text>
                     <image src="/icons/down.png" class="index-icon-down" />
-                </view>
+                </navigator>
                 <image src="/icons/search.png" class="index-icon-search" @tap="navToSearch" />
             </view>
             <view class="index-banner">
@@ -338,7 +338,10 @@ export default class Index extends wepy.page {
     };
 
     data = {
-        shopChoose: '春树馆街小区',
+        shopChoose: {
+            id: '',
+            name: '春树馆街小区'
+        },
         category: [
             {
                 title: '美味餐桌',
@@ -525,10 +528,16 @@ export default class Index extends wepy.page {
         }
     };
 
-    async onLoad() {
+    async onShow() {
         let self = this;
         let categories = await api.getShopCategory();
-        console.log(categories)
+        console.log(categories);
+
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
 
         let res = await api.getShopProduct({
             query: {
@@ -537,15 +546,20 @@ export default class Index extends wepy.page {
         });
         console.log(res);
         self.product = res.data;
-        self.color = self.$parent.globalData.color;
         self.$apply();
     }
-    
+
     onShareAppMessage() {
         return {
             title: '放心优选',
             path: '/pages/index/index'
         };
+    }
+
+    onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.$apply();
     }
 
     // async onLoad() {

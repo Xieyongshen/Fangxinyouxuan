@@ -14,6 +14,7 @@ from .models import CartItem
 from .models import RedPack
 from .models import Order
 from .models import OrderItem
+from .models import GroupUser
 
 # Register your models here.
 
@@ -31,4 +32,5 @@ admin.site.register(CartItem)
 admin.site.register(RedPack)
 admin.site.register(Order)
 admin.site.register(OrderItem)
+admin.site.register(GroupUser)
 

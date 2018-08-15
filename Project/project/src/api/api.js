@@ -3,6 +3,7 @@ import {
 } from '@/api/wxRequest';
 
 const apiFanxin = 'http://119.23.225.244'
+// const apiFanxin = 'http://127.0.0.1:8000'
 //获取首页店铺商品分类
 const getShopCategory = (params) => wxRequest(params, apiFanxin + "/api/getShopCategory");
 //获取首页当前店铺下的商品

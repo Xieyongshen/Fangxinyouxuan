@@ -455,7 +455,7 @@ page {
                     <text>￥{{freightChoose}}</text>
                 </view>
                 <view class="shoppingCart-item shoppingCart-result-deliver">配送方式
-                    <picker mode="selector" range="{{deliverList}}" range-key="name" bindchange="bindDeliverChange" value="{{deliverList[deliverChoose].name}}" class="shoppingCart-deliver-input">
+                    <picker mode="selector" range="{{deliverList}}" range-key="name" bindchange="bindDeliverChange" value="{{deliverChoose}}" class="shoppingCart-deliver-input">
                         <view class="input-picker {{deliverChoose < 0 ? 'picker-null' : ''}}">
                             <block wx:if="{{deliverChoose >= 0}}">{{deliverList[deliverChoose].name}}</block>
                             <block wx:else>请选择配送方式</block>
@@ -721,6 +721,11 @@ export default class ShoppingCart extends wepy.page {
         self.shoppingCart.forEach(element => {
             // getProduct(element.id);
         });
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
         wx.getStorage({
             key: 'address',
             success: function(res) {
@@ -735,15 +740,6 @@ export default class ShoppingCart extends wepy.page {
                 self.$apply();
             }
         });
-    }
-
-    onShow() {
-        var self = this;
-        var shop = wx.getStorageSync('shopChoose');
-        if (shop != '') {
-            self.shopChoose = shop;
-            self.$apply();
-        }
     }
 
     async onLoad(option) {

@@ -352,17 +352,13 @@ export default class OrderList extends wepy.page {
             this.$apply();
         },
 
-        toOrderDetail(id, status, type, e) {
+        toOrderDetail(id, e) {
             wx.navigateTo({
-                url:
-                    '../orderDetail/orderDetail?status=' +
-                    status +
-                    '&type=' +
-                    type
+                url: '../orderDetail/orderDetail?id=' + id
             });
         },
 
-        toOrderRefund(status, type, e) {
+        toOrderRefund(id, e) {
             var self = this;
             wx.showModal({
                 title: '申请退款',
@@ -371,7 +367,7 @@ export default class OrderList extends wepy.page {
                     if (res.confirm) {
                         wx.navigateTo({
                             url:
-                                '../orderDetail/orderDetail?status=4&type=' + type
+                                '../orderDetail/orderDetail?status=4&id=' + id
                         });
                         self.$apply();
                     } else if (res.cancel) {
@@ -396,7 +392,7 @@ export default class OrderList extends wepy.page {
                     }
                 });
                 console.log(res)
-                // self.orderList = res.data;
+                self.orderList = res.data;
                 self.$apply();
             }
         } catch (error) {

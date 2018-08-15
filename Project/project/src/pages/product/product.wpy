@@ -128,6 +128,17 @@ page {
     display: inline-block;
 }
 
+.product-intro-info {
+    color: #999999;
+    font-size: 26rpx;
+    line-height: 45rpx;
+    margin-top: 20rpx;
+    view {
+        margin-right: 30rpx;
+        display: inline-block;
+    }
+}
+
 .product-group {
     width: 750rpx;
     margin-top: 20rpx;
@@ -236,7 +247,7 @@ page {
 
 .product-recommend-name {
     width: 240rpx;
-    margin-top: 45rpx;
+    margin-top: 30rpx;
     font-size: 26rpx;
     line-height: 35rpx;
     overflow: hidden;
@@ -251,12 +262,12 @@ page {
 }
 
 .product-recommend-cart {
-    width: 45rpx;
-    height: 45rpx;
+    width: 50rpx;
+    height: 50rpx;
     border-radius: 50%;
     position: absolute;
     bottom: 0;
-    right: 45rpx;
+    right: 30rpx;
 }
 
 .product-detail {
@@ -271,7 +282,7 @@ page {
 }
 
 .product-detail-content {
-    margin-top: 35rpx;
+    margin-top: 10rpx;
     color: #808080;
     font-size: 26rpx;
     line-height: 45rpx;
@@ -356,7 +367,7 @@ page {
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{product.image}}" key="index">
                     <swiper-item class="product-image-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="product-image-img" />
+                        <image mode="aspectFill" src="{{item.imgUrl}}" mode="aspectFill" class="product-image-img" @tap="picPreview({{item.imgUrl}})" />
                     </swiper-item>
                 </repeat>
             </swiper>
@@ -392,6 +403,10 @@ page {
                     <text wx:else>已到货</text>
                 </view>
             </view>
+            <view class="product-intro-info">
+                <view>规格：{{product.norm}}</view>
+                <view>产地：{{product.producer}}</view>
+            </view>
         </view>
         <view wx:if="{{product.type == 2}}" class="product-group">
             <view class="product-group-title">已有{{product.group.list.length}}人在开团，可直接参与</view>
@@ -409,8 +424,7 @@ page {
         <view class="product-detail">
             <view class="product-detail-title">详情</view>
             <view class="product-detail-content">
-                <view>规格：{{product.weight}}</view>
-                <view>产地：{{product.package}}</view>
+                <view>{{product.detail}}</view>
                 <repeat for="{{product.detail.imgList}}">
                     <image mode="widthFix" src="{{item.imgUrl}}" />
                 </repeat>
@@ -419,7 +433,7 @@ page {
         <view class="product-recommend">
             <view class="product-recommend-title">推荐搭配商品</view>
             <scroll-view scroll-x="true" class="product-recommend-content">
-                <repeat for="{{recommend}}" key="id">
+                <repeat for="{{product.recommend}}" key="id">
                     <view class="product-recommend-item" @tap="navToProduct({{item.id}})">
                         <image src="{{item.imgUrl}}" class="product-recommend-img" />
                         <view class="product-recommend-name">{{item.name}}</view>
@@ -442,10 +456,11 @@ page {
                     <image src="/icons/shoppingCart.png" class="product-btn-cart" />
                     <text>购物车</text>
                 </view>
-                <view class="product-btn-addToCart">加入购物车</view>
+                <view hover-class="navigator-hover" class="product-btn-addToCart" @tap.stop="addToCart({{productID}})">加入购物车</view>
                 <navigator url="../order/order" class="product-btn-purchase" style="background:{{color.red}}">立即购买</navigator>
             </block>
         </view>
+
     </view>
 </template>
 
@@ -461,6 +476,7 @@ export default class Product extends wepy.page {
 
     data = {
         curImage: 0,
+        isChoosing: false,
         productID: '',
         product: {
             id: '',
@@ -507,32 +523,6 @@ export default class Product extends wepy.page {
                 }
             ]
         },
-        recommend: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000002',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000003',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000004',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            }
-        ],
         color: {}
     };
 
@@ -545,14 +535,64 @@ export default class Product extends wepy.page {
         navToProduct(product, event) {
             wx.navigateTo({
                 url:
-                    '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
+                    '/pages/product/product?id=' + product
             });
         },
 
         navToShoppingCart() {
             wx.switchTab({
-                url: '/pages/shoppingCart/shoppingCart?isChild=y'
+                url: '/pages/shoppingCart/shoppingCart'
             });
+        },
+
+        picPreview(url, e) {
+            var imageList = this.product.image;
+            var preImgList = [];
+
+            imageList.forEach((item, index) => {
+                preImgList.push(item.imgUrl);
+            });
+            this.$apply();
+            wx.previewImage({
+                current: url,
+                urls: preImgList
+            });
+        },
+        
+        addToCart(productID, e) {
+            var self = this;
+            var shoppingCart = wx.getStorageSync('shoppingCart');
+            var hasCur = false;
+            if (shoppingCart.length > 0) {
+                shoppingCart.forEach(element => {
+                    if (element.id == productID) {
+                        hasCur = true;
+                        wx.showToast({
+                            title: '商品已经在购物车中了',
+                            icon: 'none',
+                            duration: 1000
+                        });
+                        return;
+                    }
+                });
+            } else {
+                shoppingCart = [];
+            }
+
+            if (hasCur == false) {
+                shoppingCart.push({
+                    id: productID,
+                    count: 1
+                });
+                wx.setStorageSync('shoppingCart', shoppingCart);
+                wx.showToast({
+                    title: '添加成功',
+                    icon: 'success',
+                    duration: 1000
+                });
+            }
+
+            console.log(shoppingCart);
         }
     };
 
@@ -576,6 +616,12 @@ export default class Product extends wepy.page {
         });
         console.log(productDetail);
         self.product = productDetail.data;
+        self.product.image.forEach(element => {
+            element.imgUrl = "http://119.23.225.244/uploads/" + element.imgUrl;
+        });
+        self.product.recommend.forEach(element => {
+            element.imgUrl = "http://119.23.225.244/uploads/" + element.imgUrl;
+        });
         self.color = self.$parent.globalData.color;
         self.$apply();
     }

@@ -7,6 +7,7 @@ from .models import ShopBannar
 from .models import AbstractType
 from .models import ProductType
 from .models import ShopProduct
+from .models import ProductSpec
 from .models import ProductGroup
 from .models import ProductPicture
 from .models import ShoppingCart
@@ -25,6 +26,7 @@ admin.site.register(Shop)
 admin.site.register(ShopBannar)
 admin.site.register(ProductType)
 admin.site.register(ShopProduct)
+admin.site.register(ProductSpec)
 admin.site.register(ProductGroup)
 admin.site.register(ProductPicture)
 admin.site.register(ShoppingCart)

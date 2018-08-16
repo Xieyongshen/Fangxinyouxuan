@@ -33,6 +33,8 @@ class Shop(models.Model):
 	shop_man_name = models.TextField(u'店长名称',blank=True,null=True)
 	shop_man_phone = models.TextField(u'店长电话',blank=True,null=True)
 	shop_man_avatar = models.TextField(u'店长头像',blank=True,null=True)
+	shop_X = models.DecimalField(u'纬度',blank=True, null=True,max_digits=10, decimal_places=7)
+	shop_Y = models.DecimalField(u'经度',blank=True, null=True,max_digits=10, decimal_places=7)
 
 	def __str__(self):
 		return self.shop_name
@@ -54,6 +56,7 @@ class ProductType(AbstractType):
 	type_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	type_name = models.TextField(u'商品类型名称')
 	type_level = models.IntegerField(u'商品类型层级',default=0)
+	type_icon = models.ImageField(u'分类图标',upload_to='img/%Y/%m/%d',null=True,blank=True)
 
 	def __str__(self):
 		return self.type_name
@@ -87,6 +90,14 @@ class ShopProduct(models.Model):
 	def __str__(self):
 		return self.pro_name
 
+class ProductSpec(models.Model):
+	spec_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	spec_name = models.TextField()
+	spec_price = models.DecimalField(max_digits=10, decimal_places=2)
+	product = models.ForeignKey(ShopProduct,on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.spec_name
 
 class ProductGroup(models.Model):
 	groupuser_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)

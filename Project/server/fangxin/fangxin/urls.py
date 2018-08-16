@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/token', fangxin_views.create_token, name='token'),
     path('api/login', fangxin_views.login),
+    path('api/getShops', fangxin_views.getShops),
     path('api/getShopCategory', fangxin_views.getShopCategory),
     path('api/getShopProduct', fangxin_views.getShopProduct),
     path('api/getCategoryProduct', fangxin_views.getCategoryProduct),
@@ -30,4 +31,5 @@ urlpatterns = [
     path('api/getOrderList', fangxin_views.getOrderList),
     path('api/getOrderDetail', fangxin_views.getOrderDetail),
     path('api/getShoppingCart', fangxin_views.getShoppingCart),
+    path('api/getUserAddress', fangxin_views.getUserAddress),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

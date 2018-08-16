@@ -121,6 +121,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import api from '@/api/api'
 
 export default class Shop extends wepy.page {
     components = {
@@ -260,8 +261,17 @@ export default class Shop extends wepy.page {
 
     events = {};
 
-    onLoad() {
+    async onLoad() {
         var self = this;
+
+        let shops = await api.getShops({
+            query: {
+                currentX: 22.599578,
+                currentY: 113.973129
+            }
+        })
+        console.log(shops)
+
         self.color = self.$parent.globalData.color;
         self.$apply();
 

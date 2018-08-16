@@ -340,7 +340,7 @@ export default class Category extends wepy.page {
         let res = await api.getCategoryProduct({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
-                categoryId: '88428bf9-40b6-4d24-83c6-7f5f5b9f745c'
+                categoryId: '6c9c617d84da4454afca1c06bba07eec'
             }
         });
         console.log(res);

@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path
 from shop import views as fangxin_views
@@ -21,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/token', fangxin_views.create_token, name='token'),
     path('api/login', fangxin_views.login),
+    path('api/getShops', fangxin_views.getShops),
     path('api/getShopCategory', fangxin_views.getShopCategory),
     path('api/getShopProduct', fangxin_views.getShopProduct),
     path('api/getCategoryProduct', fangxin_views.getCategoryProduct),
@@ -28,4 +31,5 @@ urlpatterns = [
     path('api/getOrderList', fangxin_views.getOrderList),
     path('api/getOrderDetail', fangxin_views.getOrderDetail),
     path('api/getShoppingCart', fangxin_views.getShoppingCart),
-]
+    path('api/getUserAddress', fangxin_views.getUserAddress),
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

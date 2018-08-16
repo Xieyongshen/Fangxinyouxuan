@@ -260,8 +260,8 @@
             <view class="index-today">
                 <view class="today-title">今日热卖</view>
                 <view class="today-time" style="background:{{color.red}}">
-                    <text>距离活动结束还剩：</text>
-                    <text class="today-time-num">{{todayTime}}</text>
+                    <text>距离活动{{isStarted ? '结束' : '开始'}}还剩：</text>
+                    <text class="today-time-num">{{countTime.day}}天{{countTime.hour}}时{{countTime.minute}}分{{countTime.second}}秒</text>
                 </view>
                 <repeat for="{{product.today}}" key="id" index="i">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
@@ -340,7 +340,7 @@ export default class Index extends wepy.page {
     data = {
         shopChoose: {
             id: '',
-            name: '春树馆街小区'
+            name: ''
         },
         category: [
             {
@@ -364,145 +364,20 @@ export default class Index extends wepy.page {
                 imgUrl: '/icons/index/index-other.png'
             }
         ],
-        todayTime: '01:23:09',
         product: {
             hot: [],
             today: [],
             selected: []
         },
-        today: [
-            {
-                id: '00001',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                count: 100,
-                remain: 60,
-                isLimited: false,
-                price: 209.3,
-                oriPrice: 300
-            },
-            {
-                id: '00002',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                count: 100,
-                remain: 50,
-                isLimited: false,
-                price: 209.3,
-                oriPrice: 300
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                count: 100,
-                remain: 30,
-                isLimited: false,
-                price: 209.3,
-                oriPrice: 300
-            },
-            {
-                id: '00004',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                count: 100,
-                remain: 80,
-                isLimited: false,
-                price: 209.3,
-                oriPrice: 300
-            },
-            {
-                id: '00005',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                count: 100,
-                remain: 60,
-                isLimited: true,
-                price: 209.3,
-                oriPrice: 300
-            }
-        ],
-        hot: [
-            // {
-            //     id: '00001',
-            //     name: '日式蝴蝶结通勤女鞋',
-            //     desc: '甜美通勤，轻松搭配',
-            //     imgUrl: '',
-            //     oriPrice: 399,
-            //     price: 153.3,
-            //     label: '可拼团'
-            // },
-            // {
-            //     id: '00002',
-            //     name: '随便阅读灯',
-            //     desc: '无极调光，360°自由旋转',
-            //     imgUrl: '',
-            //     oriPrice: 45,
-            //     price: 30,
-            //     label: ''
-            // },
-            // {
-            //     id: '00003',
-            //     name: '男士都市轻生活弹力牛仔裤',
-            //     desc: '自如转换多场景，让双腿保持昂扬活力',
-            //     imgUrl: '',
-            //     oriPrice: 103.3,
-            //     price: 83.3,
-            //     label: '满20减5'
-            // },
-            // {
-            //     id: '00004',
-            //     name: '男士都市轻生活弹力牛仔裤',
-            //     desc: '自如转换多场景，让双腿保持昂扬活力',
-            //     imgUrl: '',
-            //     oriPrice: 499,
-            //     price: 209.3,
-            //     label: '甄选优品'
-            // }
-        ],
-        selected: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                desc: '甜美通勤，轻松搭配',
-                imgUrl: '',
-                oriPrice: 399,
-                price: 153.3,
-                label: '可拼团'
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                desc: '无极调光，360°自由旋转',
-                imgUrl: '',
-                oriPrice: 45,
-                price: 30,
-                label: ''
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                oriPrice: 103.3,
-                price: 83.3,
-                label: '满20减5'
-            },
-            {
-                id: '00004',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                oriPrice: 499,
-                price: 209.3,
-                label: '甄选优品'
-            }
-        ],
+        limitTime: '2018-08-20 18:00:00',
+        countTime: {
+            day: 0,
+            hour: 0,
+            minute: 0,
+            second: 0
+        },
+        isStarted: false,
+        count: 0,
         color: {}
     };
 
@@ -528,6 +403,54 @@ export default class Index extends wepy.page {
         }
     };
 
+    timeFormat(param) {
+        //小于10的格式化函数
+        return param < 10 ? '0' + param : param;
+    }
+
+    countDown() {
+        var self = this;
+        let nowTime = new Date().getTime();
+        console.log(self);
+        console.log(self.$parent);
+        console.log(self.data.count + " times: ");
+        console.log(self.$parent);
+        console.log(self.$wxpage.data.limitTime);
+        let limitTime = self.data.limitTime;
+        let countDown = '';
+
+        // 对结束时间进行处理渲染到页面
+        let endTime = new Date(limitTime).getTime();
+        let obj = null;
+        // 如果活动未结束，对时间进行处理
+        if (endTime - nowTime > 0) {
+            let time = (endTime - nowTime) / 1000;
+            // 获取天、时、分、秒
+            let day = parseInt(time / (60 * 60 * 24));
+            let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+            let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+            let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+            obj = {
+                day: self.timeFormat(day),
+                hour: self.timeFormat(hou),
+                minute: self.timeFormat(min),
+                second: self.timeFormat(sec)
+            };
+        } else {
+            obj = {
+                day: '0',
+                hour: '0',
+                minute: '0',
+                second: '0'
+            };
+        }
+        countDown = obj;
+        // 渲染，然后每隔一秒执行一次倒计时函数
+        self.countTime = countDown;
+        self.$apply();
+        setTimeout(self.countDown, 1000);
+    }
+
     async onShow() {
         let self = this;
         let categories = await api.getShopCategory();
@@ -539,6 +462,9 @@ export default class Index extends wepy.page {
         if (shop != '') {
             self.shopChoose = shop;
             self.$apply();
+        } else {
+            self.shopChoose.name = '请选择商店';
+            self.$apply();
         }
 
         let res = await api.getShopProduct({
@@ -548,15 +474,6 @@ export default class Index extends wepy.page {
         });
         console.log(res);
         self.product = res.data;
-        self.product.today.forEach(element => {
-            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
-        });
-        self.product.hot.forEach(element => {
-            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
-        });
-        self.product.selected.forEach(element => {
-            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
-        });
         self.$apply();
     }
 
@@ -571,6 +488,7 @@ export default class Index extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.$apply();
+        self.countDown();
     }
 
     // async onLoad() {

@@ -84,43 +84,43 @@ export default class ProductBlock extends wepy.component {
             wx.navigateTo({
                 url: '/pages/product/product?id=' + product
             });
-        },
-
-        addToCart(productID, e) {
-            var self = this;
-            var shoppingCart = wx.getStorageSync('shoppingCart');
-            var hasCur = false;
-            if (shoppingCart.length > 0) {
-                shoppingCart.forEach(element => {
-                    if (element.id == productID) {
-                        hasCur = true;
-                        wx.showToast({
-                            title: '商品已经在购物车中了',
-                            icon: 'none',
-                            duration: 1000
-                        });
-                        return;
-                    }
-                });
-            } else {
-                shoppingCart = [];
-            }
-
-            if (hasCur == false) {
-                shoppingCart.push({
-                    id: productID,
-                    count: 1
-                });
-                wx.setStorageSync('shoppingCart', shoppingCart);
-                wx.showToast({
-                    title: '添加成功',
-                    icon: 'success',
-                    duration: 1000
-                });
-            }
-
-            console.log(shoppingCart);
         }
+
+        // addToCart(productID, e) {
+        //     var self = this;
+        //     var shoppingCart = wx.getStorageSync('shoppingCart');
+        //     var hasCur = false;
+        //     if (shoppingCart.length > 0) {
+        //         shoppingCart.forEach(element => {
+        //             if (element.id == productID) {
+        //                 hasCur = true;
+        //                 wx.showToast({
+        //                     title: '商品已经在购物车中了',
+        //                     icon: 'none',
+        //                     duration: 1000
+        //                 });
+        //                 return;
+        //             }
+        //         });
+        //     } else {
+        //         shoppingCart = [];
+        //     }
+
+        //     if (hasCur == false) {
+        //         shoppingCart.push({
+        //             id: productID,
+        //             count: 1
+        //         });
+        //         wx.setStorageSync('shoppingCart', shoppingCart);
+        //         wx.showToast({
+        //             title: '添加成功',
+        //             icon: 'success',
+        //             duration: 1000
+        //         });
+        //     }
+
+        //     console.log(shoppingCart);
+        // }
     };
 }
 </script>

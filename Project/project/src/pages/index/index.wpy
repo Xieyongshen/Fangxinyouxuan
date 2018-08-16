@@ -265,7 +265,7 @@
                 </view>
                 <repeat for="{{product.today}}" key="id" index="i">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                        <view wx:if="{{item.isLimited == false}}" slot="extra" class="today-item-remain">
+                        <view wx:if="{{item.remain > 0}}" slot="extra" class="today-item-remain">
                             <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
                             <text style="color:{{color.red}}">还剩{{item.remain}}份</text>
                         </view>
@@ -532,6 +532,8 @@ export default class Index extends wepy.page {
         let self = this;
         let categories = await api.getShopCategory();
         console.log(categories);
+        self.categories = shop;
+        self.$apply();
 
         var shop = wx.getStorageSync('shopChoose');
         if (shop != '') {
@@ -546,6 +548,15 @@ export default class Index extends wepy.page {
         });
         console.log(res);
         self.product = res.data;
+        self.product.today.forEach(element => {
+            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
+        });
+        self.product.hot.forEach(element => {
+            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
+        });
+        self.product.selected.forEach(element => {
+            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
+        });
         self.$apply();
     }
 

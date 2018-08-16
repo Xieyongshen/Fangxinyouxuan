@@ -224,14 +224,14 @@
     color: #808080;
 }
 
-.orderDetail-refund-reason{
+.orderDetail-refund-reason {
     width: 690rpx;
     height: 86rpx;
     padding: 10rpx 0;
     border-bottom: 1rpx solid #f2f2f2;
 }
 
-.reason-item{
+.reason-item {
     width: 140rpx;
     height: 65rpx;
     font-size: 24rpx;
@@ -243,23 +243,23 @@
     display: inline-block;
 }
 
-.reason-item:not(:first-child){
+.reason-item:not(:first-child) {
     margin-left: 40rpx;
 }
 
-.orderDetail-refund-more{
+.orderDetail-refund-more {
     width: 690rpx;
     padding: 20rpx 0;
     border-bottom: 1rpx solid #f2f2f2;
 }
 
-.refund-more-input{
+.refund-more-input {
     height: auto;
     font-size: 26rpx;
     line-height: 50rpx;
 }
 
-.refund-more-update{
+.refund-more-update {
     width: 120rpx;
     height: 120rpx;
     color: #bfbfbf;
@@ -270,7 +270,7 @@
     border-radius: 3rpx;
 }
 
-.orderDetail-refund-submit{
+.orderDetail-refund-submit {
     width: 690rpx;
     padding: 20rpx 0;
 }
@@ -404,7 +404,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import api from "@/api/api"
+import api from '@/api/api';
 export default class OrderDetail extends wepy.page {
     components = {
         navBar: NavBar
@@ -421,10 +421,10 @@ export default class OrderDetail extends wepy.page {
             '订单已完成'
         ],
         refundReasons: [
-            { id: '01', name: '商品拍错'},
-            { id: '02', name: '商品损坏'},
-            { id: '03', name: '货品发错'},
-            { id: '04', name: '有异物'}
+            { id: '01', name: '商品拍错' },
+            { id: '02', name: '商品损坏' },
+            { id: '03', name: '货品发错' },
+            { id: '04', name: '有异物' }
         ],
         reasonChoose: '',
         order: {
@@ -560,17 +560,23 @@ export default class OrderDetail extends wepy.page {
 
     async onLoad(options) {
         var self = this;
-        self.order.status = options.status;
-        self.order.type = options.type;
+        self.orderID = options.id;
         self.color = self.$parent.globalData.color;
-        console.log(options.status);
+        self.$apply();
 
-        let orderDtail = await api.getOrderDetail({
+        let orderDetail = await api.getOrderDetail({
             query: {
-                orderId: '4322a503-dbb0-4b72-83d3-18184e681473'
+                orderId: self.orderID
             }
-        })
-        console.log(orderDtail)
+        });
+        self.order = orderDetail.data;
+        console.log(orderDetail);
+        console.log(self.order);
+
+        if (options.status == 4) {
+            self.order.status = options.status;
+        }
+
         self.$apply();
     }
 }

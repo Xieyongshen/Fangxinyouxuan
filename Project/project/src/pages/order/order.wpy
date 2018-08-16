@@ -25,12 +25,11 @@ page {
 
 .order-address {
     width: 690rpx;
-    height: 45rpx;
     font-size: 28rpx;
     line-height: 45rpx;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    view{
+        display: inline-block;
+    }
     text {
         font-size: 22rpx;
         line-height: 30rpx;
@@ -179,10 +178,11 @@ page {
         <navBar navTitle="填写订单" isChildPage="y"></navBar>
             <image src="/icons/address-bg.png" class="order-header" />
         <view class="order-block order-info">
-            <view class="order-address">{{address}} {{shop.name}}
-                <text style="background:{{color.red}}">{{deliver.name}}</text>
+            <view class="order-address">
+                <view>{{shopChoose.address}}</view>
+                <view>{{shopChoose.name}}<text style="background:{{color.red}}">{{deliver.name}}</text></view>
             </view>
-            <view class="order-shopkeeper">{{shop.keeper}} {{shop.phone}}</view>
+            <view class="order-shopkeeper">{{shopChoose.shopkeeper.name}} {{shopChoose.shopkeeper.phone}}</view>
         </view>
         <repeat for="{{product}}" key="type">
             <view class="order-block order-product">
@@ -251,12 +251,9 @@ export default class Order extends wepy.page {
     };
 
     data = {
-        address: '春树馆街小区',
-        shop: {
+        shopChoose: {
             id: '',
-            name: '果多美门店',
-            keeper: '小鱼',
-            phone: '13000000000'
+            name: ''
         },
         deliver: {
             name: '门店自提',
@@ -376,12 +373,9 @@ export default class Order extends wepy.page {
     onShow(){
         var self = this;
         
-        var shop = wx.getStorageSync('shopChoose');
-        if (shop != '') {
-            self.shop.id = shop.id;
-            self.shop.name = shop.name;
-            self.$apply();
-        }
+        self.shopChoose = wx.getStorageSync('shopChoose');
+        console.log(self.shopChoose);
+        self.$apply();
 
         wx.getStorage({
             key: 'redPacket',

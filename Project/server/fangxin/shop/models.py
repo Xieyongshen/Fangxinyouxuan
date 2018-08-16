@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from datetime import datetime
 import uuid
+import random
 # Create your models here.
 
 class User(models.Model):
@@ -30,6 +31,7 @@ class Shop(models.Model):
 	shop_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	shop_name = models.TextField(u'商店名称')
 	shop_area = models.TextField(u'商店地区')
+	shop_address = models.TextField(u'商店地址',blank=True,null=True)
 	shop_man_name = models.TextField(u'店长名称',blank=True,null=True)
 	shop_man_phone = models.TextField(u'店长电话',blank=True,null=True)
 	shop_man_avatar = models.TextField(u'店长头像',blank=True,null=True)
@@ -78,11 +80,13 @@ class ShopProduct(models.Model):
 	activityType = models.IntegerField(u'活动类型',blank=True, null=True)
 	limitCount = models.IntegerField(u'限时商品总量',blank=True, null=True)
 	limitRemain = models.IntegerField(u'限时商品剩余量',blank=True, null=True)
-	limitTime = models.DateTimeField(u'限时商品截止时间',default=datetime.now())
+	limitStartTime = models.DateTimeField(u'限时商品开始时间',null=True, blank=True)
+	limitEndTime = models.DateTimeField(u'限时商品截止时间',null=True, blank=True)
 	limitPrice = models.DecimalField(u'限时商品优惠价',blank=True,null=True,max_digits=10, decimal_places=2)
 	groupPrice = models.DecimalField(u'拼团商品优惠价',blank=True,null=True,max_digits=10, decimal_places=2)
 	fullCount = models.DecimalField(u'满减商品满价',blank=True, null=True, max_digits=10, decimal_places=2)
 	fullMinus = models.DecimalField(u'满减商品减价',blank=True, null=True, max_digits=10, decimal_places=2)
+	reachTime = models.DateTimeField(u'预售商品到达时间', blank=True, null=True)
 	comment = models.TextField(u'活动商品说明',blank=True, null=True)
 	buyTimes = models.IntegerField(u'商品购买次数',default=0)
 
@@ -158,7 +162,7 @@ class RedPack(models.Model):
 
 class Order(models.Model):
 	order_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	order_num = models.TextField(u'订单编号')
+	order_num = models.TextField(u'订单编号',default=datetime.now().strftime("%Y%m%d%H%M%S")+str(random.randint(10,99)))
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	order_type = models.IntegerField(u'订单类型',default=0)
 	order_status = models.IntegerField(u'订单状态')

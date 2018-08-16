@@ -178,7 +178,7 @@ def getShops(request):
     shopList = list(Shop.objects.all())
     for shops in shopList:
         d = round(1000 * get_distance_hav(currentX,currentY,shops.shop_X,shops.shop_Y),1)
-        res_dict.append(dict(id=str(shops.shop_id),area=shops.shop_area,name=shops.shop_name,address='',distance=d,shopKeeper=dict(name=shops.shop_man_name,phone=shops.shop_man_phone,avatar=shops.shop_man_avatar)))
+        res_dict.append(dict(id=str(shops.shop_id),area=shops.shop_area,name=shops.shop_name,address=shops.shop_address,distance=d,shopKeeper=dict(name=shops.shop_man_name,phone=shops.shop_man_phone,avatar=shops.shop_man_avatar)))
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
 
@@ -194,7 +194,7 @@ def getShopProduct(request):
     
     for products in shop_products:
         if(products.activityType==1):
-            todayEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),count=products.limitCount,remain=products.limitRemain,label=products.comment,limitTime=products.limitTime.strftime("%Y-%m-%d %H:%M:%S"))
+            todayEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),count=products.limitCount,remain=products.limitRemain,label=products.comment,limitStartTime=products.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=products.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
             todayProducts.append(todayEle)
     
     sortedPros = list(ShopProduct.objects.order_by("buyTimes"))
@@ -267,6 +267,35 @@ def getProductDetail(request):
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         res_dict = dict(id=productIdstr,type=2,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.groupPrice),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,group=groupDetail,recommend=recomendList)
+    elif(the_product.activityType==1):
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+        imgUrls = list()
+        for images in productPics:
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+        recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
+        recomendList = list()
+        for recPros in recomendProList:
+            recomendList.append(dict(id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+        specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
+        productSpec = list()
+        for specs in specList:
+            productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
+        res_dict = dict(id=productIdstr,type=the_product.activityType,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,recommend=recomendList,limitStartTime=the_product.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=the_product.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
+    
+    elif(the_product.activityType==3):
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+        imgUrls = list()
+        for images in productPics:
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+        recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
+        recomendList = list()
+        for recPros in recomendProList:
+            recomendList.append(dict(id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+        specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
+        productSpec = list()
+        for specs in specList:
+            productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
+        res_dict = dict(id=productIdstr,type=the_product.activityType,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,recommend=recomendList,reachTime=the_product.reachTime.strftime("%Y-%m-%d %H:%M:%S"))
     else:
         productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
         imgUrls = list()

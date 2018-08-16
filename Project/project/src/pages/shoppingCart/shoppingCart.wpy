@@ -382,7 +382,7 @@ page {
 <template>
     <view class="container">
         <navBar navTitle="放心优选"></navBar>
-        <view wx:if="{{product.length > 0}}" class="shoppingCart-content">
+        <view wx:if="{{shoppingCart.length > 0}}" class="shoppingCart-content">
             <image src="/icons/address-bg.png" class="shoppingCart-header" />
             <view wx:if="{{deliverChoose < 1}}" class="shoppingCart-block shoppingCart-shop">
                 <image src="/icons/position.png" class="icon-position" />
@@ -415,7 +415,7 @@ page {
                     </view>
                 </view>
                 <view class="shoppingCart-product-list">
-                    <repeat for="{{product}}" key="id">
+                    <repeat for="{{shoppingCart}}" key="id">
                         <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
                             <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
                             <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
@@ -475,7 +475,7 @@ page {
                 <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price" :priceColor.sync="color.red"></recommend>
             </repeat>
         </view>
-        <view wx:if="{{product.length > 0}}" class="shoppingCart-settle">
+        <view wx:if="{{shoppingCart.length > 0}}" class="shoppingCart-settle">
             <view class="shoppingCart-settle-selectAll">
                 <image src="/icons/select-{{chooseAll == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap="chooseAll" />
                 <text>全选</text>
@@ -535,24 +535,6 @@ export default class ShoppingCart extends wepy.page {
         freightChoose: 0,
         isChoosen: [],
         chooseAll: true,
-        product: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                imgUrl: '',
-                price: 39.22,
-                oriPrice: 75,
-                count: 2
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                imgUrl: '',
-                price: 45.0,
-                oriPrice: 99,
-                count: 2
-            }
-        ],
         shoppingCart: [],
         redPacket: {
             id: '',
@@ -630,33 +612,35 @@ export default class ShoppingCart extends wepy.page {
         countMinus(index, event) {
             var self = this;
             var subtotal = self.subtotal * 1000;
-            self.product[index].count--;
+            self.shoppingCart[index].count--;
             if (self.isChoosen[index]) {
-                subtotal -= self.product[index].price * 1000;
+                subtotal -= self.shoppingCart[index].price * 1000;
             }
             subtotal = parseInt(subtotal, 10);
             self.subtotal = subtotal / 1000;
-            if (self.product[index].count == 0) {
-                self.product.splice(index, 1);
+            if (self.shoppingCart[index].count == 0) {
+                self.shoppingCart.splice(index, 1);
             }
+            wx.setStorageSync('shoppingCart', self.shoppingCart);
             self.$apply();
         },
 
         countPlus(index, event) {
             var self = this;
             var subtotal = self.subtotal * 1000;
-            self.product[index].count++;
+            self.shoppingCart[index].count++;
             if (self.isChoosen[index]) {
-                subtotal += self.product[index].price * 1000;
+                subtotal += self.shoppingCart[index].price * 1000;
             }
             subtotal = parseInt(subtotal, 10);
             self.subtotal = subtotal / 1000;
+            wx.setStorageSync('shoppingCart', self.shoppingCart);
             self.$apply();
         },
 
         chooseProduct(index, event) {
             this.isChoosen[index] = !this.isChoosen[index];
-            if (this.product[index].count > 0) {
+            if (this.shoppingCart[index].count > 0) {
                 this.updateTotal();
             }
             this.$apply();
@@ -666,7 +650,7 @@ export default class ShoppingCart extends wepy.page {
             var self = this;
             self.chooseAll = !self.chooseAll;
             self.isChoosen = [];
-            self.product.forEach(element => {
+            self.shoppingCart.forEach(element => {
                 self.isChoosen.push(self.chooseAll);
                 self.$apply();
             });
@@ -684,7 +668,7 @@ export default class ShoppingCart extends wepy.page {
     updateTotal() {
         var self = this;
         self.subtotal = 0;
-        self.product.forEach((item, index) => {
+        self.shoppingCart.forEach((item, index) => {
             if (self.isChoosen[index]) {
                 self.subtotal += item.price * item.count * 1000;
                 self.$apply();
@@ -692,6 +676,7 @@ export default class ShoppingCart extends wepy.page {
         });
         self.subtotal = parseInt(self.subtotal, 10);
         self.subtotal /= 1000;
+        wx.setStorageSync('shoppingCart', self.shoppingCart);
         self.$apply();
     }
 
@@ -718,9 +703,6 @@ export default class ShoppingCart extends wepy.page {
         self.shoppingCart = wx.getStorageSync('shoppingCart');
         self.$apply();
         console.log(self.shoppingCart);
-        self.shoppingCart.forEach(element => {
-            // getProduct(element.id);
-        });
         var shop = wx.getStorageSync('shopChoose');
         if (shop != '') {
             self.shopChoose = shop;
@@ -744,7 +726,7 @@ export default class ShoppingCart extends wepy.page {
 
     async onLoad(option) {
         var self = this;
-        self.product.forEach(element => {
+        self.shoppingCart.forEach(element => {
             self.isChoosen.push(true);
             self.$apply();
         });

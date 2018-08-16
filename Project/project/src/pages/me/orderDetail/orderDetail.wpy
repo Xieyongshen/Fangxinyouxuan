@@ -38,13 +38,13 @@
     }
 }
 
-.orderDetail-shop-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    margin-right: 20rpx;
-    border-radius: 50%;
-    background: #fdedeb;
-}
+// .orderDetail-shop-avatar {
+//     width: 80rpx;
+//     height: 80rpx;
+//     margin-right: 20rpx;
+//     border-radius: 50%;
+//     background: #fdedeb;
+// }
 
 .orderDetail-icon-phone {
     width: 36rpx;
@@ -283,8 +283,8 @@
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
                 <image wx:if="{{order.status > 0}}" src="/icons/in.png" class="icon-in" />
             </view>
-            <view class="orderDetail-shop">
-                <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" />
+            <view class="orderDetail-shop" @tap="callShop()">
+                <!-- <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" /> -->
                 <text>{{order.shop.name}}</text>
                 <image src="/icons/phone.png" class="orderDetail-icon-phone" />
             </view>
@@ -439,7 +439,6 @@ export default class OrderDetail extends wepy.page {
             remark: '',
             isRefund: false,
             shop: {
-                avatar: '',
                 name: '朴美琴（小区店长）',
                 phone: '12345678900'
             },
@@ -527,6 +526,13 @@ export default class OrderDetail extends wepy.page {
     };
 
     methods = {
+        callShop() {
+            var self = this;
+            wx.makePhoneCall({
+                phoneNumber: self.order.shop.phone
+            });
+        },
+
         navToProductList(index, events) {
             wx.navigateTo({
                 url: '../../productList/productList'

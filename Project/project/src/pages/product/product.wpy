@@ -556,7 +556,9 @@ page {
                 </view>
             </view>
             <view class="product-intro-info">
-                <view>规格：{{product.norm}}</view>
+                <view>规格：
+                    <repeat for="{{product.spec}}" key="index">{{index > 0 ? ' / ' : ''}}{{item.name}}</repeat>
+                </view>
                 <view>产地：{{product.producer}}</view>
             </view>
         </view>
@@ -567,7 +569,7 @@ page {
                     <image src="{{item.head.avatar}}" class="product-group-avatar" />
                     <view class="product-group-content">
                         <view class="product-group-head">{{item.head.name}}</view>
-                        <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{item.restTime}} 结束</view>
+                        <view class="product-group-time">还差{{product.group.count - item.count}}人成团，剩余 {{restTimeList[index].hour}}:{{restTimeList[index].minute}}:{{restTimeList[index].second}} 结束</view>
                     </view>
                     <view class="product-group-btn" style="background:{{color.red}}">去参团</view>
                 </view>
@@ -577,7 +579,7 @@ page {
             <view class="product-detail-title">详情</view>
             <view class="product-detail-content">
                 <view>{{product.detail}}</view>
-                <repeat for="{{product.detail.imgList}}">
+                <repeat for="{{product.image}}" @tap="picPreview({{item.imgUrl}})">
                     <image mode="widthFix" src="{{item.imgUrl}}" />
                 </repeat>
             </view>
@@ -696,26 +698,12 @@ export default class Product extends wepy.page {
                             name: '',
                             avatar: ''
                         },
-                        count: 0,
-                        restTime: ''
+                        count: 0
                     }
                 ]
-            },
-            detail: {
-                text: '',
-                imgList: [
-                    {
-                        imgUrl: ''
-                    }
-                ]
-            },
-            image: [
-                {
-                    imgUrl: '',
-                    url: ''
-                }
-            ]
+            }
         },
+        restTimeList: [],
         color: {}
     };
 
@@ -757,7 +745,7 @@ export default class Product extends wepy.page {
             });
         },
 
-        chooseSpec(){
+        chooseSpec() {
             this.isChoosing = true;
             this.specChoose = 0;
             this.count = 1;
@@ -783,8 +771,11 @@ export default class Product extends wepy.page {
             if (hasCur == false) {
                 shoppingCart.push({
                     id: productID,
+                    name: self.product.name,
+                    image: self.product.image[0].imgUrl,
                     spec: self.product.spec[self.specChoose].name,
                     price: self.product.spec[self.specChoose].price,
+                    oriPrice: self.product.oriPrice,
                     count: self.count
                 });
             }
@@ -828,6 +819,88 @@ export default class Product extends wepy.page {
 
     events = {};
 
+    timeFormat(param) {
+        //小于10的格式化函数
+        var format = parseInt(param);
+        return format < 10 ? '0' + format : format;
+    }
+
+    countDown() {
+        var self = this;
+        let nowTime = new Date().getTime();
+        let list = self.data.product.group.list;
+        let endTimeList = [];
+        let countDown = {};
+        list.forEach(element => {
+            endTimeList.push(element.endTime);
+        });
+
+        endTimeList.forEach(element => {
+            let endTime = new Date(element).getTime();
+            if (nowTime >= endTime) {
+                countDown = {
+                    hour: '00',
+                    minute: '00',
+                    second: '00'
+                };
+            } else {
+                let time = (endTime - nowTime) / 1000;
+                let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+                let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+                let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+                countDown = {
+                    hour: self.timeFormat(hou),
+                    minute: self.timeFormat(min),
+                    second: self.timeFormat(sec)
+                };
+            }
+            self.restTimeList.push(countDown);
+            self.$apply();
+        });
+
+        if (self.timer) {
+            clearInterval(self.timer);
+        }
+        self.timer = setInterval(function() {
+            self.restTimeList.forEach(element => {
+                if (element.second > 0) {
+                    element.second--;
+                } else if (element.minute > 0) {
+                    element.second = 59;
+                    element.minute--;
+                } else if (element.hour > 0) {
+                    element.second = 59;
+                    element.minute = 59;
+                    element.hour--;
+                } else {
+                    nowTime = new Date().getTime();
+                    if (nowTime >= endTime) {
+                        clearInterval(this);
+                    } else {
+                        let time = (endTime - nowTime) / 1000;
+                        let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+                        let min = parseInt(
+                            ((time % (60 * 60 * 24)) % 3600) / 60
+                        );
+                        let sec = parseInt(
+                            ((time % (60 * 60 * 24)) % 3600) % 60
+                        );
+                        element = {
+                            hour: hou,
+                            minute: min,
+                            second: sec
+                        };
+                    }
+                }
+                element.hour = self.timeFormat(element.hour);
+                element.minute = self.timeFormat(element.minute);
+                element.second = self.timeFormat(element.second);
+                self.$apply();
+            });
+        }, 1000);
+        self.$apply();
+    }
+
     onShareAppMessage() {
         return {
             title: '放心优选',
@@ -846,25 +919,11 @@ export default class Product extends wepy.page {
         });
         console.log(productDetail);
         self.product = productDetail.data;
-        self.product.image.forEach(element => {
-            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
-        });
-        self.product.recommend.forEach(element => {
-            element.imgUrl = 'http://119.23.225.244/uploads/' + element.imgUrl;
-        });
         self.color = self.$parent.globalData.color;
-
-        self.product.spec = [
-            {
-                name: '10个装',
-                price: 9.9
-            },
-            {
-                name: '20个装',
-                price: 16.9
-            }
-        ];
         self.$apply();
+        if (self.product.type == 2 && self.product.group.list.length > 0) {
+            self.countDown();
+        }
     }
 }
 </script>

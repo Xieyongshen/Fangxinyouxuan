@@ -72,7 +72,6 @@
     padding: 25rpx 0;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
 }
 
 .category-item {
@@ -249,7 +248,7 @@
                 <image class="banner-left" />
                 <image class="banner-right" />
             </view>
-            <view class="index-category">
+            <view class="index-category" style="justify-content: {{category.length > 4 ? 'space-between' : 'space-around'}};">
                 <repeat for="{{category}}" key="index">
                     <view class="category-item" @tap="navToCategory({{item.title}})">
                         <image src="{{item.imgUrl}}" class="category-img" />
@@ -342,34 +341,14 @@ export default class Index extends wepy.page {
             id: '',
             name: ''
         },
-        category: [
-            {
-                title: '美味餐桌',
-                imgUrl: '/icons/index/index-table.png'
-            },
-            {
-                title: '宝妈必备',
-                imgUrl: '/icons/index/index-mother.png'
-            },
-            {
-                title: '居家优选',
-                imgUrl: '/icons/index/index-home.png'
-            },
-            {
-                title: '健康关怀',
-                imgUrl: '/icons/index/index-health.png'
-            },
-            {
-                title: '其他',
-                imgUrl: '/icons/index/index-other.png'
-            }
-        ],
+        category: [],
         product: {
             hot: [],
             today: [],
             selected: []
         },
-        limitTime: '2018-08-20 18:00:00',
+        startTime: '',
+        endTime: '',
         countTime: {
             day: 0,
             hour: 0,
@@ -377,7 +356,6 @@ export default class Index extends wepy.page {
             second: 0
         },
         isStarted: false,
-        count: 0,
         color: {}
     };
 
@@ -405,57 +383,102 @@ export default class Index extends wepy.page {
 
     timeFormat(param) {
         //小于10的格式化函数
-        return param < 10 ? '0' + param : param;
+        var format = parseInt(param);
+        return format < 10 ? '0' + format : format;
     }
 
     countDown() {
         var self = this;
         let nowTime = new Date().getTime();
-        console.log(self);
-        console.log(self.$parent);
-        console.log(self.data.count + " times: ");
-        console.log(self.$parent);
-        console.log(self.$wxpage.data.limitTime);
-        let limitTime = self.data.limitTime;
-        let countDown = '';
+        let startTimeStr = self.data.startTime;
+        let endTimeStr = self.data.endTime;
+        let countDown = {};
 
         // 对结束时间进行处理渲染到页面
-        let endTime = new Date(limitTime).getTime();
-        let obj = null;
+        let startTime = new Date(startTimeStr).getTime();
+        let endTime = new Date(endTimeStr).getTime();
         // 如果活动未结束，对时间进行处理
-        if (endTime - nowTime > 0) {
-            let time = (endTime - nowTime) / 1000;
-            // 获取天、时、分、秒
+        if (nowTime > endTime) {
+            self.isStarted = true;
+            countDown = {
+                day: '0',
+                hour: '00',
+                minute: '00',
+                second: '00'
+            };
+        } else {
+            var time;
+            if (nowTime >= startTime) {
+                self.isStarted = true;
+                time = (endTime - nowTime) / 1000;
+            } else {
+                time = (startTime - nowTime) / 1000;
+            }
             let day = parseInt(time / (60 * 60 * 24));
             let hou = parseInt((time % (60 * 60 * 24)) / 3600);
             let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
             let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
-            obj = {
-                day: self.timeFormat(day),
+            countDown = {
+                day: day,
                 hour: self.timeFormat(hou),
                 minute: self.timeFormat(min),
                 second: self.timeFormat(sec)
             };
-        } else {
-            obj = {
-                day: '0',
-                hour: '0',
-                minute: '0',
-                second: '0'
-            };
         }
-        countDown = obj;
         // 渲染，然后每隔一秒执行一次倒计时函数
         self.countTime = countDown;
         self.$apply();
-        setTimeout(self.countDown, 1000);
+        if (self.timer) {
+            clearInterval(self.timer);
+        }
+        self.timer = setInterval(function() {
+            if (self.countTime.second > 0) {
+                self.countTime.second--;
+            } else if (self.countTime.minute > 0) {
+                self.countTime.second = 59;
+                self.countTime.minute--;
+            } else if (self.countTime.hour > 0) {
+                self.countTime.second = 59;
+                self.countTime.minute = 59;
+                self.countTime.hour--;
+            } else if (self.countTime.day > 0) {
+                self.countTime.hour = 23;
+                self.countTime.second = 59;
+                self.countTime.minute = 59;
+                self.countTime.day--;
+            } else {
+                nowTime = new Date().getTime();
+                if (nowTime >= endTime) {
+                    clearInterval(this);
+                } else if (nowTime >= startTime) {
+                    self.isStarted = true;
+                    let time = (endTime - nowTime) / 1000;
+                    let day = parseInt(time / (60 * 60 * 24));
+                    let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+                    let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+                    let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+                    self.countTime = {
+                        day: day,
+                        hour: hou,
+                        minute: min,
+                        second: sec
+                    };
+                }
+            }
+            self.countTime.hour = self.timeFormat(self.countTime.hour);
+            self.countTime.minute = self.timeFormat(self.countTime.minute);
+            self.countTime.second = self.timeFormat(self.countTime.second);
+            self.$apply();
+        }, 1000);
+        self.$apply();
     }
 
     async onShow() {
         let self = this;
         let categories = await api.getShopCategory();
         console.log(categories);
-        self.categories = shop;
+        self.category = categories.data;
+        console.log(self.category);
         self.$apply();
 
         var shop = wx.getStorageSync('shopChoose');
@@ -474,7 +497,10 @@ export default class Index extends wepy.page {
         });
         console.log(res);
         self.product = res.data;
+        self.startTime = self.product.today[0].limitStartTime;
+        self.endTime = self.product.today[0].limitEndTime;
         self.$apply();
+        self.countDown();
     }
 
     onShareAppMessage() {
@@ -488,7 +514,6 @@ export default class Index extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.$apply();
-        self.countDown();
     }
 
     // async onLoad() {

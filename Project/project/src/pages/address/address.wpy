@@ -59,7 +59,7 @@
                         <view>{{item.name}} {{item.phone}}</view>
                         <view>{{item.desc}}</view>
                     </view>
-                    <view class="address-edit" @tap="addressEdit">
+                    <view class="address-edit" @tap.stop="addressEdit">
                         <image src="/icons/edit.png" class="address-edit-img" />
                     </view>
                 </view>
@@ -72,7 +72,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class Address extends wepy.page {
     components = {
@@ -80,20 +80,8 @@ export default class Address extends wepy.page {
     };
 
     data = {
-        address: [
-            {
-                id: '000001',
-                name: '墨小刀',
-                phone: '13000000000',
-                desc: '北京市朝阳区宇宙火星村166号'
-            },
-            {
-                id: '000002',
-                name: '墨小刀',
-                phone: '13000000000',
-                desc: '北京市朝阳区宇宙火星村166号'
-            }
-        ]
+        address: [],
+        color: {}
     };
 
     methods = {
@@ -113,16 +101,16 @@ export default class Address extends wepy.page {
             wx.setStorage({
                 key: 'address',
                 data: {
-                    'id': id,
-                    'name': name,
-                    'phone': phone,
-                    'desc': desc
+                    id: id,
+                    name: name,
+                    phone: phone,
+                    desc: desc
                 }
             });
 
             wx.navigateBack({
                 delta: 1
-            })
+            });
         }
     };
 
@@ -139,10 +127,12 @@ export default class Address extends wepy.page {
                     account_id: jwt.data.account_id
                 }
             });
-            
-            console.log(res)
-            self.$apply();
+
+            console.log(res);
+            self.address = res.data;
         }
+        self.color = self.$parent.globalData.color;
+        self.$apply();
     }
 }
 </script>

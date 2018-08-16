@@ -69,7 +69,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
 }
 
 .category-type-item {
@@ -142,7 +141,7 @@
                     </swiper-item>
                 </repeat>
             </swiper>
-            <view class="category-type">
+            <view class="category-type" style="justify-content: {{type.length > 4 ? 'space-between' : 'space-around'}};">
                 <repeat for="{{type}}" key="index">
                     <view class="category-type-item" @tap="scrollToType({{item.id}})">
                         <image src="{{item.icon}}" class="category-type-icon" />

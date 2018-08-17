@@ -489,6 +489,38 @@ export default class Index extends wepy.page {
             self.shopChoose.name = '请选择商店';
             self.$apply();
         }
+    }
+
+    onShareAppMessage() {
+        return {
+            title: '放心优选',
+            path: '/pages/index/index'
+        };
+    }
+
+    async onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        
+        var latitude = 0.0;
+        var longitude = 0.0;
+        wx.getLocation({
+            type: 'wgs84',
+            success: function(res) {
+                console.log(res);
+                latitude = res.latitude;
+                longitude = res.longitude;
+                self.$apply();
+                console.log('position: ' + latitude + ' , ' + longitude);
+            }
+        });
+        let shops = await api.getShops({
+            query: {
+                currentX: latitude,
+                currentY: longitude
+            }
+        });
+        var shopClosest = shops.data[0].id;
 
         let res = await api.getShopProduct({
             query: {
@@ -502,24 +534,5 @@ export default class Index extends wepy.page {
         self.$apply();
         self.countDown();
     }
-
-    onShareAppMessage() {
-        return {
-            title: '放心优选',
-            path: '/pages/index/index'
-        };
-    }
-
-    onLoad() {
-        var self = this;
-        self.color = self.$parent.globalData.color;
-        self.$apply();
-    }
-
-    // async onLoad() {
-    //     let self = this;
-    //     let res = await api.getShopProduct();
-    //     console.log(res.data)
-    // }
 }
 </script>

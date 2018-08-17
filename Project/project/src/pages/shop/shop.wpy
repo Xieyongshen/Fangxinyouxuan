@@ -209,11 +209,13 @@ export default class Shop extends wepy.page {
                 dis = dis / 100;
                 dis++;
                 element.distance = dis + 'km';
-            } else {
+            } else if (element.distance < 100000) {
                 dis = element.distance / 1000;
                 dis = parseInt(dis, 10);
                 dis++;
                 element.distance = '<' + dis + 'km';
+            } else {
+                element.distance = '>100km';
             }
             self.$apply();
         });

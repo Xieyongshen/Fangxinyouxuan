@@ -27,7 +27,7 @@
     vertical-align: top;
 }
 
-.productList-item-name{
+.productList-item-name {
     width: 435rpx;
     height: 30rpx;
     font-size: 28rpx;
@@ -37,7 +37,7 @@
     text-overflow: ellipsis;
 }
 
-.productList-item-price{
+.productList-item-price {
     width: 435rpx;
     height: 35rpx;
     font-size: 26rpx;
@@ -45,7 +45,7 @@
     margin-top: 85rpx;
 }
 
-.productList-item-count{
+.productList-item-count {
     width: 85rpx;
     height: 150rpx;
     color: #989898;
@@ -62,12 +62,12 @@
         <view class="productList-content">
             <repeat for="{{product}}" key="id">
                 <view class="productList-item">
-                    <image src="{{item.imgUrl}}" class="productList-item-img" />
-                        <view class="productList-item-content">
-                            <view class="productList-item-name">{{item.name}}</view>
-                            <view class="productList-item-price">￥{{item.price}}</view>
-                        </view>
-                        <view class="productList-item-count">{{item.count}}件X1</view>
+                    <image mode="aspectFill" src="{{item.image}}" class="productList-item-img" />
+                    <view class="productList-item-content">
+                        <view class="productList-item-name">{{item.name}}</view>
+                        <view class="productList-item-price">￥{{item.price}}</view>
+                    </view>
+                    <view class="productList-item-count">x{{item.count}}</view>
                 </view>
             </repeat>
         </view>
@@ -84,28 +84,18 @@ export default class ProductList extends wepy.page {
     };
 
     data = {
-        product: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                imgUrl: '',
-                price: 39.2,
-                count: 2
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                imgUrl: '',
-                price: 45.0,
-                count: 1
-            }
-        ]
+        product: []
     };
 
     methods = {};
 
     events = {};
 
-    onLoad() {}
+    onLoad(options) {
+        this.type = options.type;
+        this.product = wx.getStorageSync('orderProduct');
+        wx.removeStorageSync('orderProduct');
+        this.$apply();
+    }
 }
 </script>

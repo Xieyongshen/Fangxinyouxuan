@@ -485,9 +485,6 @@ export default class Index extends wepy.page {
         if (shop != '') {
             self.shopChoose = shop;
             self.$apply();
-        } else {
-            self.shopChoose.name = '请选择商店';
-            self.$apply();
         }
     }
 
@@ -520,7 +517,10 @@ export default class Index extends wepy.page {
                 currentY: longitude
             }
         });
-        var shopClosest = shops.data[0].id;
+        var shopClosest = shops.data[0];
+        self.shopChoose = shopClosest;
+        console.log(self.shopChoose);
+        self.$apply();
 
         let res = await api.getShopProduct({
             query: {

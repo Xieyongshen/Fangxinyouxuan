@@ -80,16 +80,6 @@ page {
     line-height: 45rpx;
     vertical-align: top;
     display: inline-block;
-    text {
-        width: 100rpx;
-        height: 25rpx;
-        margin: 10rpx 0 10rpx 10rpx;
-        color: #ffffff;
-        font-size: 22rpx;
-        line-height: 25rpx;
-        text-align: center;
-        display: inline-block;
-    }
 }
 
 .product-intro-soldCount {
@@ -531,15 +521,8 @@ page {
             </view>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
-            <block wx:if="{{product.type == 0}}">
-                <view class="product-intro-price" style="color:{{color.red}}">￥{{product.price}}</view>
-                <view class="product-intro-label" style="color:{{color.yellow}}">￥{{product.label.price}}
-                    <text style="background:{{color.yellow}}">{{product.label.name}}</text>
-                </view>
-            </block>
-            <block wx:else>
-                <view class="product-intro-label">￥{{product.price}}</view>
-            </block>
+            <view class="product-intro-price" style="color:{{color.red}}">￥{{product.oriPrice}}</view>
+            <view class="product-intro-label" style="color:{{color.yellow}}">￥{{priceShow}}</view>
             <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
             <view wx:if="{{product.type == 1}}" class="product-intro-preSale">
                 <repeat for="{{product.preSale.label}}" key="index">
@@ -699,6 +682,7 @@ export default class Product extends wepy.page {
         imageCover: '',
         imageShow: [],
         imageDetail: [],
+        priceShow: 0,
         restTimeList: [],
         operation: 0,
         color: {}
@@ -946,6 +930,12 @@ export default class Product extends wepy.page {
                 self.imageShow.push(element.imgUrl);
             } else if (element.type == 2) {
                 self.imageDetail.push(element.imgUrl);
+            }
+        });
+        self.priceShow = self.product.price;
+        self.product.spec.forEach(element => {
+            if (element.price < self.priceShow) {
+                self.priceShow = element.price;
             }
         });
         self.$apply();

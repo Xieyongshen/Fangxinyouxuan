@@ -98,10 +98,6 @@
                     <view class="addressChange-item-title">详细地址</view>
                     <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input" />
                 </view>
-                <view class="addressChange-item">
-                    <view class="addressChange-item-title">邮政编码</view>
-                    <input type="text" value="{{address.postalCode}}" placeholder="邮政编码（选填）" class="addressChange-item-input" />
-                </view>
             </view>
             <button class="addressChange-btn addressChange-save" style="background:{{color.red}}">保存</button>
             <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete" style="color:{{color.red}}">删除收货地址</view>
@@ -131,8 +127,7 @@ export default class Coupon extends wepy.page {
                 city: '',
                 area: ''
             },
-            desc: '北京市朝阳区宇宙火星村166号',
-            postalCode: ''
+            desc: '北京市朝阳区宇宙火星村166号'
         },
         color: {}
     };

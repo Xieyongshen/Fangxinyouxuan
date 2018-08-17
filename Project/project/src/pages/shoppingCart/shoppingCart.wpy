@@ -705,6 +705,9 @@ export default class ShoppingCart extends wepy.page {
     onShow() {
         var self = this;
         self.shoppingCart = wx.getStorageSync('shoppingCart');
+        if(self.shoppingCart.length == 0){
+            return;
+        }
         self.shoppingCart.forEach(element => {
             self.isChoosen.push(true);
         });
@@ -749,21 +752,21 @@ export default class ShoppingCart extends wepy.page {
             data: -1
         });
 
-        var jwt = wx.getStorageSync('jwt');
-        try {
-            if (jwt.data.access_token != null) {
-                let res = await api.getShoppingCart({
-                    query: {
-                        access_token: jwt.data.access_token,
-                        account_id: jwt.data.account_id
-                    }
-                });
-                console.log(res);
-                self.$apply();
-            }
-        } catch (error) {
-            console.log('jwt is null');
-        }
+        // var jwt = wx.getStorageSync('jwt');
+        // try {
+        //     if (jwt.data.access_token != null) {
+        //         let res = await api.getShoppingCart({
+        //             query: {
+        //                 access_token: jwt.data.access_token,
+        //                 account_id: jwt.data.account_id
+        //             }
+        //         });
+        //         console.log(res);
+        //         self.$apply();
+        //     }
+        // } catch (error) {
+        //     console.log('jwt is null');
+        // }
     }
 }
 </script>

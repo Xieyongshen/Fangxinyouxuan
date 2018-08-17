@@ -205,7 +205,12 @@ def getShopProduct(request):
         hotProducts.append(hotEle)
 
     for products in shop_products:
-        selectedEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
+        if(products.activityType==1):
+            selectedEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),label=products.comment)
+        elif(products.activityType==2):
+            selectedEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.groupPrice),label=products.comment)
+        else:
+            selectedEle = dict(id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
         selectedProducts.append(selectedEle)
 
     res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
@@ -249,10 +254,11 @@ def getProductDetail(request):
     productId = uuid.UUID(productIdstr)
     the_product = ShopProduct.objects.get(pro_id=productId)
     if(the_product.activityType==2):
-        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
         imgUrls = list()
+        imgUrls.append(dict(imgUrl=APP_IMG_URL+str(the_product.pro_image),type=0))
         for images in productPics:
-            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url='',type=images.pictureType))
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
@@ -260,7 +266,7 @@ def getProductDetail(request):
         productgroups = ProductGroup.objects.filter(group_product__pro_id=the_product.pro_id)
         groupList = list()
         for productgroup in productgroups:
-            groupList.append(dict(head=dict(name=productgroup.group_monitor.user_name,avatar=productgroup.group_monitor.user_image),count=productgroup.group_number,endTime=productgroup.end_time.strftime("%Y-%m-%d %H:%M:%S")))
+            groupList.append(dict(head=dict(id=str(productgroup.groupuser_id),name=productgroup.group_monitor.user_name,avatar=productgroup.group_monitor.user_image),count=productgroup.group_number,reachCount=productgroup.group_maxNum,endTime=productgroup.end_time.strftime("%Y-%m-%d %H:%M:%S")))
         groupDetail = dict(price=str(the_product.groupPrice),list=groupList,count=len(groupList))
         specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
         productSpec = list()
@@ -268,10 +274,11 @@ def getProductDetail(request):
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         res_dict = dict(id=productIdstr,type=2,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.groupPrice),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,group=groupDetail,recommend=recomendList)
     elif(the_product.activityType==1):
-        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
         imgUrls = list()
+        imgUrls.append(dict(imgUrl=APP_IMG_URL+str(the_product.pro_image),type=0))
         for images in productPics:
-            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url='',type=images.pictureType))
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
@@ -282,11 +289,12 @@ def getProductDetail(request):
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         res_dict = dict(id=productIdstr,type=the_product.activityType,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,recommend=recomendList,limitStartTime=the_product.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=the_product.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
     
-    elif(the_product.activityType==3):
-        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+    elif(the_product.activityType==4):
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
         imgUrls = list()
+        imgUrls.append(dict(imgUrl=APP_IMG_URL+str(the_product.pro_image),type=0))
         for images in productPics:
-            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url='',type=images.pictureType))
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
@@ -297,10 +305,11 @@ def getProductDetail(request):
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         res_dict = dict(id=productIdstr,type=the_product.activityType,name=the_product.pro_name,desc=the_product.pro_desc,price=str(the_product.pro_price),soldCount=the_product.buyTimes,remain=the_product.pro_remain,detail=the_product.pro_detail,spec=productSpec,producer=the_product.pro_producer,image=imgUrls,recommend=recomendList,reachTime=the_product.reachTime.strftime("%Y-%m-%d %H:%M:%S"))
     else:
-        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id,pictureType=0))
+        productPics = list(ProductPicture.objects.filter(shop_product__pro_id=the_product.pro_id))
         imgUrls = list()
+        imgUrls.append(dict(imgUrl=APP_IMG_URL+str(the_product.pro_image),type=0))
         for images in productPics:
-            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url=''))
+            imgUrls.append(dict(imgUrl=APP_IMG_URL+str(images.url),url='',type=images.pictureType))
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
@@ -403,6 +412,6 @@ def getUserAddress(request):
     if(verify_token(client_access_token)):
         userAddressList = list(Address.objects.filter(user__user_openid=client_account_id))
         for addresses in userAddressList:
-            res_dict.append(dict(id=str(addresses.address_id),name=addresses.address_contact,phone=addresses.address_phone,desc=addresses.address_detail))
+            res_dict.append(dict(id=str(addresses.address_id),name=addresses.address_contact,phone=addresses.address_phone,desc=addresses.address_detail,region=dict(province=addresses.address_province,city=addresses.address_city,area=addresses.address_area),mail=addresses.address_mail))
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)

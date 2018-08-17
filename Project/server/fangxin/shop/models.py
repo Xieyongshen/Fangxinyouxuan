@@ -19,9 +19,12 @@ class Address(models.Model):
 	address_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	address_contact = models.TextField(u'联系人',blank=True, null=True,)
 	address_phone = models.TextField(u'联系电话',blank=True, null=True,)
+	address_province = models.TextField(u'省份',blank=True, null=True,)
+	address_city = models.TextField(u'城市',blank=True, null=True,)
 	address_area = models.TextField(u'地区',blank=True, null=True,)
 	address_detail = models.TextField(u'详细住址',blank=True, null=True,)
 	address_mail = models.TextField(u'邮箱',blank=True, null=True,)
+	
 	user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
 		return self.address_detail

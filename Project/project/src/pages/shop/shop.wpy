@@ -121,7 +121,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class Shop extends wepy.page {
     components = {
@@ -129,118 +129,10 @@ export default class Shop extends wepy.page {
     };
 
     data = {
-        areaChoose: '海淀区',
-        area: ['海淀区', '朝阳区', '西城区'],
-        shop: [
-            {
-                id: '000001',
-                area: '海淀区',
-                name: '果多美门店(海淀1号店)',
-                address: '春树馆街小区6号楼101室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 201
-            },
-            {
-                id: '000002',
-                area: '海淀区',
-                name: '果多美门店(海淀2号店)',
-                address: '春树馆街小区6号楼102室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 1802
-            },
-            {
-                id: '000003',
-                area: '海淀区',
-                name: '果多美门店(海淀3号店)',
-                address: '春树馆街小区6号楼103室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 2803
-            },
-            {
-                id: '000004',
-                area: '海淀区',
-                name: '果多美门店(海淀4号店)',
-                address: '春树馆街小区6号楼104室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 10804
-            },
-            {
-                id: '000005',
-                area: '朝阳区',
-                name: '果多美门店(朝阳1号店)',
-                address: '春树馆街小区6号楼105室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 11805
-            },
-            {
-                id: '000006',
-                area: '朝阳区',
-                name: '果多美门店(朝阳2号店)',
-                address: '春树馆街小区6号楼106室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 12806
-            },
-            {
-                id: '000007',
-                area: '朝阳区',
-                name: '果多美门店(朝阳3号店)',
-                address: '春树馆街小区6号楼107室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 16807
-            },
-            {
-                id: '000008',
-                area: '西城区',
-                name: '果多美门店(西城1号店)',
-                address: '春树馆街小区6号楼108室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 17808
-            },
-            {
-                id: '000009',
-                area: '西城区',
-                name: '果多美门店(西城2号店)',
-                address: '春树馆街小区6号楼109室',
-                shopkeeper: {
-                    name: '小鱼',
-                    phone: '13000000000',
-                    avatar: ''
-                },
-                distance: 18809
-            }
-        ],
+        areaChoose: '',
+        shopChoose: {},
+        area: [],
+        shop: [],
         color: {}
     };
 
@@ -263,15 +155,47 @@ export default class Shop extends wepy.page {
 
     async onLoad() {
         var self = this;
+        var latitude = 0.0;
+        var longitude = 0.0;
+        wx.getLocation({
+            type: 'wgs84',
+            success: function(res) {
+                console.log(res);
+                latitude = res.latitude;
+                longitude = res.longitude;
+                self.$apply();
+                console.log('position: ' + latitude + ' , ' + longitude);
+            }
+        });
 
         let shops = await api.getShops({
             query: {
-                currentX: 22.599578,
-                currentY: 113.973129
+                currentX: latitude,
+                currentY: longitude
             }
-        })
-        console.log(shops)
-
+        });
+        console.log(shops);
+        self.shop = shops.data;
+        self.area.push(self.shop[0].area);
+        var i = 1;
+        var j = 0;
+        for (var i = 1; i < self.shop.length; i++) {
+            j = 0;
+            for (var j = 0; j < self.area.length; j++) {
+                if (self.shop[i].area == self.area[j]) {
+                    break;
+                }
+            }
+            if (j == self.area.length) {
+                self.area.push(self.shop[i].area);
+            }
+        }
+        self.shopChoose = wx.getStorageSync('shopChoose');
+        if (self.shopChoose) {
+            self.areaChoose = self.shopChoose.area;
+        } else {
+            self.areaChoose = self.shop[0].area;
+        }
         self.color = self.$parent.globalData.color;
         self.$apply();
 

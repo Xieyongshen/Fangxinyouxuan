@@ -20,30 +20,23 @@ page {
 
 .order-info {
     margin-top: 0;
-    padding: 35rpx 30rpx 30rpx 30rpx;
 }
 
-.order-address {
-    width: 690rpx;
+.order-shop {
+    width: 750rpx;
     font-size: 28rpx;
     line-height: 45rpx;
-    view{
-        display: inline-block;
-    }
-    text {
-        font-size: 22rpx;
-        line-height: 30rpx;
-        color: #ffffff;
-        margin: 7rpx 0 7rpx 10rpx;
-        padding: 0 10rpx;
-        border-radius: 5rpx;
-        vertical-align: top;
+    padding: 35rpx 30rpx 30rpx 30rpx;
+    view {
         display: inline-block;
     }
 }
 
-.order-shopkeeper {
-    width: 690rpx;
+.order-shop-address {
+    margin-right: 20rpx;
+}
+
+.order-phone {
     height: 45rpx;
     font-size: 28rpx;
     line-height: 45rpx;
@@ -52,6 +45,77 @@ page {
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #bfbfbf;
+    display: block;
+}
+
+.order-deliver {
+    font-size: 22rpx;
+    line-height: 30rpx;
+    color: #ffffff;
+    margin: 7rpx 0 7rpx 10rpx;
+    padding: 0 10rpx;
+    border-radius: 5rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.order-address {
+    width: 750rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    background: #ffffff;
+}
+
+.order-address-choose {
+    width: 690rpx;
+    height: 110rpx;
+    font-size: 28rpx;
+    line-height: 110rpx;
+    text-align: left;
+    .icon-position {
+        width: 20rpx;
+        height: 30rpx;
+        margin: 40rpx 15rpx 40rpx 0;
+        vertical-align: top;
+    }
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 42.5rpx 0;
+        vertical-align: top;
+        float: right;
+    }
+}
+
+.order-address-desc {
+    width: 690rpx;
+    height: 150rpx;
+    .icon-in {
+        width: 15rpx;
+        height: 25rpx;
+        margin: 62.5rpx 0;
+        vertical-align: top;
+        float: right;
+    }
+}
+
+.order-address-content {
+    width: 675rpx;
+    height: 150rpx;
+    padding: 20rpx 0;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.address-desc {
+    font-size: 28rpx;
+    line-height: 70rpx;
+}
+
+.address-user {
+    color: #999999;
+    font-size: 22rpx;
+    line-height: 40rpx;
 }
 
 .order-item {
@@ -146,6 +210,25 @@ page {
     margin-right: 10rpx;
 }
 
+.order-result-deliver .icon-in {
+    width: 15rpx;
+    height: 25rpx;
+    margin: 32.5rpx 0 32.5rpx 10rpx;
+    float: right;
+    vertical-align: top;
+}
+
+.order-deliver-input {
+    width: 550rpx;
+    height: 90rpx;
+    text-align: right;
+    float: right;
+}
+
+.picker-null {
+    color: #bfbfbf;
+}
+
 .order-pay {
     width: 750rpx;
     height: 90rpx;
@@ -176,34 +259,48 @@ page {
 <template>
     <view class="container">
         <navBar navTitle="填写订单" isChildPage="y"></navBar>
-            <image src="/icons/address-bg.png" class="order-header" />
+        <image src="/icons/address-bg.png" class="order-header" />
         <view class="order-block order-info">
-            <view class="order-address">
-                <view>{{shopChoose.address}}</view>
-                <view>{{shopChoose.name}}<text style="background:{{color.red}}">{{deliver.name}}</text></view>
+            <view wx:if="{{deliverChoose < 1}}" class="order-shop">
+                <view class="order-shop-address">{{shopChoose.address}}</view>
+                <view>{{shopChoose.name}}</view>
+                <view class="order-phone">{{shopChoose.shopKeeper.name}} {{shopChoose.shopKeeper.phone}}
+                    <view class="order-deliver" style="background:{{color.red}}">{{deliverList[deliverChoose].name}}</view>
+                </view>
             </view>
-            <view class="order-shopkeeper">{{shopChoose.shopkeeper.name}} {{shopChoose.shopkeeper.phone}}</view>
+            <navigator wx:else url="../address/address" class="order-address">
+                <view wx:if="{{addressChoose.id == ''}}" class="order-address-choose">
+                    <image src="/icons/position.png" class="icon-position" />
+                    <text>请点击选择收货地址</text>
+                    <image src="/icons/in.png" class="icon-in" />
+                </view>
+                <view wx:else class="order-address-desc">
+                    <view class="order-address-content">
+                        <view class="address-desc">{{addressChoose.desc}}</view>
+                        <view class="address-user">{{addressChoose.name}} {{addressChoose.phone}}
+                            <view class="order-deliver" style="background:{{color.red}}">{{deliverList[deliverChoose].name}}</view>
+                        </view>
+                    </view>
+                    <image src="/icons/in.png" class="icon-in" />
+                </view>
+            </navigator>
         </view>
         <repeat for="{{product}}" key="type">
             <view class="order-block order-product">
-                <view class="order-product-deliver order-item">送达时间
-                    <text style="color:{{color.red}}">{{item.sendTime}}</text>
+                <view wx:if="{{deliverChoose > 0}}" class="order-product-deliver order-item">送达时间
+                    <text style="color:{{color.red}}">{{sendTime}}</text>
                 </view>
                 <view class="order-product-items" @tap="navToProductList()">
-                    <repeat for="{{item.list}}" key="id" item="listItem" index="idx">
-                        <image wx:if="{{idx < 5}}" src="{{listItem.imgUrl}}" mode="aspectFill" class="order-product-img" />
-                    </repeat>
-                    <view wx:if="{{item.type > 0}}" class="order-product-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
-                    <view class="order-product-count">共{{item.list.length}}件
+                    <image wx:if="{{index < 5}}" src="{{item.image}}" mode="aspectFill" class="order-product-img" />
+                    <view wx:if="{{type > 0}}" class="order-product-label">{{type == 1 ? '预售款':'拼团中'}}</view>
+                    <view class="order-product-count">共{{product.length}}件
                         <image src="/icons/in.png" class="icon-in" />
                     </view>
                 </view>
-                <block wx:if="{{item.type == 2}}">
-                    <repeat for="{{item.list}}" key="id" item="listItem">
-                        <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
-                            <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text>
-                        </view>
-                    </repeat>
+                <block wx:if="{{type == 2}}">
+                    <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
+                        <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text>
+                    </view>
                 </block>
             </view>
         </repeat>
@@ -212,16 +309,27 @@ page {
                 <text>￥{{subtotal}}</text>
             </view>
             <view class="order-item order-total-redPacket" @tap="navToRedPacket()">
-                <image src="/icons/redPacket.png" class="order-redPacket-icon" />
-                    红包
-                    <image src="/icons/in.png" class="icon-in" />
-                        <text style="color:{{redPacket.count == 0 ? '#bfbfbf' : color.red}}">
-                            <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
-                            <block wx:else>{{redPacket.count}}元</block>
-                        </text>
+                <image src="/icons/redPacket.png" class="order-redPacket-icon" /> 红包
+                <image src="/icons/in.png" class="icon-in" />
+                <text style="color:{{redPacket.count == 0 ? '#bfbfbf' : color.red}}">
+                    <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
+                    <block wx:else>{{redPacket.count}}元</block>
+                </text>
             </view>
             <view class="order-item">商品实付
                 <text>￥{{total}}</text>
+            </view>
+            <view wx:if="{{deliverChoose > 0}}" class="order-item">配送费用
+                <text>￥{{freightChoose}}</text>
+            </view>
+            <view class="order-item order-result-deliver">配送方式
+                <picker mode="selector" range="{{deliverList}}" range-key="name" bindchange="bindDeliverChange" value="{{deliverChoose}}" class="order-deliver-input">
+                    <view class="input-picker {{deliverChoose < 0 ? 'picker-null' : ''}}">
+                        <block wx:if="{{deliverChoose >= 0}}">{{deliverList[deliverChoose].name}}</block>
+                        <block wx:else>请选择配送方式</block>
+                        <image src="/icons/in.png" class="icon-in" />
+                    </view>
+                </picker>
             </view>
         </view>
         <view class="order-block order-final">
@@ -236,7 +344,7 @@ page {
             <view class="order-pay-total">合计:
                 <text style="color:{{color.red}}">￥{{total}}</text>
             </view>
-            <view class="order-pay-btn" style="background:{{color.red}}">去支付</view>
+            <view class="order-pay-btn" style="background:{{color.red}}">提交订单</view>
         </view>
     </view>
 </template>
@@ -255,92 +363,66 @@ export default class Order extends wepy.page {
             id: '',
             name: ''
         },
-        deliver: {
-            name: '门店自提',
-            freight: 0
-        },
+        addressChoose: {},
+        deliverChoose: -1,
+        freightChoose: 0,
+        deliverList: [
+            {
+                name: '到店自提',
+                freight: 0
+            },
+            {
+                name: '送货上门',
+                freight: 15
+            },
+            {
+                name: '快递到家',
+                freight: 15
+            }
+        ],
         redPacket: {
             id: '',
             count: 0
         },
         remain: 8.88,
-        product: [
-            {
-                type: 0,
-                sendTime: '7月16号',
-                list: [
-                    {
-                        id: '000001',
-                        name: '韩国制造，花洒替代品',
-                        imgUrl: '',
-                        price: 39.2,
-                        oriPrice: 75,
-                        count: 2
-                    },
-                    {
-                        id: '00002',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0
-                    }
-                ]
-            },
-            {
-                type: 1,
-                sendTime: '7月16号',
-                list: [
-                    {
-                        id: '000003',
-                        name: '韩国制造，花洒替代品',
-                        imgUrl: '',
-                        price: 39.2,
-                        oriPrice: 75,
-                        count: 2
-                    },
-                    {
-                        id: '00004',
-                        name: '随便阅读灯',
-                        imgUrl: '',
-                        price: 45.0,
-                        oriPrice: 99,
-                        count: 0
-                    }
-                ]
-            },
-            {
-                type: 2,
-                sendTime: '7月16号',
-                list: [
-                    {
-                        id: '000005',
-                        name: '韩国制造，花洒替代品',
-                        imgUrl: '',
-                        price: 39.2,
-                        oriPrice: 75,
-                        count: 2,
-                        people: 7,
-                        maxpeople: 10
-                    }
-                ]
-            }
-        ],
+        type: 0,
+        sendTime: '2018-08-20',
+        product: [],
         subtotal: 0,
         color: {}
     };
 
     computed = {
         total() {
-            return this.subtotal - this.redPacket.count;
+            var subtotal = this.subtotal * 100;
+            var redPacket = this.redPacket.count * 100;
+            var total = subtotal - redPacket;
+            total = parseInt(total);
+            return total / 100;
         },
 
         totalFinal() {
-            return this.subtotal - this.redPacket.count - this.remain;
+            var total = this.total * 100;
+            var remain = this.remain * 100;
+            var freight = this.freightChoose * 100;
+            var totalFinal = total + freight - remain;
+            totalFinal = parseInt(totalFinal);
+            return totalFinal / 100;
         }
     };
 
     methods = {
+        bindDeliverChange(e) {
+            var self = this;
+            self.deliverChoose = e.detail.value;
+            self.freightChoose = self.deliverList[self.deliverChoose].freight;
+            wx.setStorage({
+                key: 'deliverChoose',
+                data: self.deliverChoose
+            });
+            self.$apply();
+        },
+
         navToProductList(index, events) {
             wx.navigateTo({
                 url: '../productList/productList'
@@ -357,38 +439,54 @@ export default class Order extends wepy.page {
     updateTotal() {
         var self = this;
         var total = 0;
+        var cur = 0;
         self.subtotal = 0;
-        self.product.forEach((item, index) => {
-            item.list.forEach(element => {
-                total += element.price * 100;
-                self.$apply();
-            });
+        self.product.forEach(element => {
+            cur = element.price * 100;
+            cur = cur * element.count;
+            total += cur;
         });
+        self.subtotal = parseInt(self.subtotal);
         self.subtotal = total / 100;
         self.$apply();
     }
 
     events = {};
 
-    onShow(){
+    onShow() {
         var self = this;
-        
-        self.shopChoose = wx.getStorageSync('shopChoose');
-        console.log(self.shopChoose);
-        self.$apply();
 
+        wx.getStorage({
+            key: 'address',
+            success: function(res) {
+                self.addressChoose = res.data;
+                self.$apply();
+            }
+        });
         wx.getStorage({
             key: 'redPacket',
             success: function(res) {
-                console.log(res.data);
                 self.redPacket = res.data;
                 self.$apply();
             }
         });
     }
 
-    onLoad() {
+    onLoad(options) {
         var self = this;
+        self.type = options.type;
+        self.shopChoose = wx.getStorageSync('shopChoose');
+        self.product = wx.getStorageSync('orderProduct');
+        wx.getStorage({
+            key: 'deliverChoose',
+            success: function(res) {
+                if (res.data >= 0) {
+                    self.deliverChoose = res.data;
+                    self.freightChoose =
+                        self.deliverList[self.deliverChoose].freight;
+                }
+            }
+        });
         self.color = self.$parent.globalData.color;
         self.$apply();
         self.updateTotal();

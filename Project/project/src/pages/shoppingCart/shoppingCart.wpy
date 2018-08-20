@@ -751,7 +751,6 @@ export default class ShoppingCart extends wepy.page {
             data: -1
         });
 
-<<<<<<< HEAD
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -775,23 +774,6 @@ export default class ShoppingCart extends wepy.page {
         })
         console.log(recommendPros)
         self.recommend = recommendPros.data
-=======
-        // var jwt = wx.getStorageSync('jwt');
-        // try {
-        //     if (jwt.data.access_token != null) {
-        //         let res = await api.getShoppingCart({
-        //             query: {
-        //                 access_token: jwt.data.access_token,
-        //                 account_id: jwt.data.account_id
-        //             }
-        //         });
-        //         console.log(res);
-        //         self.$apply();
-        //     }
-        // } catch (error) {
-        //     console.log('jwt is null');
-        // }
->>>>>>> 66f5281f8e41faf22e07a9aac0cadce1a757cb68
     }
 }
 </script>

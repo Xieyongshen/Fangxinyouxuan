@@ -299,7 +299,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
-
+import api from '@/api/api'
 export default class Search extends wepy.page {
     components = {
         navBar: NavBar,
@@ -438,13 +438,31 @@ export default class Search extends wepy.page {
             key: 'history',
             data: history
         });
+        let searchResult = await api.getSearchResult({
+            query: {
+                searchValue: keyword
+            }
+        })
+        console.log(searchResult)
+        self.result = searchResult
     }
 
     events = {};
 
-    onLoad() {
+    async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
+        let recommendProducts = await api.getRecommendPros({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        })
+        console.log(recommendProducts);
+        self.recommend = recommendProducts.data
+
+        let hotSearch = await api.getHotSearch()
+        console.log(hotSearch)
+
         self.$apply();
     }
 }

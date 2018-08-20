@@ -37,4 +37,6 @@ urlpatterns = [
     path('api/getRecommendPros', fangxin_views.getRecommendPros),
     path('api/getCouponProducts', fangxin_views.getCouponProducts),
     path('api/submitOrder', fangxin_views.submitOrder),
+    path('api/getHotSearch', fangxin_views.getHotSearch),
+    path('api/getSearchResult', fangxin_views.getSearchResult),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

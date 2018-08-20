@@ -509,7 +509,31 @@ def getCouponProducts(request):
         groupList = list()
         for productgroup in productgroups:
             groupList.append(dict(id=str(productgroup.group_monitor.user_openid),avatar=productgroup.group_monitor.user_image))
-        groupProducts.append(dict(id=str(products.pro_id),name=products.pro_name,imgUrl=str(products.pro_image),price=str(products.groupPrice),oriPrice=str(products.pro_origin_price),soldCount=products.buyTimes,buyer=groupList))
+        groupProducts.append(dict(id=str(products.pro_id),name=products.pro_name,imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.groupPrice),oriPrice=str(products.pro_origin_price),soldCount=products.buyTimes,buyer=groupList))
     res_dict = dict(limitProducts=todayProducts,groupProducts=groupProducts)
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
+
+def getHotSearch(request):
+	res_list = list()
+	sortedPros = list(ShopProduct.objects.order_by("searchTime"))
+	hotPros = sortedPros[-5:]
+	returnPros = random.sample(hotPros, 3)
+	for pros in returnPros:
+		res_list.append(dict(id=str(pros.pro_id),name=pros.pro_name))
+	res_json = json.dumps(res_list)
+	return HttpResponse(res_json)
+
+def getSearchResult(request):
+	searchValue = request.GET['searchValue']
+	res_dict = list()
+	match_categories = set(ProductType.objects.filter(type_name__icontains=searchValue))
+	match_products = set(ShopProduct.objects.filter(pro_name__icontains=searchValue))
+
+	for products in match_products:
+		products.searchTime = products.searchTime + 1
+		products.save()
+		eve_dict = dict(name=products.pro_name,id=str(products.pro_id),imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.pro_price),desc=products.pro_desc)
+		res_dict.append(eve_dict)
+	res_json = json.dumps(res_dict)
+	return HttpResponse(res_json)

@@ -93,7 +93,7 @@ class ShopProduct(models.Model):
 	reachTime = models.DateTimeField(u'预售商品到达时间', blank=True, null=True)
 	comment = models.TextField(u'活动商品说明',blank=True, null=True)
 	buyTimes = models.IntegerField(u'商品购买次数',default=0)
-
+	searchTimes = models.IntegerField(u'搜索次数',default=0)
 
 	def __str__(self):
 		return self.pro_name

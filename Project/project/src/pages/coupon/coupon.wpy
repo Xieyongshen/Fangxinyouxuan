@@ -193,7 +193,6 @@ page {
     width: 35rpx;
     height: 35rpx;
     border-radius: 50%;
-    background: #fdedeb;
     margin-right: 10rpx;
     vertical-align: top;
 }
@@ -283,18 +282,23 @@ page {
                 <view class="coupon-block-title">优选拼单购</view>
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
-                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name">
-                            <view slot="extra" class="group-item-sold">
-                                <repeat for="{{item.buyer}}" key="id" item="buyer">
-                                    <image src="{{buyer.avatar}}" class="group-item-buyer" />
-                                </repeat>
-                                <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
-                                <text>已团{{item.soldCount}}件</text>
+                        <view class="product-item" @tap="navToProduct({{item.id}})">
+                            <image src="{{item.imgUrl}}" class="product-item-img" />
+                            <view class="product-item-content">
+                                <view class="product-item-name">{{item.name}}</view>
+                                <view class="group-item-sold">
+                                    <repeat for="{{item.buyer}}" key="id" item="buyer">
+                                        <image src="{{buyer.avatar}}" class="group-item-buyer" />
+                                    </repeat>
+                                    <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
+                                    <text>已团{{item.soldCount}}件</text>
+                                </view>
+                                <view class="group-item-price" style="color:{{color.red}}">¥{{item.price}}
+                                    <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
+                                </view>
+                                <image src="/icons/cart-recommend.png" class="product-icon-cart" />
                             </view>
-                            <view slot="price" class="group-item-price" style="color:{{color.red}}">¥{{item.price}}
-                                <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
-                            </view>
-                        </product>
+                        </view>
                     </repeat>
                 </view>
             </view>
@@ -426,7 +430,7 @@ export default class Coupon extends wepy.page {
 
     events = {};
 
-    getFormatTime(){
+    getFormatTime() {
         var self = this;
         let startTimeStr = self.data.startTime;
         let startTime = new Date(startTimeStr);
@@ -437,7 +441,14 @@ export default class Coupon extends wepy.page {
         hour = startTime.getHours();
         minute = startTime.getMinutes();
 
-        self.startFormatTime = month + '月' + day + '日 ' + self.timeFormat(hour) + ':' + self.timeFormat(minute);
+        self.startFormatTime =
+            month +
+            '月' +
+            day +
+            '日 ' +
+            self.timeFormat(hour) +
+            ':' +
+            self.timeFormat(minute);
         self.$apply();
     }
 

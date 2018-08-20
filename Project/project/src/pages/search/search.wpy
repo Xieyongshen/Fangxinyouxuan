@@ -299,8 +299,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
-import api from '@/api/api';
-
+import api from '@/api/api'
 export default class Search extends wepy.page {
     components = {
         navBar: NavBar,
@@ -405,16 +404,23 @@ export default class Search extends wepy.page {
         }
     };
 
-    doSearch(keyword) {
+    async doSearch(keyword) {
         var self = this;
         self.searchValue = keyword;
         self.showResult = true;
         self.history.push(keyword);
-        self.$apply();
         wx.setStorage({
             key: 'history',
-            data: history
+            data: self.history
         });
+        let searchResult = await api.getSearchResult({
+            query: {
+                searchValue: keyword
+            }
+        })
+        console.log(searchResult);
+        self.result = searchResult;
+        self.$apply();
     }
 
     events = {};
@@ -422,13 +428,23 @@ export default class Search extends wepy.page {
     async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
-        let recommendPros = await api.getRecommendPros({
+        let recommendProducts = await api.getRecommendPros({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
             }
         })
-        console.log(recommendPros);
-        self.recommend = recommendPros.data;
+        console.log(recommendProducts);
+        self.recommend = recommendProducts.data
+
+        let hotSearch = await api.getHotSearch()
+        console.log(hotSearch);
+
+
+        var history = wx.getStorageSync('history');
+        if(history){
+            self.history = history;
+        }
+
         self.$apply();
     }
 }

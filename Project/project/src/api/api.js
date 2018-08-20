@@ -37,6 +37,10 @@ const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUser
 const getRecommendPros = (params) => wxRequest(params, apiFanxin + "/api/getRecommendPros");
 //获取优惠券页面商品
 const getCouponProducts = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+//获取热门搜索
+const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+//获取搜索结果
+const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
 
 export default {
     getShops,
@@ -53,5 +57,7 @@ export default {
     getUserRedPacket,
     getRecommendPros,
     getCouponProducts,
-    submitOrder
+    submitOrder,
+    getSearchResult,
+    getHotSearch
 }

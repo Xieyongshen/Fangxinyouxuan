@@ -428,7 +428,7 @@ export default class Search extends wepy.page {
         }
     };
 
-    doSearch(keyword) {
+    async doSearch(keyword) {
         var self = this;
         self.searchValue = keyword;
         self.showResult = true;

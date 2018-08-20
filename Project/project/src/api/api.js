@@ -38,9 +38,9 @@ const getRecommendPros = (params) => wxRequest(params, apiFanxin + "/api/getReco
 //获取优惠券页面商品
 const getCouponProducts = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
 //获取热门搜索
-const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getHotSearch");
 //获取搜索结果
-const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getSearchResult");
 
 export default {
     getShops,

@@ -13,6 +13,7 @@ from .models import ProductPicture
 from .models import ShoppingCart
 from .models import CartItem
 from .models import RedPack
+from .models import Deliver
 from .models import Order
 from .models import OrderItem
 from .models import GroupUser
@@ -33,6 +34,7 @@ admin.site.register(ShoppingCart)
 admin.site.register(CartItem)
 admin.site.register(RedPack)
 admin.site.register(Order)
+admin.site.register(Deliver)
 admin.site.register(OrderItem)
 admin.site.register(GroupUser)
 

@@ -344,7 +344,7 @@ page {
             <view class="order-pay-total">合计:
                 <text style="color:{{color.red}}">￥{{total}}</text>
             </view>
-            <view class="order-pay-btn" style="background:{{color.red}}">提交订单</view>
+            <view class="order-pay-btn" style="background:{{color.red}}" @tap="submitOrder()">提交订单</view>
         </view>
     </view>
 </template>
@@ -352,6 +352,7 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import api from '@/api/api'
 
 export default class Order extends wepy.page {
     components = {
@@ -360,7 +361,7 @@ export default class Order extends wepy.page {
 
     data = {
         shopChoose: {
-            id: '',
+            id: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
             name: ''
         },
         addressChoose: {},
@@ -476,6 +477,7 @@ export default class Order extends wepy.page {
         var self = this;
         self.type = options.type;
         self.shopChoose = wx.getStorageSync('shopChoose');
+        console.log(self.shopChoose+'111')
         self.product = wx.getStorageSync('orderProduct');
         wx.getStorage({
             key: 'deliverChoose',
@@ -490,6 +492,38 @@ export default class Order extends wepy.page {
         self.color = self.$parent.globalData.color;
         self.$apply();
         self.updateTotal();
+    }
+
+    async submitOrder(){
+        let self = this
+        var jwt = wx.getStorageSync('jwt');
+        console.log(self.redPacket)
+        console.log(self.product)
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.submitOrder({
+                    query: JSON.stringify({
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id,
+                        shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
+                        deliver: self.deliverList[0],
+                        product: self.product,
+                        redPacket: self.redPacket.id,
+                        remain: self.remain,
+                        type: self.type,
+                        total: self.total
+                    }),
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                console.log(res);
+                self.$apply();
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 </script>

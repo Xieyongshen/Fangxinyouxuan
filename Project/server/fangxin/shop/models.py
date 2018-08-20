@@ -10,6 +10,7 @@ class User(models.Model):
 	user_name = models.TextField(u'用户名称')
 	user_image = models.TextField(u'用户头像')
 	user_openid = models.TextField(default='unknown user')
+	user_remain = models.DecimalField(u'用户余额',blank=True,null=True,max_digits=10, decimal_places=2)
 	create_time = models.DateTimeField(u'创建时间',blank=True,default=datetime.now())
 
 	def __str__(self):
@@ -157,11 +158,24 @@ class CartItem(models.Model):
 class RedPack(models.Model):
 	red_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	red_amount = models.DecimalField(u'红包数额',max_digits=10, decimal_places=2)
+	red_name = models.TextField(u'名称',default='放心优选全场红包')
+	red_type = models.IntegerField(u'红包类型',default=0)
+	red_overdue = models.BooleanField(u'是否过期',default=False)
+	red_satisfy = models.DecimalField(u'门槛数额',max_digits=10, decimal_places=2,default=0)
+	red_date = models.DateTimeField(u'到期时间',null=True,blank=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	is_used = models.BooleanField(u'是否被用了')
+	
+	def __str__(self):
+		return str(self.red_amount) + str(self.red_name)
+
+class Deliver(models.Model):
+	del_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	del_name = models.TextField()
+	del_freight = models.DecimalField(max_digits=10, decimal_places=2)
 
 	def __str__(self):
-		return str(self.red_amount)
+		return str(self.del_name)
 
 class Order(models.Model):
 	order_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
@@ -170,6 +184,7 @@ class Order(models.Model):
 	order_type = models.IntegerField(u'订单类型',default=0)
 	order_status = models.IntegerField(u'订单状态')
 	order_totalprice = models.DecimalField(u'订单总额',max_digits=10, decimal_places=2)
+	order_deliver = models.ForeignKey(Deliver, on_delete=models.CASCADE, blank=True, null=True)
 	payment = models.DecimalField(u'已付金额',max_digits=10, decimal_places=2)
 	pay_time = models.DateTimeField(u'付款时间')
 	end_time = models.DateTimeField(u'付款结束时间')

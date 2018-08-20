@@ -2,8 +2,8 @@ import {
     wxRequest
 } from '@/api/wxRequest';
 
-// const apiFanxin = 'http://119.23.225.244';
-const apiFanxin = 'http://127.0.0.1:8000';
+const apiFanxin = 'http://119.23.225.244';
+// const apiFanxin = 'http://127.0.0.1:8000';
 //根据位置获取商店
 const getShops = (params) => wxRequest(params, apiFanxin + "/api/getShops");
 //获取首页店铺商品分类
@@ -24,8 +24,19 @@ const getOrderList = (params) => wxRequest(params, apiFanxin + "/api/getOrderLis
 //获取订单详情
 const getOrderDetail = (params) => wxRequest(params, apiFanxin + "/api/getOrderDetail");
 
+
 //获取用户收货地址
 const getUserAddress = (params) => wxRequest(params, apiFanxin + "/api/getUserAddress");
+//获取用户余额
+const getMyBalance = (params) => wxRequest(params, apiFanxin + "/api/getMyBalance");
+//提交订单
+const submitOrder = (params) => wxRequest(params, apiFanxin + "/api/submitOrder");
+//获取用户红包
+const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUserRedPacket");
+//获取推荐商品
+const getRecommendPros = (params) => wxRequest(params, apiFanxin + "/api/getRecommendPros");
+//获取优惠券页面商品
+const getCouponProducts = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
 
 export default {
     getShops,
@@ -37,5 +48,10 @@ export default {
     getOrderList,
     getOrderDetail,
     getShoppingCart,
-    getUserAddress
+    getUserAddress,
+    getMyBalance,
+    getUserRedPacket,
+    getRecommendPros,
+    getCouponProducts,
+    submitOrder
 }

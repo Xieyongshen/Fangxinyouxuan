@@ -35,7 +35,7 @@
 <script>
   import wepy from 'wepy'
 import NavBar from '@/components/navBar'
-
+import api from '@/api/api'
 
   export default class Balance extends wepy.page {
     components = {
@@ -55,9 +55,22 @@ import NavBar from '@/components/navBar'
         
     }
 
-    onLoad() {
+    async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
+        var jwt = wx.getStorageSync('jwt');
+        if (jwt.data.access_token != null) {
+            let myBalance = await api.getMyBalance({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            
+            console.log(myBalance)
+            self.balance = myBalance.data.balance
+            self.$apply();
+        }
         self.$apply();
     }
   }

@@ -764,6 +764,14 @@ export default class ShoppingCart extends wepy.page {
         } catch (error) {
             console.log('jwt is null');
         }
+
+        let recommendPros = await api.getRecommendPros({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        })
+        console.log(recommendPros)
+        self.recommend = recommendPros.data
     }
 }
 </script>

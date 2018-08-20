@@ -250,7 +250,7 @@
             </view>
             <view class="index-category" style="justify-content: {{category.length > 4 ? 'space-between' : 'space-around'}};">
                 <repeat for="{{category}}" key="index">
-                    <view class="category-item" @tap="navToCategory({{item.title}})">
+                    <view class="category-item" @tap="navToCategory({{item.title}}, {{item.id}})">
                         <image src="{{item.imgUrl}}" class="category-img" />
                         <text class="category-title">{{item.title}}</text>
                     </view>
@@ -368,9 +368,9 @@ export default class Index extends wepy.page {
             });
         },
 
-        navToCategory(category, event) {
+        navToCategory(category, id, event) {
             wx.navigateTo({
-                url: '/pages/index/category/category?name=' + category
+                url: '/pages/index/category/category?name=' + category + '&id=' + id
             });
         },
 
@@ -475,11 +475,6 @@ export default class Index extends wepy.page {
 
     async onShow() {
         let self = this;
-        let categories = await api.getShopCategory();
-        console.log(categories);
-        self.category = categories.data;
-        console.log(self.category);
-        self.$apply();
 
         var shop = wx.getStorageSync('shopChoose');
         if (shop != '') {
@@ -520,6 +515,12 @@ export default class Index extends wepy.page {
         var shopClosest = shops.data[0];
         self.shopChoose = shopClosest;
         console.log(self.shopChoose);
+        self.$apply();
+        
+        let categories = await api.getShopCategory();
+        console.log(categories);
+        self.category = categories.data;
+        console.log(self.category);
         self.$apply();
 
         let res = await api.getShopProduct({

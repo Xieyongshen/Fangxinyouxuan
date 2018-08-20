@@ -49,10 +49,6 @@
     float: right;
 }
 
-.category-banner {
-    background: #fdedeb;
-}
-
 .category-banner,
 .category-banner-item,
 .category-banner-img {
@@ -62,10 +58,14 @@
     border-radius: 20rpx;
 }
 
+.category-banner {
+    margin-bottom: 45rpx;
+    background: #fdedeb;
+}
+
 .category-type {
     width: 690rpx;
-    height: 155rpx;
-    margin: 45rpx 30rpx 80rpx 30rpx;
+    margin: 0 30rpx 80rpx 30rpx;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
@@ -106,6 +106,10 @@
     text-align: center;
 }
 
+.category-product-type:last-child{
+    display: none;
+}
+
 .product-item-price {
     font-size: 30rpx;
     line-height: 30rpx;
@@ -120,6 +124,13 @@
         vertical-align: bottom;
         display: inline-block;
     }
+}
+
+.category-empty {
+    color: #999999;
+    font-size: 30rpx;
+    line-height: 200rpx;
+    text-align: center;
 }
 </style>
 <template>
@@ -141,10 +152,10 @@
                     </swiper-item>
                 </repeat>
             </swiper>
-            <view class="category-type" style="justify-content: {{type.length > 4 ? 'space-between' : 'space-around'}};">
+            <view wx:if="{{type.length > 0}}" class="category-type" style="justify-content: {{type.length > 4 ? 'space-between' : 'space-around'}};">
                 <repeat for="{{type}}" key="index">
-                    <view class="category-type-item" @tap="scrollToType({{item.id}})">
-                        <image src="{{item.icon}}" class="category-type-icon" />
+                    <view class="category-type-item" @tap="scrollToType({{item.scrollID}})">
+                        <image src="{{item.imgUrl}}" class="category-type-icon" />
                         <view class="category-type-text">{{item.name}}</view>
                     </view>
                 </repeat>
@@ -152,16 +163,19 @@
             <view class="category-product">
                 <view class="product-title">{{category}}</view>
                 <repeat for="{{type}}" key="id" item="type">
-                    <view class="category-product-type" id="{{type.id}}">{{type.name}}</view>
-                    <repeat for="{{product}}" key="id">
-                        <product wx:if="{{item.type == type.id}}" :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
-                            <view slot="price" class="product-item-price" style="color:{{color.red}}">¥{{item.price}}
-                                <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
-                            </view>
-                        </product>
-                    </repeat>
+                    <view class="category-product=block">
+                        <view class="category-product-type" id="{{type.scrollID}}">{{type.name}}</view>
+                        <repeat for="{{product}}" key="id">
+                            <product wx:if="{{item.type == type.id}}" :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="category-product-item">
+                                <view slot="price" class="product-item-price" style="color:{{color.red}}">¥{{item.price}}
+                                    <text wx:if="{{item.oriPrice >= 0}}">¥{{item.oriPrice}}</text>
+                                </view>
+                            </product>
+                        </repeat>
+                    </view>
                 </repeat>
             </view>
+            <view wx:if="{{product.length == 0}}" class="category-empty">暂无商品</view>
         </scroll-view>
         <tabbar curTab="0" :selectedColor.sync="color.red"></tabbar>
     </view>
@@ -186,6 +200,7 @@ export default class Category extends wepy.page {
         curType: '',
         shopChoose: '春树馆街小区',
         category: '',
+        categoryID: '',
         banner: [
             {
                 imgUrl: '',
@@ -204,107 +219,8 @@ export default class Category extends wepy.page {
                 productID: ''
             }
         ],
-        type: [
-            {
-                id: 'hot',
-                name: '热卖',
-                icon: '/icons/index/hot.png'
-            },
-            {
-                id: 'fruit',
-                name: '水果',
-                icon: '/icons/index/fruit.png'
-            },
-            {
-                id: 'vegetable',
-                name: '鲜蔬',
-                icon: '/icons/index/vegetable.png'
-            },
-            {
-                id: 'seafood',
-                name: '海鲜',
-                icon: '/icons/index/seafood.png'
-            },
-            {
-                id: 'other',
-                name: '其他',
-                icon: '/icons/index/other.png'
-            }
-        ],
-        product: [
-            {
-                id: '00001',
-                type: 'hot',
-                name: '日式蝴蝶结通勤女鞋',
-                desc: '甜美通勤，轻松搭配',
-                imgUrl: '',
-                price: 153.3,
-                oriPrice: 399
-            },
-            {
-                id: '00002',
-                type: 'hot',
-                name: '随便阅读灯',
-                desc: '无极调光，360°自由旋转',
-                imgUrl: '',
-                price: 45,
-                oriPrice: -1
-            },
-            {
-                id: '00003',
-                type: 'hot',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 83.3,
-                oriPrice: 103.3
-            },
-            {
-                id: '00004',
-                type: 'fruit',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 499
-            },
-            {
-                id: '00005',
-                type: 'fruit',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 499
-            },
-            {
-                id: '00006',
-                type: 'vegetable',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 499
-            },
-            {
-                id: '00007',
-                type: 'seafood',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 499
-            },
-            {
-                id: '00008',
-                type: 'other',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 499
-            }
-        ],
+        type: [],
+        product: [],
         color: {}
     };
 
@@ -323,7 +239,7 @@ export default class Category extends wepy.page {
             });
         }
     };
-    
+
     onShareAppMessage() {
         return {
             title: '放心优选',
@@ -334,16 +250,21 @@ export default class Category extends wepy.page {
     async onLoad(options) {
         var self = this;
         self.category = options.name;
+        self.categoryID = options.id;
         self.color = self.$parent.globalData.color;
-        self.$apply();
         let res = await api.getCategoryProduct({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
-                categoryId: '6c9c617d84da4454afca1c06bba07eec'
+                categoryId: self.categoryID
             }
         });
         console.log(res);
-        
+        self.type = res.data.type;
+        self.type.forEach((item, index) => {
+            item.scrollID = 'type' + index;
+        });
+        self.product = res.data.product;
+        self.$apply();
     }
 }
 </script>

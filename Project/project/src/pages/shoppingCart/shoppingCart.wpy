@@ -324,7 +324,6 @@ page {
     height: 90rpx;
     padding-left: 30rpx;
     background: #ffffff;
-    border-top: 1rpx solid #f2f2f2;
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
@@ -698,7 +697,7 @@ export default class ShoppingCart extends wepy.page {
     onShareAppMessage() {
         return {
             title: '放心优选',
-            path: '/pages/shoppingCart/shoppingCart'
+            path: '/pages/index/index'
         };
     }
 

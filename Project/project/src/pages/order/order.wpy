@@ -236,7 +236,6 @@ page {
     line-height: 90rpx;
     padding-left: 30rpx;
     background: #ffffff;
-    border-top: 1rpx solid #f2f2f2;
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
@@ -292,7 +291,8 @@ page {
                 </view>
                 <view class="order-product-items" @tap="navToProductList()">
                     <image wx:if="{{index < 5}}" src="{{item.image}}" mode="aspectFill" class="order-product-img" />
-                    <view wx:if="{{type > 0}}" class="order-product-label">{{type == 1 ? '预售款':'拼团中'}}</view>
+                    <view wx:if="{{type == 2}}" class="order-product-label">拼团中</view>
+                    <view wx:if="{{type == 4}}" class="order-product-label">预售款</view>
                     <view class="order-product-count">共{{product.length}}件
                         <image src="/icons/in.png" class="icon-in" />
                     </view>

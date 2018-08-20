@@ -14,6 +14,7 @@ page {
 .product-image-img {
     width: 750rpx;
     height: 400rpx;
+    background: #ffffff;
 }
 
 .product-image-index {
@@ -39,6 +40,10 @@ page {
 
 .product-intro-share {
     height: 30rpx;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-sizing: border-box;
     position: absolute;
     right: 30rpx;
     top: 25rpx;
@@ -49,6 +54,10 @@ page {
         display: inline-block;
         vertical-align: top;
     }
+}
+
+.product-intro-share::after {
+    border: none;
 }
 
 .product-icon-share {
@@ -70,12 +79,12 @@ page {
     margin-bottom: 30rpx;
 }
 
-.product-intro-price {
+.product-intro-oriPrice {
     font-size: 26rpx;
     line-height: 35rpx;
 }
 
-.product-intro-label {
+.product-intro-price {
     font-size: 32rpx;
     line-height: 45rpx;
     vertical-align: top;
@@ -91,13 +100,13 @@ page {
     display: inline-block;
 }
 
-.product-intro-preSale {
+.product-intro-label {
     font-size: 22rpx;
     line-height: 30rpx;
     margin-top: 25rpx;
 }
 
-.preSale-label {
+.label-text {
     height: 30rpx;
     margin-right: 40rpx;
     display: inline-block;
@@ -108,7 +117,7 @@ page {
     }
 }
 
-.preSale-mark {
+.label-mark {
     width: 8rpx;
     height: 8rpx;
     margin: 11rpx 10rpx 11rpx 0;
@@ -286,7 +295,6 @@ page {
     width: 750rpx;
     height: 90rpx;
     background: #ffffff;
-    border-top: 1rpx solid #e3e3e3;
     position: fixed;
     bottom: 0;
     z-index: 99;
@@ -515,25 +523,25 @@ page {
             <view class="product-image-index">{{curImage + 1}}/{{imageShow.length}}</view>
         </view>
         <view class="product-intro">
-            <view class="product-intro-share">
+            <button open-type="share" hover-class="none" class="product-intro-share">
                 <image src="/icons/share.png" class="product-icon-share" />
                 <text>分享</text>
-            </view>
+            </button>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
-            <view class="product-intro-price" style="color:{{color.red}}">￥{{product.oriPrice}}</view>
-            <view class="product-intro-label" style="color:{{color.yellow}}">￥{{priceShow}}</view>
+            <view class="product-intro-oriPrice" style="color:{{color.red}}">￥{{product.price}}</view>
+            <view class="product-intro-price" style="color:{{color.yellow}}">￥{{priceShow}}</view>
             <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
-            <view wx:if="{{product.type == 1}}" class="product-intro-preSale">
-                <repeat for="{{product.preSale.label}}" key="index">
-                    <view class="preSale-label">
-                        <view class="preSale-mark"></view>
+            <view class="product-intro-label">
+                <repeat for="{{product.label}}" key="index">
+                    <view class="label-text">
+                        <view class="label-mark"></view>
                         <text>{{item}}</text>
                     </view>
                 </repeat>
-                <view class="preSale-label">
-                    <view class="preSale-mark"></view>
-                    <text wx:if="{{product.preSale.reachTime > 0}}">预计到货{{product.preSale.reachTime}}天</text>
+                <view wx:if="{{product.type == 4}}" class="label-text">
+                    <view class="label-mark"></view>
+                    <text wx:if="{{product.reachTime != ''}}">预计到货时间：{{product.reachTime}}</text>
                     <text wx:else>已到货</text>
                 </view>
             </view>
@@ -541,7 +549,7 @@ page {
                 <view>规格：
                     <repeat for="{{product.spec}}" key="index">{{index > 0 ? ' / ' : ''}}{{item.name}}</repeat>
                 </view>
-                <view>产地：{{product.producer}}</view>
+                <view wx:if="{{product.producer != ''}}">产地：{{product.producer}}</view>
             </view>
         </view>
         <view wx:if="{{product.type == 2}}" class="product-group">
@@ -932,10 +940,10 @@ export default class Product extends wepy.page {
                 self.imageDetail.push(element.imgUrl);
             }
         });
-        self.priceShow = self.product.price;
-        self.product.spec.forEach(element => {
-            if (element.price < self.priceShow) {
-                self.priceShow = element.price;
+        self.priceShow = parseFloat(self.product.spec[0].price);
+        self.product.spec.forEach((item, index) => {
+            if (item.price < self.priceShow) {
+                self.priceShow = parseFloat(item.price);
             }
         });
         self.$apply();

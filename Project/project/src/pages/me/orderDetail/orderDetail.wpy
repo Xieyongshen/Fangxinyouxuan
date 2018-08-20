@@ -354,7 +354,7 @@
                     <text>{{order.product[0].name}}</text>
                 </view>
                 <view class="orderDetail-item">订单号码:
-                    <text>{{orderID}}</text>
+                    <text>{{order.orderNum}}</text>
                 </view>
                 <view class="orderDetail-item">拼单时间:
                     <text>{{order.createTime}}</text>
@@ -365,7 +365,7 @@
             </block>
             <block wx:elif="{{order.status != 4}}">
                 <view class="orderDetail-item">订单号码:
-                    <text>{{orderID}}</text>
+                    <text>{{order.orderNum}}</text>
                 </view>
                 <view class="orderDetail-item">订单时间:
                     <text>{{order.createTime}}</text>

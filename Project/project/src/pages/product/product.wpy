@@ -561,7 +561,7 @@ page {
                         <view class="product-group-head">{{item.head.name}}</view>
                         <view class="product-group-time">还差{{item.reachCount - item.count}}人成团，剩余 {{restTimeList[index].hour}}:{{restTimeList[index].minute}}:{{restTimeList[index].second}} 结束</view>
                     </view>
-                    <view class="product-group-btn" style="background:{{color.red}}">去参团</view>
+                    <view class="product-group-btn" style="background:{{color.red}}" @tap="buyNow({{product.type}})">去参团</view>
                 </view>
             </repeat>
         </view>

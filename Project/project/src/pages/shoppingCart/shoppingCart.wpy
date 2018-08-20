@@ -417,7 +417,7 @@ page {
                     <repeat for="{{shoppingCart}}" key="id">
                         <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
                             <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
-                            <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
+                            <image src="{{item.image}}" mode="aspectFill" class="product-item-image" />
                             <view class="product-item-content">
                                 <view class="product-item-name">{{item.name}}</view>
                                 <view class="product-item-price" style="color:{{color.red}}">￥{{item.price}}

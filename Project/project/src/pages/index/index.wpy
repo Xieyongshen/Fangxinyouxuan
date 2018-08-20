@@ -370,7 +370,11 @@ export default class Index extends wepy.page {
 
         navToCategory(category, id, event) {
             wx.navigateTo({
-                url: '/pages/index/category/category?name=' + category + '&id=' + id
+                url:
+                    '/pages/index/category/category?name=' +
+                    category +
+                    '&id=' +
+                    id
             });
         },
 
@@ -493,7 +497,7 @@ export default class Index extends wepy.page {
     async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
-        
+
         var latitude = 0.0;
         var longitude = 0.0;
         wx.getLocation({
@@ -512,11 +516,12 @@ export default class Index extends wepy.page {
                 currentY: longitude
             }
         });
-        var shopClosest = shops.data[0];
+        var shopClosest = shops.data[3];
         self.shopChoose = shopClosest;
         console.log(self.shopChoose);
         self.$apply();
-        
+        wx.setStorageSync('shopChoose', self.shopChoose);
+
         let categories = await api.getShopCategory();
         console.log(categories);
         self.category = categories.data;

@@ -516,7 +516,7 @@ def getCouponProducts(request):
 
 def getHotSearch(request):
 	res_list = list()
-	sortedPros = list(ShopProduct.objects.order_by("searchTime"))
+	sortedPros = list(ShopProduct.objects.order_by("searchTimes"))
 	hotPros = sortedPros[-5:]
 	returnPros = random.sample(hotPros, 3)
 	for pros in returnPros:
@@ -531,7 +531,7 @@ def getSearchResult(request):
 	match_products = set(ShopProduct.objects.filter(pro_name__icontains=searchValue))
 
 	for products in match_products:
-		products.searchTime = products.searchTime + 1
+		products.searchTimes = products.searchTimes + 1
 		products.save()
 		eve_dict = dict(name=products.pro_name,id=str(products.pro_id),imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.pro_price),desc=products.pro_desc)
 		res_dict.append(eve_dict)

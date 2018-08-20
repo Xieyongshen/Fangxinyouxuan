@@ -314,6 +314,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
+import api from '@/api/api'
 
 export default class Coupon extends wepy.page {
     components = {
@@ -521,12 +522,20 @@ export default class Coupon extends wepy.page {
         };
     }
 
-    onLoad() {
+    async onLoad() {
         var self = this;
         self.curModule = 0;
         self.scrollToModule = self.couponModule[0].id;
         self.color = self.$parent.globalData.color;
         self.$apply();
+
+        let products = await api.getCouponProducts({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        })
+        console.log(products)
+        
 
         var query = wx.createSelectorQuery();
         var top = 0;

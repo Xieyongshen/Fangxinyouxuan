@@ -32,4 +32,9 @@ urlpatterns = [
     path('api/getOrderDetail', fangxin_views.getOrderDetail),
     path('api/getShoppingCart', fangxin_views.getShoppingCart),
     path('api/getUserAddress', fangxin_views.getUserAddress),
+    path('api/getMyBalance', fangxin_views.getMyBalance),
+    path('api/getUserRedPacket', fangxin_views.getUserRedPacket),
+    path('api/getRecommendPros', fangxin_views.getRecommendPros),
+    path('api/getCouponProducts', fangxin_views.getCouponProducts),
+    path('api/submitOrder', fangxin_views.submitOrder),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

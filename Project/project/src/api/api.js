@@ -2,8 +2,8 @@ import {
     wxRequest
 } from '@/api/wxRequest';
 
-const apiFanxin = 'http://119.23.225.244';
-// const apiFanxin = 'http://127.0.0.1:8000';
+// const apiFanxin = 'http://119.23.225.244';
+const apiFanxin = 'http://127.0.0.1:8000';
 //根据位置获取商店
 const getShops = (params) => wxRequest(params, apiFanxin + "/api/getShops");
 //获取首页店铺商品分类
@@ -38,9 +38,9 @@ const getRecommendPros = (params) => wxRequest(params, apiFanxin + "/api/getReco
 //获取优惠券页面商品
 const getCouponProducts = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
 //获取热门搜索
-const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getHotSearch");
 //获取搜索结果
-const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getCouponProducts");
+const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getSearchResult");
 
 export default {
     getShops,

@@ -167,7 +167,8 @@
                         <text wx:if="{{item.status == 2}}" style="color:{{color.red}}">拼团中</text>
                         <text wx:else style="color:{{color.red}}">{{item.deliverTime}}</text>
                     </view>
-                    <view wx:if="{{item.type == 1 || item.type == 2}}" class="orderList-productAll-label">{{item.type == 1 ? '预售款':'拼团中'}}</view>
+                    <view wx:if="{{item.type == 2}}" class="orderList-productAll-label">拼团中</view>
+                    <view wx:if="{{item.type == 4}}" class="orderList-productAll-label">预售款</view>
                     <scroll-view scroll-x class="orderList-item-list">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
                             <view class="orderList-product">
@@ -221,126 +222,7 @@ export default class OrderList extends wepy.page {
         orderType: ['待付款', '待收货', '待成团', '全部订单'],
         //订单状态：待付款0，待成团1，待发货2，发货中（待收货）3, 售后中4, 已完成5
         curType: 3,
-        orderList: [
-            // {
-            //     id: '000001',
-            //     type: 0,
-            //     status: 0,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000001',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2
-            //         },
-            //         {
-            //             id: '00002',
-            //             name: '随便阅读灯',
-            //             imgUrl: '',
-            //             price: 45.0,
-            //             oriPrice: 99,
-            //             count: 0
-            //         }
-            //     ]
-            // },
-            // {
-            //     id: '000002',
-            //     type: 2,
-            //     status: 1,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000003',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2
-            //         }
-            //     ]
-            // },
-            // {
-            //     id: '000003',
-            //     type: 1,
-            //     status: 2,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000005',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2,
-            //             people: 7,
-            //             maxpeople: 10
-            //         }
-            //     ]
-            // },
-            // {
-            //     id: '000004',
-            //     type: 0,
-            //     status: 3,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000006',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2
-            //         }
-            //     ]
-            // },
-            // {
-            //     id: '000005',
-            //     type: 0,
-            //     status: 4,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000007',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2
-            //         }
-            //     ]
-            // },
-            // {
-            //     id: '000006',
-            //     type: 0,
-            //     status: 5,
-            //     total: 247.6,
-            //     createTime: '2018-06-29 19:43:18',
-            //     deliverTime: '7月16号(明天)',
-            //     product: [
-            //         {
-            //             id: '000008',
-            //             name: '韩国制造，花洒替代品',
-            //             imgUrl: '',
-            //             price: 39.2,
-            //             oriPrice: 75,
-            //             count: 2
-            //         }
-            //     ]
-            // }
-        ],
+        orderList: [],
         color: {}
     };
 

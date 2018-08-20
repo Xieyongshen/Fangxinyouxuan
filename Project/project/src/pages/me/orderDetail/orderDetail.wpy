@@ -38,13 +38,13 @@
     }
 }
 
-// .orderDetail-shop-avatar {
-//     width: 80rpx;
-//     height: 80rpx;
-//     margin-right: 20rpx;
-//     border-radius: 50%;
-//     background: #fdedeb;
-// }
+.orderDetail-shop-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 20rpx;
+    border-radius: 50%;
+    background: #fdedeb;
+}
 
 .orderDetail-icon-phone {
     width: 36rpx;
@@ -284,7 +284,7 @@
                 <image wx:if="{{order.status > 0}}" src="/icons/in.png" class="icon-in" />
             </view>
             <view class="orderDetail-shop" @tap="callShop()">
-                <!-- <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" /> -->
+                <image src="{{order.shop.avatar}}" class="orderDetail-shop-avatar" />
                 <text>{{order.shop.name}}</text>
                 <image src="/icons/phone.png" class="orderDetail-icon-phone" />
             </view>
@@ -354,7 +354,7 @@
                     <text>{{order.product[0].name}}</text>
                 </view>
                 <view class="orderDetail-item">订单号码:
-                    <text>{{orderID}}</text>
+                    <text>{{order.orderNum}}</text>
                 </view>
                 <view class="orderDetail-item">拼单时间:
                     <text>{{order.createTime}}</text>
@@ -365,7 +365,7 @@
             </block>
             <block wx:elif="{{order.status != 4}}">
                 <view class="orderDetail-item">订单号码:
-                    <text>{{orderID}}</text>
+                    <text>{{order.orderNum}}</text>
                 </view>
                 <view class="orderDetail-item">订单时间:
                     <text>{{order.createTime}}</text>
@@ -431,16 +431,16 @@ export default class OrderDetail extends wepy.page {
             type: 2,
             status: 0,
             total: 247.6,
-            createTime: '2018-06-29 19:43:18',
-            deliverTime: '7月16号(明天)',
+            createTime: '',
+            deliverTime: '',
             discount: 5,
             redPacket: 5,
-            pay: '在线支付',
+            pay: '',
             remark: '',
             isRefund: false,
             shop: {
-                name: '朴美琴（小区店长）',
-                phone: '12345678900'
+                name: '',
+                phone: ''
             },
             group: {
                 count: 2,
@@ -467,50 +467,6 @@ export default class OrderDetail extends wepy.page {
                     price: 39.2,
                     oriPrice: 75,
                     count: 2
-                },
-                {
-                    id: '00002',
-                    name: '随便阅读灯',
-                    imgUrl: '',
-                    price: 45.0,
-                    oriPrice: 99,
-                    count: 0
-                },
-                {
-                    id: '000003',
-                    name: '韩国制造，花洒替代品',
-                    imgUrl: '',
-                    price: 39.2,
-                    oriPrice: 75,
-                    count: 2
-                },
-                {
-                    id: '00004',
-                    name: '随便阅读灯',
-                    imgUrl: '',
-                    price: 45.0,
-                    oriPrice: 99,
-                    count: 0
-                },
-                {
-                    id: '000005',
-                    name: '韩国制造，花洒替代品',
-                    imgUrl: '',
-                    price: 39.2,
-                    oriPrice: 75,
-                    count: 2,
-                    people: 7,
-                    maxpeople: 10
-                },
-                {
-                    id: '00006',
-                    name: '随便阅读灯',
-                    imgUrl: '',
-                    price: 45.0,
-                    oriPrice: 99,
-                    count: 0,
-                    people: 3,
-                    maxpeople: 10
                 }
             ]
         },

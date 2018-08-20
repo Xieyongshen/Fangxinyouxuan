@@ -20,11 +20,18 @@
 
 .me-invite {
     color: #ffffff;
+    margin: 0;
+    padding: 0;
+    background: transparent;
     font-size: 28rpx;
     line-height: 40rpx;
     position: absolute;
     top: 10rpx;
     left: 30rpx;
+}
+
+.me-invite::after {
+    border: none;
 }
 
 .me-userinfo {
@@ -141,7 +148,7 @@
         <image src="/icons/me-bg.png" class="me-header-bg" />
         <navBar navTitle="放心优选"></navBar>
         <view class="me-header">
-            <view class="me-invite">邀请好友</view>
+            <button open-type="share" hover-class="none" class="me-invite">邀请好友</button>
             <view class="me-userinfo">
                 <block wx:if="{{hasUserInfo === false}}">
                     <button class="me-userinfo-login" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
@@ -241,7 +248,7 @@ export default class Me extends wepy.page {
     onShareAppMessage() {
         return {
             title: '放心优选',
-            path: '/pages/me/me'
+            path: '/pages/index/index'
         };
     }
 

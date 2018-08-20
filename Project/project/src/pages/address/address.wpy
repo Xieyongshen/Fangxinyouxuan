@@ -116,7 +116,7 @@ export default class Address extends wepy.page {
 
     events = {};
 
-    async onLoad() {
+    async onShow() {
         var jwt = wx.getStorageSync('jwt');
         let self = this;
 
@@ -131,6 +131,15 @@ export default class Address extends wepy.page {
             console.log(res);
             self.address = res.data;
         }
+        self.address.forEach(element => {
+            element.desc = element.region.province + element.region.city + element.region.area + ' ' + element.desc;
+        });
+        self.color = self.$parent.globalData.color;
+        self.$apply();
+    }
+
+    onLoad(){
+        let self = this;
         self.color = self.$parent.globalData.color;
         self.$apply();
     }

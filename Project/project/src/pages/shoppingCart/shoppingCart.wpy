@@ -324,7 +324,6 @@ page {
     height: 90rpx;
     padding-left: 30rpx;
     background: #ffffff;
-    border-top: 1rpx solid #f2f2f2;
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
@@ -698,13 +697,16 @@ export default class ShoppingCart extends wepy.page {
     onShareAppMessage() {
         return {
             title: '放心优选',
-            path: '/pages/shoppingCart/shoppingCart'
+            path: '/pages/index/index'
         };
     }
 
     onShow() {
         var self = this;
         self.shoppingCart = wx.getStorageSync('shoppingCart');
+        if(self.shoppingCart.length == 0){
+            return;
+        }
         self.shoppingCart.forEach(element => {
             self.isChoosen.push(true);
         });
@@ -749,6 +751,7 @@ export default class ShoppingCart extends wepy.page {
             data: -1
         });
 
+<<<<<<< HEAD
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -772,6 +775,23 @@ export default class ShoppingCart extends wepy.page {
         })
         console.log(recommendPros)
         self.recommend = recommendPros.data
+=======
+        // var jwt = wx.getStorageSync('jwt');
+        // try {
+        //     if (jwt.data.access_token != null) {
+        //         let res = await api.getShoppingCart({
+        //             query: {
+        //                 access_token: jwt.data.access_token,
+        //                 account_id: jwt.data.account_id
+        //             }
+        //         });
+        //         console.log(res);
+        //         self.$apply();
+        //     }
+        // } catch (error) {
+        //     console.log('jwt is null');
+        // }
+>>>>>>> 66f5281f8e41faf22e07a9aac0cadce1a757cb68
     }
 }
 </script>

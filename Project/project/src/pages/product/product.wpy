@@ -529,7 +529,7 @@ page {
             </button>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
-            <view class="product-intro-oriPrice" style="color:{{color.red}}">￥{{product.price}}</view>
+            <view class="product-intro-oriPrice" style="color:{{color.red}}">￥{{product.type == 2 ? product.oriPrice : product.price}}</view>
             <view class="product-intro-price" style="color:{{color.yellow}}">￥{{priceShow}}</view>
             <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
             <view class="product-intro-label">

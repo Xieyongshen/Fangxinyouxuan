@@ -15,7 +15,6 @@
     margin-right: 30rpx;
     border: 1rpx solid #f5ebe4;
     border-radius: 10rpx;
-    background: #fdedeb;
     vertical-align: top;
     box-sizing: border-box;
 }
@@ -64,7 +63,7 @@
             <view class="product-item-desc">{{desc}}</view>
             <slot name="extra"></slot>
             <slot name="price">￥0</slot>
-            <image src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="addToCart({{id}})" />
+            <image src="/icons/cart-recommend.png" class="product-icon-cart"/>
         </view>
     </view>
 </template>

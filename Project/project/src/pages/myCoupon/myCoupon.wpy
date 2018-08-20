@@ -31,6 +31,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Recommend from '@/components/recommendBlock';
+import api from '@/api/api'
 
 export default class MyCoupon extends wepy.page {
     components = {
@@ -39,32 +40,7 @@ export default class MyCoupon extends wepy.page {
     };
 
     data = {
-        recommend: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000002',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000003',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000004',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            }
-        ]
+        recommend: []
     };
 
     methods = {
@@ -73,6 +49,17 @@ export default class MyCoupon extends wepy.page {
 
     events = {};
 
-    onLoad() {}
+    async onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        let recommendPros = await api.getRecommendPros({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        })
+        console.log(recommendPros);
+        self.recommend = recommendPros.data;
+        self.$apply();
+    }
 }
 </script>

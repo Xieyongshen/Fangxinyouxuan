@@ -248,15 +248,15 @@ page {
             </view>
             <view class="coupon-block coupon-limit coupon-module-block" id="{{couponModule[1].id}}">
                 <view class="coupon-block-title">限时秒杀</view>
-                <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text style="background:{{color.red}}">{{limit.restTime[0]}}</text>:
-                    <text style="background:{{color.red}}">{{limit.restTime[1]}}</text>:
-                    <text style="background:{{color.red}}">{{limit.restTime[2]}}</text>
+                <view class="coupon-limit-time">距{{isStarted?'结束':'开场'}}还剩
+                    <text style="background:{{color.red}}">{{restTime.hour}}</text>:
+                    <text style="background:{{color.red}}">{{restTime.minute}}</text>:
+                    <text style="background:{{color.red}}">{{restTime.second}}</text>
                 </view>
                 <view class="coupon-limit-product">
-                    <repeat for="{{limit.product}}" key="id">
+                    <repeat for="{{limitProduct}}" key="id">
                         <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc">
-                            <view slot="extra" class="limit-item-time" style="color:{{color.red}}">{{limit.startTime}} 开抢</view>
+                            <view wx:if="{{isStarted == false}}" slot="extra" class="limit-item-time" style="color:{{color.red}}">{{startFormatTime}} 开抢</view>
                             <view slot="price" class="limit-item-price">
                                 <view class="limit-item-price">¥{{item.price}}
                                     <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
@@ -285,8 +285,8 @@ page {
                     <repeat for="{{groupProduct}}" key="id">
                         <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name">
                             <view slot="extra" class="group-item-sold">
-                                <repeat for="{{item.buyer}}" key="id">
-                                    <image src="{{item.avatar}}" class="group-item-buyer" />
+                                <repeat for="{{item.buyer}}" key="id" item="buyer">
+                                    <image src="{{buyer.avatar}}" class="group-item-buyer" />
                                 </repeat>
                                 <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
                                 <text>已团{{item.soldCount}}件</text>
@@ -314,7 +314,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class Coupon extends wepy.page {
     components = {
@@ -332,6 +332,12 @@ export default class Coupon extends wepy.page {
         curModule: 0,
         scrollToModule: '',
         recommendImg: '',
+        isStarted: false,
+        startTime: '',
+        endTime: '',
+        startFormatTime: '',
+        endFormatTime: '',
+        restTime: {},
         update: [
             {
                 user: {
@@ -370,103 +376,8 @@ export default class Coupon extends wepy.page {
                 }
             }
         ],
-        limit: {
-            isStarted: false,
-            startTime: '7月24日 12：00',
-            restTime: ['10', '39', '06'],
-            product: [
-                {
-                    id: '00001',
-                    name: '日式蝴蝶结通勤女鞋',
-                    desc: '甜美通勤，轻松搭配',
-                    imgUrl: '',
-                    price: 209.3,
-                    oriPrice: 299
-                },
-                {
-                    id: '00002',
-                    name: '随便阅读灯',
-                    desc: '无极调光，360°自由旋转',
-                    imgUrl: '',
-                    price: 45
-                },
-                {
-                    id: '00003',
-                    name: '男士都市轻生活弹力牛仔裤',
-                    desc: '自如转换多场景，让双腿保持昂扬活力',
-                    imgUrl: '',
-                    oriPrice: 103.3,
-                    price: 83.3
-                }
-            ]
-        },
-        groupProduct: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 299,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                imgUrl: '',
-                price: 45,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                imgUrl: '',
-                price: 83.3,
-                oriPrice: 103.3,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            }
-        ],
+        limitProduct: [],
+        groupProduct: [],
         moduleTop: [],
         moveStartPos: 0,
         color: {}
@@ -515,6 +426,113 @@ export default class Coupon extends wepy.page {
 
     events = {};
 
+    getFormatTime(){
+        var self = this;
+        let startTimeStr = self.data.startTime;
+        let startTime = new Date(startTimeStr);
+        var month, day, hour, minute;
+
+        month = startTime.getMonth() + 1;
+        day = startTime.getDate();
+        hour = startTime.getHours();
+        minute = startTime.getMinutes();
+
+        self.startFormatTime = month + '月' + day + '日 ' + self.timeFormat(hour) + ':' + self.timeFormat(minute);
+        self.$apply();
+    }
+
+    timeFormat(param) {
+        //小于10的格式化函数
+        var format = parseInt(param);
+        return format < 10 ? '0' + format : format;
+    }
+
+    countDown() {
+        var self = this;
+        let nowTime = new Date().getTime();
+        let startTimeStr = self.data.startTime;
+        let endTimeStr = self.data.endTime;
+        let countDown = {};
+
+        // 对结束时间进行处理渲染到页面
+        let startTime = new Date(startTimeStr).getTime();
+        let endTime = new Date(endTimeStr).getTime();
+        // 如果活动未结束，对时间进行处理
+        if (nowTime > endTime) {
+            self.isStarted = true;
+            countDown = {
+                day: '0',
+                hour: '00',
+                minute: '00',
+                second: '00'
+            };
+        } else {
+            var time;
+            if (nowTime >= startTime) {
+                self.isStarted = true;
+                time = (endTime - nowTime) / 1000;
+            } else {
+                time = (startTime - nowTime) / 1000;
+            }
+            let day = parseInt(time / (60 * 60 * 24));
+            let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+            let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+            let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+            countDown = {
+                day: day,
+                hour: self.timeFormat(hou),
+                minute: self.timeFormat(min),
+                second: self.timeFormat(sec)
+            };
+        }
+        // 渲染，然后每隔一秒执行一次倒计时函数
+        self.restTime = countDown;
+        self.$apply();
+        if (self.timer) {
+            clearInterval(self.timer);
+        }
+        self.timer = setInterval(function() {
+            if (self.restTime.second > 0) {
+                self.restTime.second--;
+            } else if (self.restTime.minute > 0) {
+                self.restTime.second = 59;
+                self.restTime.minute--;
+            } else if (self.restTime.hour > 0) {
+                self.restTime.second = 59;
+                self.restTime.minute = 59;
+                self.restTime.hour--;
+            } else if (self.restTime.day > 0) {
+                self.restTime.hour = 23;
+                self.restTime.second = 59;
+                self.restTime.minute = 59;
+                self.restTime.day--;
+            } else {
+                nowTime = new Date().getTime();
+                if (nowTime >= endTime) {
+                    clearInterval(this);
+                } else if (nowTime >= startTime) {
+                    self.isStarted = true;
+                    let time = (endTime - nowTime) / 1000;
+                    let day = parseInt(time / (60 * 60 * 24));
+                    let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+                    let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+                    let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+                    self.restTime = {
+                        day: day,
+                        hour: hou,
+                        minute: min,
+                        second: sec
+                    };
+                }
+            }
+            self.restTime.hour = self.timeFormat(self.restTime.hour);
+            self.restTime.minute = self.timeFormat(self.restTime.minute);
+            self.restTime.second = self.timeFormat(self.restTime.second);
+            self.$apply();
+        }, 1000);
+        self.$apply();
+    }
+
     onShareAppMessage() {
         return {
             title: '放心优选',
@@ -533,9 +551,15 @@ export default class Coupon extends wepy.page {
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
             }
-        })
-        console.log(products)
-        
+        });
+        console.log(products);
+        self.groupProduct = products.data.groupProducts;
+        self.limitProduct = products.data.limitProducts;
+        self.startTime = self.limitProduct[0].limitStartTime;
+        self.endTime = self.limitProduct[0].limitEndTime;
+        self.$apply();
+        self.countDown();
+        self.getFormatTime();
 
         var query = wx.createSelectorQuery();
         var top = 0;

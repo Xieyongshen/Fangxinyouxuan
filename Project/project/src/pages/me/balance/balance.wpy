@@ -67,8 +67,8 @@ import api from '@/api/api'
                 }
             });
             
-            console.log(myBalance)
-            self.balance = myBalance.data.balance
+            console.log(myBalance);
+            self.balance = myBalance.data.balance;
             self.$apply();
         }
         self.$apply();

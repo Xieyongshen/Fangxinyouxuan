@@ -12,7 +12,6 @@
     width: 335rpx;
     height: 335rpx;
     border-radius: 10rpx;
-    background: #fdedeb;
 }
 
 .recommend-item-name {

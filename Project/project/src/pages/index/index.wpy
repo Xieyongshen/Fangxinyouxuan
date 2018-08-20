@@ -230,6 +230,13 @@
 .index-product {
     margin: 0 -30rpx;
 }
+
+.index-empty {
+    color: #999999;
+    font-size: 30rpx;
+    line-height: 200rpx;
+    text-align: center;
+}
 </style>
 <template>
     <view class="container">
@@ -278,6 +285,7 @@
                         </view>
                     </product>
                 </repeat>
+                <view wx:if="{{!product.today}}" class="index-empty">暂无相关商品</view>
             </view>
             <image class="index-banner-middle" />
             <view class="index-hot">
@@ -298,6 +306,7 @@
                         </view>
                     </product>
                 </repeat>
+                <view wx:if="{{!product.hot}}" class="index-empty">暂无相关商品</view>
             </view>
             <image class="index-banner-middle" />
             <view class="index-selected">
@@ -318,6 +327,7 @@
                         </view>
                     </product>
                 </repeat>
+                <view wx:if="{{!product.selected}}" class="index-empty">暂无相关商品</view>
             </view>
         </view>
     </view>
@@ -394,8 +404,8 @@ export default class Index extends wepy.page {
     countDown() {
         var self = this;
         let nowTime = new Date().getTime();
-        let startTimeStr = self.data.startTime;
-        let endTimeStr = self.data.endTime;
+        let startTimeStr = self.startTime;
+        let endTimeStr = self.endTime;
         let countDown = {};
 
         // 对结束时间进行处理渲染到页面
@@ -485,6 +495,33 @@ export default class Index extends wepy.page {
             self.shopChoose = shop;
             self.$apply();
         }
+
+        let categories = await api.getShopCategory();
+        console.log(categories);
+        self.category = categories.data;
+        console.log(self.category);
+        self.$apply();
+
+        let res = await api.getShopProduct({
+            query: {
+                shopId: self.shopChoose.id
+            }
+        });
+        console.log(res);
+        self.product = res.data;
+        if (self.product.today) {
+            console.log('yes');
+            self.startTime = self.product.today[0].limitStartTime;
+            self.endTime = self.product.today[0].limitEndTime;
+            console.log(self.startTime);
+        } else {
+            self.startTime = new Date().getTime();
+            self.endTime = self.startTime;
+        }
+        console.log(self.startTime);
+        self.countDown();
+        console.log(self.countTime);
+        self.$apply();
     }
 
     onShareAppMessage() {
@@ -521,24 +558,6 @@ export default class Index extends wepy.page {
         console.log(self.shopChoose);
         self.$apply();
         wx.setStorageSync('shopChoose', self.shopChoose);
-
-        let categories = await api.getShopCategory();
-        console.log(categories);
-        self.category = categories.data;
-        console.log(self.category);
-        self.$apply();
-
-        let res = await api.getShopProduct({
-            query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
-            }
-        });
-        console.log(res);
-        self.product = res.data;
-        self.startTime = self.product.today[0].limitStartTime;
-        self.endTime = self.product.today[0].limitEndTime;
-        self.$apply();
-        self.countDown();
     }
 }
 </script>

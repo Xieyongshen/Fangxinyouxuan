@@ -99,8 +99,8 @@
                     <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input" />
                 </view>
             </view>
-            <button class="addressChange-btn addressChange-save" style="background:{{color.red}}">保存</button>
-            <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete" style="color:{{color.red}}">删除收货地址</view>
+            <button class="addressChange-btn addressChange-save" style="background:{{color.red}}" @tap="saveMyAddress()">保存</button>
+            <view wx:if="{{type == 1}}" class="addressChange-btn addressChange-delete" style="color:{{color.red}}" @tap="deleteMyAddress()">删除收货地址</view>
         </form>
     </view>
 </template>
@@ -108,6 +108,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import api from "@/api/api"
 
 export default class Coupon extends wepy.page {
     components = {
@@ -120,12 +121,13 @@ export default class Coupon extends wepy.page {
         addressID: '000001',
         curRegion: ['北京市', '北京市', '朝阳区'],
         address: {
+            id: 'b9a2a836-f97e-4a10-adf5-b7e58a2eca28',
             name: '墨小刀',
             phone: '13000000000',
             region: {
-                province: '',
-                city: '',
-                area: ''
+                province: '北京',
+                city: '北京',
+                area: '海淀'
             },
             desc: '北京市朝阳区宇宙火星村166号'
         },
@@ -145,6 +147,56 @@ export default class Coupon extends wepy.page {
     };
 
     events = {};
+
+    async saveMyAddress(){
+        let self = this
+        var jwt = wx.getStorageSync('jwt');
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.saveMyAddress({
+                    query: JSON.stringify({
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id,
+                        address: self.address
+                    }),
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                console.log(res);
+                self.$apply();
+            }
+        } catch (error) {
+            console.log(error)
+            console.log('jwt is null');
+        }
+    }
+
+    async deleteMyAddress(){
+        let self = this
+        var jwt = wx.getStorageSync('jwt');
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.deleteMyAddress({
+                    query: JSON.stringify({
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id,
+                        address: self.address
+                    }),
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                console.log(res);
+                self.$apply();
+            }
+        } catch (error) {
+            console.log(error)
+            console.log('jwt is null');
+        }
+    }
 
     onLoad(options) {
         var self = this;

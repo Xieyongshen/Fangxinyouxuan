@@ -42,6 +42,10 @@ const getHotSearch = (params) => wxRequest(params, apiFanxin + "/api/getHotSearc
 //获取搜索结果
 const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getSearchResult");
 
+//保存或新增收货地址
+const saveMyAddress = (params) => wxRequest(params, apiFanxin + "/api/saveMyAddress");
+//删除收货地址
+const deleteMyAddress = (params) => wxRequest(params, apiFanxin + "/api/deleteMyAddress");
 export default {
     getShops,
     getShopCategory,
@@ -59,5 +63,7 @@ export default {
     getCouponProducts,
     submitOrder,
     getSearchResult,
-    getHotSearch
+    getHotSearch,
+    saveMyAddress,
+    deleteMyAddress
 }

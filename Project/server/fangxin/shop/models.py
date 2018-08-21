@@ -70,7 +70,7 @@ class ProductType(AbstractType):
 class ShopProduct(models.Model):
 	pro_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
 	pro_name = models.TextField(u'商品名称')
-	shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+	shop = models.ManyToManyField(Shop)
 	pro_price = models.DecimalField(u'商品价格',max_digits=10, decimal_places=2)
 	pro_origin_price = models.DecimalField(u'商品原价',blank=True, null=True,max_digits=10, decimal_places=2)
 	pro_remain = models.IntegerField(u'商品库存')

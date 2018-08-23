@@ -43,13 +43,13 @@
                 </div>
                 <div class="weui-cell__ft"></div>
             </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a @click="goRanking" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd">
                     <p>优质用户排行榜</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </a>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a @click="goDeliver" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd">
                     <p>门店配送设置</p>
                 </div>
@@ -90,6 +90,12 @@ export default {
     },
     goTeam(){
       this.$router.push('/team')
+    },
+    goRanking(){
+      this.$router.push('/ranking')
+    },
+    goDeliver(){
+      this.$router.push('/deliver')
     }
   }
 

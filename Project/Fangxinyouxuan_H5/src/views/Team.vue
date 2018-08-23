@@ -2,19 +2,20 @@
     <div class="team">
         <navBar navTitle="我的团队" isChildPage="y"></navBar>
         
-        <search
-      @result-click="resultClick"
-      @on-change="getResult"
-      :results="results"
-      v-model="value"
-      position="absolute"
-      auto-scroll-to-top
-      top="46px"
-      @on-focus="onFocus"
-      @on-cancel="onCancel"
-      @on-submit="onSubmit"
-      ref="search">
-      </search>
+        <search class="team-search"
+            @result-click="resultClick"
+            @on-change="getResult"
+            :results="results"
+            v-model="value"
+            position="absolute"
+            auto-scroll-to-top
+            @on-focus="onFocus"
+            @on-cancel="onCancel"
+            @on-submit="onSubmit"
+            ref="search">
+        </search>
+
+        <div :class="{ placeHolder: placeHolderShow}"></div>
 
         <div class="team-toolBar">
             <div class="team-toolBar-select">
@@ -34,7 +35,7 @@
                         <div class="accountDetail-list-item-recommendedTime">{{item.recommendedTime}}</div>
                     </div>
                     <div class="accountDetail-list-item-recommendedFrom">来源: {{item.recommendedFrom}}</div>
-                    <img src="" class="icon-link">
+                    <img src="@/assets/in.png" class="icon-in">
                 </div>
                 <hr class="divider">
             </div>
@@ -59,7 +60,8 @@ export default {
       return{
           totalTeamMenber: '85',
           results: [],
-          value: 'test',
+          value: '',
+          placeHolderShow: false,
           items: [
             {
                 number: '1',
@@ -99,20 +101,28 @@ export default {
     },
     onSubmit () {
       this.$refs.search.setBlur()
-      this.$vux.toast.show({
-        type: 'text',
-        position: 'top',
-        text: 'on submit'
-      })
     },
     onFocus () {
       console.log('on focus')
+      this.placeHolderShow = true
     },
     onCancel () {
       console.log('on cancel')
+      this.placeHolderShow = false
     }
   }
 
+}
+
+function getResult (val) {
+  let rs = []
+  for (let i = 0; i < 20; i++) {
+    rs.push({
+      title: `${val} result: ${i + 1} `,
+      other: i
+    })
+  }
+  return rs
 }
 </script>
 
@@ -121,6 +131,14 @@ export default {
     color: #888888;
     margin: 1.25rem 0;
     line-height: 1px;
+}
+
+.team-search{
+    margin-top: 3.875rem;
+}
+
+.placeHolder{
+    height: 7.5625rem;
 }
 
 .team-toolBar{
@@ -150,7 +168,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .team-list-item-userinfo{
@@ -170,6 +188,7 @@ export default {
 
 .accountDetail-list-item-recommendedFrom{
     font-size: 15px;
+    align-self: flex-end;
 }
 
 .icon-user{
@@ -177,5 +196,11 @@ export default {
     height: 6.25rem;
     /* margin: 0 auto; */
 }
+
+.icon-in{
+    width: 0.875rem;
+    height: 1.5rem;
+}
+
 </style>
 

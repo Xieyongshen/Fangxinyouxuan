@@ -68,6 +68,16 @@ export default new Router({
       path: '/team',
       name: 'team',
       component: () => import('./views/Team.vue')
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: () => import('./views/Ranking.vue')
+    },
+    {
+      path: '/deliver',
+      name: 'deliver',
+      component: () => import('./views/Deliver.vue')
     }
   ]
 })

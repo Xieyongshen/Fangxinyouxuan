@@ -50,8 +50,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="我的地址" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="我的地址" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="address-content">
             <repeat for="{{address}}" key="index">
                 <view class="address-item" @tap="chooseAddress({{item.id}}, {{item.name}}, {{item.phone}}, {{item.desc}})">
@@ -59,7 +59,7 @@
                         <view>{{item.name}} {{item.phone}}</view>
                         <view>{{item.desc}}</view>
                     </view>
-                    <view class="address-edit" @tap.stop="addressEdit">
+                    <view class="address-edit" @tap.stop="addressEdit({{item.id}})">
                         <image src="/icons/edit.png" class="address-edit-img" />
                     </view>
                 </view>
@@ -81,6 +81,7 @@ export default class Address extends wepy.page {
 
     data = {
         address: [],
+        isIphoneX: false,
         color: {}
     };
 
@@ -91,9 +92,9 @@ export default class Address extends wepy.page {
             });
         },
 
-        addressEdit() {
+        addressEdit(id) {
             wx.navigateTo({
-                url: 'addressChange/addressChange?type=1'
+                url: 'addressChange/addressChange?type=1&id=' + id
             });
         },
 
@@ -141,6 +142,7 @@ export default class Address extends wepy.page {
     onLoad(){
         let self = this;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
     }
 }

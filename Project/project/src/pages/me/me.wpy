@@ -144,9 +144,9 @@
 }
 </style>
 <template>
-    <view class="container">
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <image src="/icons/me-bg.png" class="me-header-bg" />
-        <navBar navTitle="放心优选"></navBar>
+        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="me-header">
             <button open-type="share" hover-class="none" class="me-invite">邀请好友</button>
             <view class="me-userinfo">
@@ -181,12 +181,12 @@
                     我的余额
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
-                <navigator url="../redPacket/redPacket" class="me-manage-item">
+                <navigator url="../redPacket/redPacket?type=0" class="me-manage-item">
                     我的红包
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
                 <navigator url="../myCoupon/myCoupon" class="me-manage-item">
-                    我的优惠券
+                    我的优惠
                     <image src="/icons/in.png" class="icon-in" />
                 </navigator>
                 <navigator url="../address/address" class="me-manage-item">
@@ -215,7 +215,8 @@ export default class Me extends wepy.page {
             name: '小鱼',
             avatar: ''
         },
-        globalData: {}
+        globalData: {},
+        isIphoneX: false
     };
 
     async getUserInfoFun(e) {
@@ -255,6 +256,8 @@ export default class Me extends wepy.page {
     async onLoad() {
         var jwt = wx.getStorageSync('jwt');
         let self = this;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.$apply();
 
         if (jwt.data.access_token != null) {
             let res = await api.login({

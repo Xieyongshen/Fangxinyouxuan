@@ -6,8 +6,8 @@ page {
 
 .container {
     height: 100%;
-    padding-top: 62px;
     box-sizing: border-box;
+    position: relative;
 }
 
 ::-webkit-scrollbar {
@@ -63,7 +63,7 @@ export default class extends wepy.app {
                 },
                 {
                     pagePath: 'pages/coupon/coupon',
-                    text: '优惠券',
+                    text: '优惠',
                     iconPath: 'icons/tabbar/coupon.png',
                     selectedIconPath: 'icons/tabbar/coupon-selected.png'
                 },
@@ -85,6 +85,7 @@ export default class extends wepy.app {
 
     globalData = {
         userInfo: null,
+        isIphoneX: false,
         color: {
             red: '#f5333f',
             yellow: '#ffba00'
@@ -99,6 +100,12 @@ export default class extends wepy.app {
 
     onLaunch() {
         this.testAsync();
+        var res = wx.getSystemInfoSync();
+        console.log(res.model);
+        if (res.model == 'iPhone X') {
+            this.globalData.isIphoneX = true;
+            console.log('Rich man here！');
+        }
     }
 
     sleep(s) {

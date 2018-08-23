@@ -187,13 +187,21 @@
     width: 110rpx;
     height: 30rpx;
     margin: 5rpx;
-    color: #ffffff;
     font-size: 24rpx;
     line-height: 30rpx;
     text-align: center;
     vertical-align: top;
     border-radius: 5rpx;
     display: inline-block;
+}
+
+.label-common {
+    color: #cccccc;
+    border: 1rpx solid #cccccc;
+}
+
+.label-member {
+    color: #ffffff;
 }
 
 .hot-item-price,
@@ -213,16 +221,11 @@
 .selected-item-curPrice {
     font-size: 32rpx;
     line-height: 40rpx;
-}
-
-.hot-item-nowPrice,
-.selected-item-nowPrice {
-    font-size: 32rpx;
-    line-height: 40rpx;
     text {
         color: #999999;
         font-size: 22rpx;
         line-height: 30rpx;
+        margin-left: 10rpx;
         text-decoration: line-through;
     }
 }
@@ -239,8 +242,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="index-content">
             <view class="index-header">
                 <navigator url="../shop/shop" hover-class="none" class="index-shop">
@@ -269,7 +272,7 @@
                     <text>距离活动{{isStarted ? '结束' : '开始'}}还剩：</text>
                     <text class="today-time-num">{{countTime.day}}天{{countTime.hour}}时{{countTime.minute}}分{{countTime.second}}秒</text>
                 </view>
-                <repeat for="{{product.today}}" key="id" index="i">
+                <repeat for="{{product.today}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
                         <view wx:if="{{item.remain > 0}}" slot="extra" class="today-item-remain">
                             <progress class="today-item-progress" percent="{{item.remain/item.count*100}}" stroke-width="20" activeColor="#fddddf" backgroundColor="#fffbfb" />
@@ -283,6 +286,7 @@
                                 <text>¥{{item.oriPrice}}</text>
                             </view>
                         </view>
+                        <image slot="cart" src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="chooseSpec(0, {{index}})" />
                     </product>
                 </repeat>
                 <view wx:if="{{!product.today}}" class="index-empty">暂无相关商品</view>
@@ -292,18 +296,16 @@
                 <view class="hot-title">热卖爆款</view>
                 <repeat for="{{product.hot}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                        <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="hot-item-label label-common">{{item.label}}</view>
                         <view slot="price" class="hot-item-price">
-                            <block wx:if="{{item.label != ''}}">
-                                <view class="hot-item-oriPrice" style="color:{{color.red}}">¥{{item.oriPrice}}</view>
-                                <view wx:if="{{item.price >= 0}}" class="hot-item-curPrice" style="color:{{color.yellow}}">¥{{item.price}}</view>
-                            </block>
-                            <block wx:else>
-                                <view class="hot-item-nowPrice" style="color:{{color.red}}">¥{{item.price}}
-                                    <text>¥{{item.oriPrice}}</text>
-                                </view>
-                            </block>
+                            <view wx:if="{{item.memberPrice > 0}}" class="hot-item-oriPrice" style="color:{{color.yellow}}">¥{{item.oriPrice}}
+                                <view class="hot-item-label label-member" style="background:{{color.yellow}}">会员专享</view>
+                            </view>
+                            <view class="hot-item-curPrice" style="color:{{color.red}}">¥{{item.price}}
+                                <text>¥{{item.oriPrice}}</text>
+                            </view>
                         </view>
+                        <image slot="cart" src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="chooseSpec(1, {{index}})" />
                     </product>
                 </repeat>
                 <view wx:if="{{!product.hot}}" class="index-empty">暂无相关商品</view>
@@ -313,21 +315,49 @@
                 <view class="selected-title">放心精选</view>
                 <repeat for="{{product.selected}}" key="id">
                     <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc" class="index-product">
-                        <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label" style="background:{{color.yellow}}">{{item.label}}</view>
+                        <view wx:if="{{item.label != ''}}" slot="extra" class="selected-item-label label-common">{{item.label}}</view>
                         <view slot="price" class="selected-item-price">
-                            <block wx:if="{{item.label != ''}}">
-                                <view class="selected-item-oriPrice" style="color:{{color.red}}">¥{{item.oriPrice}}</view>
-                                <view wx:if="{{item.price >= 0}}" class="selected-item-curPrice" style="color:{{color.yellow}}">¥{{item.price}}</view>
-                            </block>
-                            <block wx:else>
-                                <view class="selected-item-nowPrice" style="color:{{color.red}}">¥{{item.price}}
-                                    <text>¥{{item.oriPrice}}</text>
-                                </view>
-                            </block>
+                            <view wx:if="{{item.memberPrice > 0}}" class="selected-item-oriPrice" style="color:{{color.yellow}}">¥{{item.oriPrice}}
+                                <view class="selected-item-label label-member" style="background:{{color.yellow}}">会员专享</view>
+                            </view>
+                            <view class="selected-item-curPrice" style="color:{{color.red}}">¥{{item.price}}
+                                <text>¥{{item.oriPrice}}</text>
+                            </view>
                         </view>
+                        <image slot="cart" src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="chooseSpec(2, {{index}})" />
                     </product>
                 </repeat>
                 <view wx:if="{{!product.selected}}" class="index-empty">暂无相关商品</view>
+            </view>
+        </view>
+        <view wx:if="{{isChoosing}}" class="product-select" @tap="selectClose()">
+            <view class="product-select-container" @tap.stop="selectContent()">
+                <view class="product-select-close" @tap="selectClose()">×</view>
+                <view class="product-select-content">
+                    <image mode="aspectFill" src="{{curProduct.imgUrl}}" class="product-select-img" />
+                    <view class="product-select-info">
+                        <view class="product-select-name">{{curProduct.name}}</view>
+                        <view class="product-select-price" style="color:{{color.red}}">￥{{curProduct.spec[specChoose].price}}</view>
+                        <view class="product-select-remain">库存：{{curProduct.remain}}</view>
+                    </view>
+                    <view class="product-select-spec">
+                        <view class="product-spec-title">规格：</view>
+                        <view class="product-spec-content">
+                            <repeat for="{{curProduct.spec}}" key="index">
+                                <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
+                            </repeat>
+                        </view>
+                    </view>
+                    <view class="product-select-count">
+                        <text>数量：</text>
+                        <view class="product-count-choose">
+                            <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
+                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <view class="product-count-add" style="{{count < curProduct.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
+                        </view>
+                    </view>
+                    <view hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap.stop="addToCart">加入购物车</view>
+                </view>
             </view>
         </view>
     </view>
@@ -337,6 +367,7 @@
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
+// import SpecChoose from '@/components/specChoose';
 import api from '@/api/api';
 
 export default class Index extends wepy.page {
@@ -344,6 +375,7 @@ export default class Index extends wepy.page {
     components = {
         navBar: NavBar,
         product: Product
+        // spec: SpecChoose
     };
 
     data = {
@@ -366,6 +398,11 @@ export default class Index extends wepy.page {
             second: 0
         },
         isStarted: false,
+        isChoosing: false,
+        curProduct: {},
+        specChoose: 0,
+        count: 1,
+        isIphoneX: false,
         color: {}
     };
 
@@ -392,8 +429,94 @@ export default class Index extends wepy.page {
             wx.navigateTo({
                 url: '/pages/product/product?id=' + product
             });
+        },
+
+        chooseSpec(type, index) {
+            var self = this;
+            if(type == 0){
+                self.curProduct = self.product.today[index];
+            }else if(type == 1){
+                self.curProduct = self.product.hot[index];
+            }else if(type == 2){
+                self.curProduct = self.product.selected[index];
+            }
+            self.specChoose = 0;
+            self.count = 1;
+            self.isChoosing = true;
+            self.$apply();
+            console.log(self.curProduct);
+        },
+
+        specChoose(spec, e) {
+            this.specChoose = spec;
+            this.$apply();
+        },
+
+        selectClose() {
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        selectContent() {
+            return;
+        },
+
+        countMinus() {
+            if (this.count > 1) {
+                this.count--;
+                this.$apply();
+            }
+        },
+
+        countPlus() {
+            if (this.count < this.curProduct.remain) {
+                this.count++;
+                this.$apply();
+            }
+        },
+
+        addToCart() {
+            var self = this;
+            var shoppingCart = wx.getStorageSync('shoppingCart');
+            var hasCur = false;
+            if (shoppingCart.length > 0) {
+                shoppingCart.forEach(element => {
+                    if (element.id == self.id) {
+                        hasCur = true;
+                        element.count += self.count;
+                        return;
+                    }
+                });
+            } else {
+                shoppingCart = [];
+            }
+
+            if (hasCur == false) {
+                shoppingCart.push({
+                    id: self.curProduct.id,
+                    name: self.curProduct.name,
+                    image: self.curProduct.imgUrl,
+                    spec: self.curProduct.spec[self.specChoose].name,
+                    price: self.curProduct.spec[self.specChoose].price,
+                    oriPrice: self.curProduct.oriPrice,
+                    count: self.count
+                });
+            }
+
+            wx.setStorageSync('shoppingCart', shoppingCart);
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000
+            });
+
+            console.log(shoppingCart);
+            this.isChoosing = false;
+            this.$apply();
         }
     };
+
+    events = {};
 
     timeFormat(param) {
         //小于10的格式化函数
@@ -510,17 +633,13 @@ export default class Index extends wepy.page {
         console.log(res);
         self.product = res.data;
         if (self.product.today) {
-            console.log('yes');
             self.startTime = self.product.today[0].limitStartTime;
             self.endTime = self.product.today[0].limitEndTime;
-            console.log(self.startTime);
         } else {
             self.startTime = new Date().getTime();
             self.endTime = self.startTime;
         }
-        console.log(self.startTime);
         self.countDown();
-        console.log(self.countTime);
         self.$apply();
     }
 
@@ -534,6 +653,8 @@ export default class Index extends wepy.page {
     async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.$apply();
 
         var latitude = 0.0;
         var longitude = 0.0;

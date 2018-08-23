@@ -276,8 +276,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="订单详情" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="订单详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="orderDetail-header">
             <view wx:if="{{order.type == 2 && order.status == 5}}" class="orderDetail-status">拼单成功</view>
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}
@@ -470,6 +470,7 @@ export default class OrderDetail extends wepy.page {
                 }
             ]
         },
+        isIphoneX: false,
         color: {}
     };
 
@@ -524,6 +525,7 @@ export default class OrderDetail extends wepy.page {
         var self = this;
         self.orderID = options.id;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
 
         let orderDetail = await api.getOrderDetail({

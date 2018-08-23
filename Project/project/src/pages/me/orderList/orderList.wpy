@@ -150,8 +150,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="全部订单" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="全部订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="orderList-type">
             <repeat for="{{orderType}}" key="index">
                 <view class="orderList-type-item" @tap="chooseType({{index}})">
@@ -223,6 +223,7 @@ export default class OrderList extends wepy.page {
         //订单状态：待付款0，待成团1，待发货2，发货中（待收货）3, 售后中4, 已完成5
         curType: 3,
         orderList: [],
+        isIphoneX: false,
         color: {}
     };
 
@@ -282,6 +283,7 @@ export default class OrderList extends wepy.page {
         }
         self.curType = options.index;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
     }
 }

@@ -678,7 +678,35 @@ export default class Index extends wepy.page {
         self.shopChoose = shopClosest;
         console.log(self.shopChoose);
         self.$apply();
+<<<<<<< HEAD
+        
+        let categories = await api.getShopCategory();
+        console.log(categories);
+        self.category = categories.data;
+        console.log(self.category);
+        self.$apply();
+
+        let res = await api.getShopProduct({
+            query: {
+                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+            }
+        });
+        console.log(res);
+        self.product = res.data;
+        self.startTime = self.product.today[0].limitStartTime;
+        self.endTime = self.product.today[0].limitEndTime;
+        self.$apply();
+        self.countDown();
+
+        let banners = await api.getBanners({
+            query: {
+                shopId: '95c5106b900e47caab71ad7b049d9697'
+            }
+        })
+        console.log(banners)
+=======
         wx.setStorageSync('shopChoose', self.shopChoose);
+>>>>>>> 3fe9e60b44686326ef0c1a63d162b7a5516c65e3
     }
 }
 </script>

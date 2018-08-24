@@ -534,6 +534,13 @@ export default class Index extends wepy.page {
         self.endTime = self.product.today[0].limitEndTime;
         self.$apply();
         self.countDown();
+
+        let banners = await api.getBanners({
+            query: {
+                shopId: '95c5106b900e47caab71ad7b049d9697'
+            }
+        })
+        console.log(banners)
     }
 }
 </script>

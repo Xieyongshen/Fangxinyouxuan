@@ -259,6 +259,13 @@ export default class Category extends wepy.page {
             }
         });
         console.log(res);
+        let categoryBannners = await api.getCategoryBanners({
+            query: {
+                shopId: '95c5106b900e47caab71ad7b049d9697',
+                typeId: '6c9c617d84da4454afca1c06bba07eec'
+            }
+        })
+        console.log(categoryBannners)
         self.type = res.data.type;
         self.type.forEach((item, index) => {
             item.scrollID = 'type' + index;

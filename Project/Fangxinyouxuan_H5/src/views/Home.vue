@@ -60,10 +60,12 @@
 </template>
 
 <script>
+import navBar from '@/components/navBar.vue'
 
 export default {
   name: 'home',
   components: {
+    navBar
   },
 
   data: function () {
@@ -100,6 +102,10 @@ export default {
 </script>
 
 <style scoped>
+.home{
+    position: relative;
+}
+
 .me-bg {
     width: 100%;
     height: 18.75rem;

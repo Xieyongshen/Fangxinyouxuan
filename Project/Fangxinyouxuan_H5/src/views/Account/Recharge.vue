@@ -1,5 +1,21 @@
 <template>
   <div class="recharge">
-    <h1>This is an recharge page</h1>
+    <navBar navTitle="充值" isChildPage="y"></navBar>
   </div>
 </template>
+
+<script>
+import navBar from '@/components/navBar.vue'
+
+export default {
+  name: 'recharge',
+  components: {
+    navBar
+  },
+
+  data: function(){
+      return{
+      }
+  }
+}
+</script>

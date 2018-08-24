@@ -196,7 +196,7 @@ def getShopProduct(request):
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         if(products.activityType==1):
-            todayEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),count=products.limitCount,remain=products.limitRemain,label=products.comment,limitStartTime=products.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=products.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
+            todayEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),count=products.limitCount,limitRemain=products.limitRemain,label=products.comment,limitStartTime=products.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=products.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
             todayProducts.append(todayEle)
     
     sortedPros = list(ShopProduct.objects.order_by("buyTimes"))
@@ -208,11 +208,11 @@ def getShopProduct(request):
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         if(products.activityType==1):
-            hotEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),label=products.comment)
+            hotEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),label=products.comment)
         elif(products.activityType==2):
-            hotEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.groupPrice),label=products.comment)
+            hotEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.groupPrice),label=products.comment)
         else:
-            hotEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
+            hotEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
         hotProducts.append(hotEle)
 
     for products in shop_products:
@@ -221,11 +221,11 @@ def getShopProduct(request):
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         if(products.activityType==1):
-            selectedEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),label=products.comment)
+            selectedEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),label=products.comment)
         elif(products.activityType==2):
-            selectedEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.groupPrice),label=products.comment)
+            selectedEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.groupPrice),label=products.comment)
         else:
-            selectedEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
+            selectedEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price),label=products.comment)
         selectedProducts.append(selectedEle)
 
     res_dict = dict(today=todayProducts,hot=hotProducts,selected=selectedProducts)
@@ -258,7 +258,7 @@ def getCategoryProduct(request):
         productSpec = list()
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
-        productEle = dict(spec=productSpec,id=str(products.pro_id),type=str(products.pro_type.type_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price))
+        productEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),type=str(products.pro_type.type_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.pro_price))
         productDict.append(productEle)
 
     res_dict = dict(type=typeDict,product=productDict)
@@ -283,7 +283,7 @@ def getProductDetail(request):
             productSpec = list()
             for specs in specList:
                 productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
-            recomendList.append(dict(spec=productSpec,id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+            recomendList.append(dict(remain=recPros.pro_remain,spec=productSpec,id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
         productgroups = ProductGroup.objects.filter(group_product__pro_id=the_product.pro_id)
         groupList = list()
         for productgroup in productgroups:
@@ -506,7 +506,7 @@ def getRecommendPros(request):
         productSpec = list()
         for specs in specList:
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
-        res_dict.append(dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,price=str(products.pro_price),imgUrl=APP_IMG_URL+str(products.pro_image)))
+        res_dict.append(dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,price=str(products.pro_price),imgUrl=APP_IMG_URL+str(products.pro_image)))
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
 
@@ -520,7 +520,7 @@ def getCouponProducts(request):
             productSpec = list()
             for specs in specList:
                 productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
-            todayEle = dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),count=products.limitCount,remain=products.limitRemain,label=products.comment,limitStartTime=products.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=products.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
+            todayEle = dict(remain=products.pro_remain,spec=productSpec,id=str(products.pro_id),name=products.pro_name,desc=products.pro_desc,imgUrl=APP_IMG_URL+str(products.pro_image),oriPrice=str(products.pro_origin_price),price=str(products.limitPrice),count=products.limitCount,limitRemain=products.limitRemain,label=products.comment,limitStartTime=products.limitStartTime.strftime("%Y-%m-%d %H:%M:%S"),limitEndTime=products.limitEndTime.strftime("%Y-%m-%d %H:%M:%S"))
             todayProducts.append(todayEle)
     groupProducts = list()
     groupProductList = list(ShopProduct.objects.filter(activityType=2))
@@ -533,7 +533,7 @@ def getCouponProducts(request):
         groupList = list()
         for productgroup in productgroups:
             groupList.append(dict(id=str(productgroup.group_monitor.user_openid),avatar=productgroup.group_monitor.user_image))
-        groupProducts.append(dict(spec=productSpec,id=str(products.pro_id),name=products.pro_name,imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.groupPrice),oriPrice=str(products.pro_origin_price),soldCount=products.buyTimes,buyer=groupList))
+        groupProducts.append(dict(remain=products.pro_remain    ,spec=productSpec,id=str(products.pro_id),name=products.pro_name,imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.groupPrice),oriPrice=str(products.pro_origin_price),soldCount=products.buyTimes,buyer=groupList))
     res_dict = dict(limitProducts=todayProducts,groupProducts=groupProducts)
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
@@ -560,7 +560,7 @@ def getSearchResult(request):
             productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
         products.searchTimes = products.searchTimes + 1
         products.save()
-        eve_dict = dict(spec=productSpec,name=products.pro_name,id=str(products.pro_id),imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.pro_price),desc=products.pro_desc)
+        eve_dict = dict(remain=products.pro_remain,spec=productSpec,name=products.pro_name,id=str(products.pro_id),imgUrl=APP_IMG_URL+str(products.pro_image),price=str(products.pro_price),desc=products.pro_desc)
         res_dict.append(eve_dict)
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
@@ -605,3 +605,25 @@ def deleteMyAddress(request):
         address = Address.objects.get(address_id=addressId)
         address.delete()
     return HttpResponse('ok')
+
+def getBanners(request):
+    res_dict = list()
+    shopIdstr = request.GET['shopId']
+    shopId = uuid.UUID(shopIdstr)
+    bannerList = ShopBannar.objects.filter(shop__shop_id=shopId)
+    for banners in bannerList:
+        res_dict.append(dict(url=APP_IMG_URL+str(banners.bannar_url),position=banners.position))
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)
+
+def getCategoryBanners(request):
+    res_dict = list()
+    shopIdstr = request.GET['shopId']
+    shopId = uuid.UUID(shopIdstr)
+    typeIdstr = request.GET['typeId']
+    typeId = uuid.UUID(typeIdstr)
+    bannerList = ShopBannar.objects.filter(shop__shop_id=shopId,banner_type__type_id=typeId)
+    for banners in bannerList:
+        res_dict.append(dict(url=APP_IMG_URL+str(banners.bannar_url)))
+    res_json = json.dumps(res_dict)
+    return HttpResponse(res_json)

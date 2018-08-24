@@ -45,14 +45,6 @@ class Shop(models.Model):
 	def __str__(self):
 		return self.shop_name
 
-class ShopBannar(models.Model):
-	bannar_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
-	bannar_url = models.ImageField(u'商店海报',upload_to='img/%Y/%m/%d',null=True,blank=True)
-	shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-
-	def __str__(self):
-		return self.bannar_url
-
 class AbstractType(models.Model):  
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child', on_delete=models.CASCADE)  
     class Meta:  
@@ -66,6 +58,16 @@ class ProductType(AbstractType):
 
 	def __str__(self):
 		return self.type_name
+
+class ShopBannar(models.Model):
+	bannar_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)
+	bannar_url = models.ImageField(u'商店海报',upload_to='img/%Y/%m/%d',null=True,blank=True)
+	shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+	position = models.IntegerField(u'布局位置',blank=True,null=True)
+	banner_type = models.ForeignKey(ProductType,blank=True,null=True,on_delete=models.CASCADE)
+
+	def __str__(self):
+		return str(self.bannar_url)
 
 class ShopProduct(models.Model):
 	pro_id = models.UUIDField(primary_key=True, auto_created=True,default=uuid.uuid4,editable=False)

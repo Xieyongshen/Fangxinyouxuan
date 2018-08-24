@@ -41,4 +41,6 @@ urlpatterns = [
     path('api/getSearchResult', fangxin_views.getSearchResult),
     path('api/saveMyAddress', fangxin_views.saveMyAddress),
     path('api/deleteMyAddress', fangxin_views.deleteMyAddress),
+    path('api/getBanners', fangxin_views.getBanners),
+    path('api/getCategoryBanners', fangxin_views.getCategoryBanners),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

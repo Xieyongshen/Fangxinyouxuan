@@ -9,7 +9,7 @@
             <group>
                 <div class="deliver-time">
                     <div>配送时间</div>
-                    <checker v-model="deliverTime" default-item-class="deliver-time-item" selected-item-class="deliver-time-item-selected">
+                    <checker v-model="deliverTime" :max="1" default-item-class="deliver-time-item" selected-item-class="deliver-time-item-selected">
                         <checker-item :value="1">全天</checker-item>
                         <checker-item :value="2">上午09:00-下午18:00</checker-item>
                     </checker>

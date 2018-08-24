@@ -1,7 +1,6 @@
 <template>
     <div class="fan">
         <img src="@/assets/me-bg.png" class="me-bg">
-        <navBar navTitle="我的粉丝" isChildPage="y"></navBar>
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
@@ -41,13 +40,11 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 import { PopupRadio } from 'vux'
 
 export default {
   name: 'fan',
   components: {
-    navBar,
     PopupRadio
   },
 

@@ -1,11 +1,10 @@
 <template>
   <div class="home">
         <img src="@/assets/me-bg.png" class="me-bg">
-        <navBar navTitle="放心优选"></navBar>
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
-            <img src="" class="me-userinfo-avatar">
+            <img class="me-userinfo-avatar">
             <div class="me-userinfo-name">nickName</div>
         </div>
 
@@ -61,12 +60,10 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 
 export default {
   name: 'home',
   components: {
-    navBar
   },
 
   data: function () {
@@ -107,7 +104,6 @@ export default {
     width: 100%;
     height: 18.75rem;
     position: absolute;
-    top: 3.875rem;
     z-index: -1;
 }
 
@@ -119,7 +115,6 @@ export default {
     text-align: center;
     box-sizing: border-box;
     position: relative;
-    top:3.875rem;
 
 }
 
@@ -162,7 +157,6 @@ export default {
 
 .me-function-item{
     width: 13.75rem;
-    margin: 3.875rem auto 0;
     padding: 0.9375rem;
     display: flex;
     flex-direction: column;

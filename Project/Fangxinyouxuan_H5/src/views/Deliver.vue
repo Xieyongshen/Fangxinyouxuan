@@ -1,6 +1,5 @@
 <template>
     <div class="deliver">
-        <navBar navTitle="门店配送设置" isChildPage="y"></navBar>
         <div class="deliver-config">
             <check-icon :value.sync="deliverConfig">配送到家</check-icon>
         </div>
@@ -26,13 +25,11 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 import { CheckIcon, Checker, CheckerItem, PopupRadio, XInput, XButton } from 'vux'
 
 export default {
   name: 'ranking',
   components: {
-    navBar,
     CheckIcon,
     Checker,
     CheckerItem,

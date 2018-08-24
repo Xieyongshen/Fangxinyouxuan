@@ -1,7 +1,6 @@
 <template>
   <div class="myAccount">
     <img src="@/assets/me-bg.png" class="me-bg">
-    <navBar navTitle="我的金库" isChildPage="y"></navBar>
 
     <div class="me-userinfo">
         <div class="me-share">分享店铺</div>
@@ -47,12 +46,10 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 
 export default {
   name: 'account',
   components: {
-    navBar
   },
 
   data: function () {

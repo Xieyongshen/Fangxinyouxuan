@@ -1,6 +1,5 @@
 <template>
   <div class="manage">
-    <navBar navTitle="商品管理" isChildPage="y"></navBar>
     
     <div class="manage-head">
       <img src="@/assets/ic_user.png" class="icon-user">
@@ -53,13 +52,11 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 import { PopupRadio, Checker, CheckerItem,  XButton } from 'vux'
 
 export default {
   name: 'manage',
   components: {
-    navBar,
     PopupRadio,
     Checker,
     CheckerItem,

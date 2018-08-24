@@ -1,6 +1,5 @@
 <template>
     <div class="team">
-        <navBar navTitle="我的团队" isChildPage="y"></navBar>
 
         <search class="team-search"
             @result-click="resultClick"
@@ -45,13 +44,11 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 import { Search } from 'vux'
 
 export default {
   name: 'team',
   components: {
-    navBar,
     Search
   },
 

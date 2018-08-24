@@ -1,7 +1,6 @@
 <template>
     <div class="withdrawRecord">
         <img src="@/assets/me-bg.png" class="me-bg">
-        <navBar navTitle="提现记录" isChildPage="true"></navBar>
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
@@ -24,12 +23,10 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 
 export default {
   name: 'withdrawRecord',
   components: {
-    navBar
   },
 
   data: function () {

@@ -1,7 +1,6 @@
 <template>
   <div class="income">
     <img src="@/assets/me-bg.png" class="me-bg">
-    <navBar navTitle="本店收益" isChildPage="y"></navBar>
 
     <div class="me-userinfo">
       <div class="me-share">分享店铺</div>
@@ -72,13 +71,11 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
 import { Grid, GridItem, PopupRadio } from 'vux'
 
 export default {
   name: 'income',
   components: {
-    navBar,
     Grid,
     GridItem,
     PopupRadio

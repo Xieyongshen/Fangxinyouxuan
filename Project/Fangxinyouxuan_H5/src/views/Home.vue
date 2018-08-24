@@ -69,36 +69,35 @@ export default {
     navBar
   },
 
-    data: function() {
-        return {
-            postConfig:'已开启'
-        }
-    },
+  data: function () {
+    return {
+      postConfig: '已开启'
+    }
+  },
 
   methods: {
-    goOrder(){
+    goOrder () {
       this.$router.push('/order')
     },
-    goIncome(){
+    goIncome () {
       this.$router.push('/income')
     },
-    goManage(){
+    goManage () {
       this.$router.push('/manage')
     },
-    goAccount(){
+    goAccount () {
       this.$router.push('/account')
     },
-    goTeam(){
+    goTeam () {
       this.$router.push('/team')
     },
-    goRanking(){
+    goRanking () {
       this.$router.push('/ranking')
     },
-    goDeliver(){
+    goDeliver () {
       this.$router.push('/deliver')
     }
   }
-
 
 }
 </script>
@@ -121,7 +120,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     top:3.875rem;
-   
+
 }
 
 .me-userinfo-avatar {
@@ -182,4 +181,3 @@ export default {
     margin-bottom: 0.625rem;
 }
 </style>
-

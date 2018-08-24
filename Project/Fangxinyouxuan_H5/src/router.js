@@ -11,6 +11,9 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      meta: {
+        title: '放心优选'
+      },
       component: Home
     },
     {
@@ -52,6 +55,9 @@ export default new Router({
     {
       path: '/order',
       name: 'order',
+      meta: {
+        title: '本店订单'
+      },
       component: () => import('./views/Order.vue')
     },
     {

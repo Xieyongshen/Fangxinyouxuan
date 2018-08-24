@@ -17,7 +17,7 @@
                 <PopupRadio title="配送距离" placeholder="500m" v-model="deliverDistance" :options="deliverDistanceList"></PopupRadio>
                 <XInput title="配送费用" placeholder="_____元"></XInput>
             </group>
-            <hr class="divider">       
+            <hr class="divider">
         </div>
         <div class="button-submit">
             <XButton mini type="primary">确认提交</XButton>
@@ -41,13 +41,13 @@ export default {
     XButton
   },
 
-  data: function(){
-      return{
-        deliverConfig: false,
-        deliverTime: '1',
-        deliverDistance: '',
-        deliverDistanceList: ['500m','1000m','2000m']
-      }
+  data: function () {
+    return {
+      deliverConfig: false,
+      deliverTime: '1',
+      deliverDistance: '',
+      deliverDistanceList: ['500m', '1000m', '2000m']
+    }
   },
 
   methods: {

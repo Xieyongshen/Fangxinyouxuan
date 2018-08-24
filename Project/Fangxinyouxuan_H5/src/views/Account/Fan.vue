@@ -2,7 +2,7 @@
     <div class="fan">
         <img src="@/assets/me-bg.png" class="me-bg">
         <navBar navTitle="我的粉丝" isChildPage="y"></navBar>
-    
+
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
             <img src="" class="me-userinfo-avatar">
@@ -20,7 +20,7 @@
                 <div class="fan-list-item-content">
                     <div class="fan-list-item-number">{{item.number}}</div>
                     <img src="@/assets/ic_user.png" class="icon-user">
-                
+
                     <div class="fan-list-item-userinfo">
                         <div class="fan-list-userinfo-baseinfo">
                             <div class="fan-list-userinfo-name">{{item.name}}</div>
@@ -48,96 +48,96 @@ export default {
   name: 'fan',
   components: {
     navBar,
-    PopupRadio,
+    PopupRadio
   },
 
-  data: function(){
-      return{
-        fanOrder:'',
-        fanOrderList: [{key: '0', value: '本月消费top10用户'}, {key: '1', value: '本周消费top10用户'}, {key: '2', value: '累计消费排名'}],
-        items: [
-            {
-                number: '1',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-            {
-                number: '2',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-            {
-                number: '3',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-            {
-                number: '4',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-             {
-                number: '5',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-             {
-                number: '6',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-             {
-                number: '7',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-             {
-                number: '8',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-             {
-                number: '9',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            },
-            {
-                number: '10',
-                name: '小花',
-                sex: '女',
-                wechat: 'xiaohuazuimei',
-                cost: '999',
-                tel: '13006666666'
-            }
-        ]
-      }
+  data: function () {
+    return {
+      fanOrder: '',
+      fanOrderList: [{key: '0', value: '本月消费top10用户'}, {key: '1', value: '本周消费top10用户'}, {key: '2', value: '累计消费排名'}],
+      items: [
+        {
+          number: '1',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '2',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '3',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '4',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '5',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '6',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '7',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '8',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '9',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        },
+        {
+          number: '10',
+          name: '小花',
+          sex: '女',
+          wechat: 'xiaohuazuimei',
+          cost: '999',
+          tel: '13006666666'
+        }
+      ]
+    }
   }
 }
 </script>
@@ -166,7 +166,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     top:3.875rem;
-   
+
 }
 
 .me-userinfo-avatar {
@@ -218,7 +218,7 @@ export default {
 .fan-list-item-content{
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 .fan-list-item-number{

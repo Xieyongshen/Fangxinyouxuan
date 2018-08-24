@@ -2,7 +2,7 @@
   <div class="myAccount">
     <img src="@/assets/me-bg.png" class="me-bg">
     <navBar navTitle="我的金库" isChildPage="y"></navBar>
-    
+
     <div class="me-userinfo">
         <div class="me-share">分享店铺</div>
         <img src="" class="me-userinfo-avatar">
@@ -42,7 +42,7 @@
           <a @click="goRecharge" class="weui-btn weui-btn_plain-default">我要充值</a>
           <a @click="goWithdraw" class="weui-btn weui-btn_plain-default">我要提现</a>
       </div>
-   
+
   </div>
 </template>
 
@@ -55,27 +55,27 @@ export default {
     navBar
   },
 
-  data: function(){
-      return{
-        totalMoney: 0.0,
-        fansNumber: 666
-      }
+  data: function () {
+    return {
+      totalMoney: 0.0,
+      fansNumber: 666
+    }
   },
 
   methods: {
-    goFan(){
+    goFan () {
       this.$router.push('/account/fan')
     },
-    goAccountDetai(){
+    goAccountDetai () {
       this.$router.push('/account/accountDetail')
     },
-    goWithdrawRecord(){
+    goWithdrawRecord () {
       this.$router.push('/account/withdrawRecord')
     },
-    goRecharge(){
+    goRecharge () {
       this.$router.push('/account/recharge')
     },
-    goWithdraw(){
+    goWithdraw () {
       this.$router.push('/account/withdraw')
     }
   }
@@ -101,7 +101,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     top:3.875rem;
-   
+
 }
 
 .me-userinfo-avatar {

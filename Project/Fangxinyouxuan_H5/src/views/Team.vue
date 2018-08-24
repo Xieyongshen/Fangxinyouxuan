@@ -1,7 +1,7 @@
 <template>
     <div class="team">
         <navBar navTitle="我的团队" isChildPage="y"></navBar>
-        
+
         <search class="team-search"
             @result-click="resultClick"
             @on-change="getResult"
@@ -40,7 +40,6 @@
                 <hr class="divider">
             </div>
         </div>
-    
 
     </div>
 </template>
@@ -56,36 +55,36 @@ export default {
     Search
   },
 
-  data: function(){
-      return{
-          totalTeamMenber: '85',
-          results: [],
-          value: '',
-          placeHolderShow: false,
-          items: [
-            {
-                number: '1',
-                username: '初夏',
-                recommendedBy: '小黄',
-                recommendedTime: '2018-07-02 01:11:01',
-                recommendedFrom: '二维码'
-            },
-            {
-                number: '2',
-                username: '李颖',
-                recommendedBy: 'lily bai',
-                recommendedTime: '2018-07-02 01:11:01',
-                recommendedFrom: '分享'
-            },
-            {
-                number: '3',
-                username: '薄荷',
-                recommendedBy: '多多麻麻',
-                recommendedTime: '2018-07-02 01:11:01',
-                recommendedFrom: '二维码'
-            }
-        ]
-      }
+  data: function () {
+    return {
+      totalTeamMenber: '85',
+      results: [],
+      value: '',
+      placeHolderShow: false,
+      items: [
+        {
+          number: '1',
+          username: '初夏',
+          recommendedBy: '小黄',
+          recommendedTime: '2018-07-02 01:11:01',
+          recommendedFrom: '二维码'
+        },
+        {
+          number: '2',
+          username: '李颖',
+          recommendedBy: 'lily bai',
+          recommendedTime: '2018-07-02 01:11:01',
+          recommendedFrom: '分享'
+        },
+        {
+          number: '3',
+          username: '薄荷',
+          recommendedBy: '多多麻麻',
+          recommendedTime: '2018-07-02 01:11:01',
+          recommendedFrom: '二维码'
+        }
+      ]
+    }
   },
 
   methods: {
@@ -203,4 +202,3 @@ function getResult (val) {
 }
 
 </style>
-

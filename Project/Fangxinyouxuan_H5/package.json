@@ -11,6 +11,7 @@
     "less-loader": "^4.1.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
+    "vue-wechat-title": "^2.0.4",
     "vux": "^2.9.2"
   },
   "devDependencies": {

@@ -1,44 +1,43 @@
 <template>
     <div class="navBar">
-        <block v-if="isChildPage == 'y'">
+        <span v-if="isChildPage == 'y'">
             <div class="nav-back">
             <!-- <navigator open-type="navigateBack" delta="1" hover-class="none" class="nav-back"> -->
-                <img @click="goBack" src="@/assets/out.png" class="icon-out">
+                <x-icon @click="goBack" type="ios-arrow-back" class="icon-out"></x-icon>
             <!-- </navigator> -->
             </div>
-        </block>
+        </span>
         <label class="nav-title">{{ navTitle }}</label>
     </div>
 </template>
 
 <script>
-    export default{
-        name: 'navBar',
-        props: {
-            navTitle: {
-                type: String,
-                default: '',
-            },
-            isChildPage: {
-                type: String,
-                default: 'n'
-            }
-       },
-
-       methods: {
-           goBack(){
-               this.$router.go(-1)
-           }
-       }
+export default{
+  name: 'navBar',
+  props: {
+    navTitle: {
+      type: String,
+      default: ''
+    },
+    isChildPage: {
+      type: String,
+      default: 'n'
     }
+  },
+
+  methods: {
+    goBack () {
+      this.$router.go(-1)
+    }
+  }
+}
 </script>
 
 <style scoped>
 .navBar {
     width: 100%;
-    height: 3.875rem;
+    height: 2.8125rem /* 45/16 */;
     text-align: center;
-    padding: 1.25rem 0;
     background: #ffffff;
     box-sizing: border-box;
     position: fixed;
@@ -47,20 +46,19 @@
 }
 
 .nav-back {
-    width: 3.125rem;
-    text-align: left;
+    height: 2.8125rem /* 45/16 */;
     position: absolute;
-    left: 1.875rem;
+    left: 1.25rem /* 20/16 */;
 }
 
 .icon-out {
-    width: 0.75rem;
-    height: 1.25rem;
+    size: 1.5625rem /* 25/16 */;
+    margin: .625rem /* 10/16 */ 0;
 }
 
 .nav-title{
-    font-size: 20px;
-    line-height: 1rem;
+    font-size: 1.25rem /* 20/16 */;
+    line-height: 2.8125rem /* 45/16 */;
     display: inline-block;
 }
 </style>

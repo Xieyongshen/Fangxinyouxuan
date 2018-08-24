@@ -2,7 +2,7 @@
     <div class="accountDetail">
         <img src="@/assets/me-bg.png" class="me-bg">
         <navBar navTitle="资金明细" isChildPage="y"></navBar>
-    
+
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
             <img src="" class="me-userinfo-avatar">
@@ -29,32 +29,32 @@ import navBar from '@/components/navBar.vue'
 export default {
   name: 'accountDetail',
   components: {
-    navBar,
+    navBar
   },
 
-  data: function(){
-      return{
-        items: [
-            {
-                number: '1',
-                name: '资金明细一',
-                change: '+88.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '2',
-                name: '资金明细二',
-                change: '-28.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '3',
-                name: '资金明细三',
-                change: '+88.88',
-                time: '2018-07-02 01:11:01'
-            }
-        ]
-      }
+  data: function () {
+    return {
+      items: [
+        {
+          number: '1',
+          name: '资金明细一',
+          change: '+88.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '2',
+          name: '资金明细二',
+          change: '-28.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '3',
+          name: '资金明细三',
+          change: '+88.88',
+          time: '2018-07-02 01:11:01'
+        }
+      ]
+    }
   }
 }
 </script>
@@ -83,7 +83,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     top:3.875rem;
-   
+
 }
 
 .me-userinfo-avatar {

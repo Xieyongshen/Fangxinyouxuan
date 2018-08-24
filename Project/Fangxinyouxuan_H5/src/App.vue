@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
-    <router-view/>
+    <router-view  v-wechat-title='$route.meta.title' />
   </div>
 </template>
 
@@ -13,12 +13,17 @@
     word-wrap: break-word;
     font-family: Microsoft YaHei;
     color: #333;
-    -webkit-text-size-adjust: none; 
+    -webkit-text-size-adjust: none;
 }
 
 #app *{
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select:none;
+}
+
+html{
+  color: #424242;
+  font-size: 16px;
 }
 </style>
 

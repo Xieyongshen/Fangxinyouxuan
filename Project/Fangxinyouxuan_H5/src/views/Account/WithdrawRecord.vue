@@ -1,8 +1,8 @@
 <template>
     <div class="withdrawRecord">
         <img src="@/assets/me-bg.png" class="me-bg">
-        <navBar navTitle="提现记录" isChildPage="y"></navBar>
-    
+        <navBar navTitle="提现记录" isChildPage="true"></navBar>
+
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
             <img src="" class="me-userinfo-avatar">
@@ -29,44 +29,44 @@ import navBar from '@/components/navBar.vue'
 export default {
   name: 'withdrawRecord',
   components: {
-    navBar,
+    navBar
   },
 
-  data: function(){
-      return{
-        items: [
-            {
-                number: '1',
-                name: '提现记录一',
-                change: '-88.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '2',
-                name: '提现记录二',
-                change: '-88.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '3',
-                name: '提现记录三',
-                change: '-88.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '4',
-                name: '提现记录四',
-                change: '-88.88',
-                time: '2018-07-02 01:11:01'
-            },
-            {
-                number: '5',
-                name: '提现记录五',
-                change: '-88.88',
-                time: '2018-07-02 01:11:01'
-            }
-        ]
-      }
+  data: function () {
+    return {
+      items: [
+        {
+          number: '1',
+          name: '提现记录一',
+          change: '-88.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '2',
+          name: '提现记录二',
+          change: '-88.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '3',
+          name: '提现记录三',
+          change: '-88.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '4',
+          name: '提现记录四',
+          change: '-88.88',
+          time: '2018-07-02 01:11:01'
+        },
+        {
+          number: '5',
+          name: '提现记录五',
+          change: '-88.88',
+          time: '2018-07-02 01:11:01'
+        }
+      ]
+    }
   }
 }
 </script>
@@ -95,7 +95,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     top:3.875rem;
-   
+
 }
 
 .me-userinfo-avatar {

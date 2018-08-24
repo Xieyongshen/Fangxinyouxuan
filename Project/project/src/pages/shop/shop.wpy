@@ -93,8 +93,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="选择门店" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="选择门店" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="shop-content">
             <scroll-view scroll-x class="shop-area">
                 <repeat for="{{area}}" key="index">
@@ -133,6 +133,7 @@ export default class Shop extends wepy.page {
         shopChoose: {},
         area: [],
         shop: [],
+        isIphoneX: false,
         color: {}
     };
 
@@ -155,6 +156,8 @@ export default class Shop extends wepy.page {
 
     async onLoad() {
         var self = this;
+        self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         var latitude = 0.0;
         var longitude = 0.0;
         wx.getLocation({
@@ -196,7 +199,6 @@ export default class Shop extends wepy.page {
         } else {
             self.areaChoose = self.shop[0].area;
         }
-        self.color = self.$parent.globalData.color;
         self.$apply();
 
         var dis = 0;

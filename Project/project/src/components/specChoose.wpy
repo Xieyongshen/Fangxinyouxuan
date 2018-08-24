@@ -1,0 +1,291 @@
+<style lang="less">
+.product-select {
+    width: 750rpx;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.product-select-container {
+    width: 750rpx;
+    padding-top: 30rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+}
+
+.product-select-close {
+    width: 80rpx;
+    height: 80rpx;
+    font-size: 60rpx;
+    font-weight: 900;
+    line-height: 80rpx;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: -40rpx;
+    right: 60rpx;
+}
+
+.product-select-content {
+    max-height: 80vh;
+    overflow: scroll;
+}
+
+.product-select-img {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 30rpx;
+    vertical-align: top;
+}
+
+.product-select-info {
+    width: 500rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 0;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-name {
+    width: 500rpx;
+    height: 45rpx;
+    color: #999999;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 60rpx;
+}
+
+.product-select-price {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-remain {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    margin-right: 30rpx;
+    float: right;
+}
+
+.product-select-spec {
+    width: 750rpx;
+    margin-top: 45rpx;
+    padding: 0 30rpx;
+}
+
+.product-spec-title {
+    font-size: 28rpx;
+    line-height: 50rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-spec-content {
+    display: inline-block;
+}
+
+.product-spec-item {
+    height: 64rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    margin-left: 20rpx;
+    padding: 0 50rpx;
+    border: 2rpx solid #cccccc;
+    display: inline-block;
+}
+
+.product-select-count {
+    width: 750rpx;
+    margin-top: 35rpx;
+    padding: 0 30rpx;
+    text-align: right;
+    text {
+        font-size: 28rpx;
+        line-height: 64rpx;
+        margin-right: 40rpx;
+        display: inline-block;
+    }
+}
+
+.product-count-choose {
+    height: 64rpx;
+    display: inline-block;
+}
+
+.product-count-reduce,
+.product-count-current,
+.product-count-add {
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    text-align: center;
+    border: 2rpx solid #cccccc;
+    box-sizing: content-box;
+    display: inline-block;
+}
+
+.product-count-current,
+.product-count-add {
+    border-left: none;
+}
+
+.product-select-buy {
+    width: 750rpx;
+    height: 100rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 100rpx;
+    text-align: center;
+    margin: 20rpx 0;
+}
+</style>
+<template>
+    <view wx:if="{{isChoosing}}" class="product-select" @tap="selectClose()">
+        <view class="product-select-container" @tap.stop="selectContent()">
+            <view class="product-select-close" @tap="selectClose()">×</view>
+            <view class="product-select-content">
+                <image mode="aspectFill" src="{{imageCover}}" class="product-select-img" />
+                <view class="product-select-info">
+                    <view class="product-select-name">{{name}}</view>
+                    <view class="product-select-price" style="color:{{priceColor}}">￥{{price}}</view>
+                    <view class="product-select-remain">库存：{{remain}}</view>
+                </view>
+                <view class="product-select-spec">
+                    <view class="product-spec-title">规格：</view>
+                    <view class="product-spec-content">
+                        <repeat for="{{product.spec}}" key="index">
+                            <view class="product-spec-item" style="{{index == specChoose? 'color:' + priceColor + ';border: 2rpx solid ' + priceColor + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
+                        </repeat>
+                    </view>
+                </view>
+                <view class="product-select-count">
+                    <text>数量：</text>
+                    <view class="product-count-choose">
+                        <view class="product-count-reduce" style="{{count > 1 ? 'color:' + priceColor + ';' : ''}}" @tap="countMinus">-</view>
+                        <view class="product-count-current" style="color:{{priceColor}};">{{count}}</view>
+                        <view class="product-count-add" style="{{count < remain ? 'color:' + priceColor + ';' : ''}}" @tap="countPlus">+</view>
+                    </view>
+                </view>
+                <view hover-class="navigator-hover" class="product-select-buy" style="background:{{priceColor}}" @tap="addToCart">加入购物车</view>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class SpecChoose extends wepy.component {
+    data = {
+        specChoose: 0,
+        count: 1
+    };
+
+    props = {
+        priceColor: {
+            type: String,
+            default: '#f5333f'
+        },
+        isChoosing: {
+            type: Boolean,
+            default: true,
+            twoWay: true
+        },
+        id: String,
+        imageCover: String,
+        name: String,
+        type: Number,
+        spec: Array,
+        oriPrice: Number,
+        priceColor: {
+            type: String,
+            default: '#f5333f'
+        },
+        remain: Number
+    };
+
+    methods = {
+        selectClose() {
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        selectContent() {
+            console.log(this);
+            return;
+        },
+
+        specChoose(spec, e) {
+            this.specChoose = spec;
+            this.$apply();
+        },
+
+        countMinus() {
+            if (this.count > 1) {
+                this.count--;
+                this.$apply();
+            }
+        },
+
+        countPlus() {
+            if (this.count < this.remain) {
+                this.count++;
+                this.$apply();
+            }
+        },
+
+        addToCart() {
+            var self = this;
+            var shoppingCart = wx.getStorageSync('shoppingCart');
+            var hasCur = false;
+            if (shoppingCart.length > 0) {
+                shoppingCart.forEach(element => {
+                    if (element.id == self.id) {
+                        hasCur = true;
+                        element.count += self.count;
+                        return;
+                    }
+                });
+            } else {
+                shoppingCart = [];
+            }
+
+            var oriPrice;
+            console.log(self.id);
+
+            if (hasCur == false) {
+                shoppingCart.push({
+                    id: self.id,
+                    name: self.name,
+                    image: self.imageCover,
+                    spec: self.spec[self.specChoose].name,
+                    price: self.price,
+                    oriPrice: self.oriPrice,
+                    count: self.count
+                });
+            }
+
+            wx.setStorageSync('shoppingCart', shoppingCart);
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000
+            });
+
+            console.log(shoppingCart);
+            this.isChoosing = false;
+            this.$apply();
+        }
+    };
+}
+</script>

@@ -193,7 +193,6 @@ page {
     width: 35rpx;
     height: 35rpx;
     border-radius: 50%;
-    background: #fdedeb;
     margin-right: 10rpx;
     vertical-align: top;
 }
@@ -227,10 +226,160 @@ page {
     line-height: 300rpx;
     text-align: center;
 }
+.product-select {
+    width: 750rpx;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.product-select-container {
+    width: 750rpx;
+    padding-top: 30rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+}
+
+.product-select-close {
+    width: 80rpx;
+    height: 80rpx;
+    font-size: 60rpx;
+    font-weight: 900;
+    line-height: 80rpx;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: -40rpx;
+    right: 60rpx;
+}
+
+.product-select-content {
+    max-height: 80vh;
+    overflow: scroll;
+}
+
+.product-select-img {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 30rpx;
+    vertical-align: top;
+}
+
+.product-select-info {
+    width: 500rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 0;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-name {
+    width: 500rpx;
+    height: 45rpx;
+    color: #999999;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 60rpx;
+}
+
+.product-select-price {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-remain {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    margin-right: 30rpx;
+    float: right;
+}
+
+.product-select-spec {
+    width: 750rpx;
+    margin-top: 45rpx;
+    padding: 0 30rpx;
+}
+
+.product-spec-title {
+    font-size: 28rpx;
+    line-height: 50rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-spec-content {
+    display: inline-block;
+}
+
+.product-spec-item {
+    height: 64rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    margin-left: 20rpx;
+    padding: 0 50rpx;
+    border: 2rpx solid #cccccc;
+    display: inline-block;
+}
+
+.product-select-count {
+    width: 750rpx;
+    margin-top: 35rpx;
+    padding: 0 30rpx;
+    text-align: right;
+    text {
+        font-size: 28rpx;
+        line-height: 64rpx;
+        margin-right: 40rpx;
+        display: inline-block;
+    }
+}
+
+.product-count-choose {
+    height: 64rpx;
+    display: inline-block;
+}
+
+.product-count-reduce,
+.product-count-current,
+.product-count-add {
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    text-align: center;
+    border: 2rpx solid #cccccc;
+    box-sizing: content-box;
+    display: inline-block;
+}
+
+.product-count-current,
+.product-count-add {
+    border-left: none;
+}
+
+.product-select-buy {
+    width: 750rpx;
+    height: 100rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 100rpx;
+    text-align: center;
+    margin: 20rpx 0;
+}
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="coupon-module">
             <repeat for="{{couponModule}}" key="id">
                 <view class="coupon-module-item" style="{{index == curModule ? 'color:' + color.red : ''}}" @tap="chooseModule({{index}})">
@@ -248,20 +397,22 @@ page {
             </view>
             <view class="coupon-block coupon-limit coupon-module-block" id="{{couponModule[1].id}}">
                 <view class="coupon-block-title">限时秒杀</view>
-                <view class="coupon-limit-time">距{{limit.isStarted?'结束':'开场'}}还剩
-                    <text style="background:{{color.red}}">{{limit.restTime[0]}}</text>:
-                    <text style="background:{{color.red}}">{{limit.restTime[1]}}</text>:
-                    <text style="background:{{color.red}}">{{limit.restTime[2]}}</text>
+                <view class="coupon-limit-time">距{{isStarted?'结束':'开场'}}还剩
+                    <text style="background:{{color.red}}">{{restTime.hour}}</text>:
+                    <text style="background:{{color.red}}">{{restTime.minute}}</text>:
+                    <text style="background:{{color.red}}">{{restTime.second}}</text>
                 </view>
                 <view class="coupon-limit-product">
-                    <repeat for="{{limit.product}}" key="id">
+                    <repeat for="{{limitProduct}}" key="id">
                         <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :desc.sync="item.desc">
-                            <view slot="extra" class="limit-item-time" style="color:{{color.red}}">{{limit.startTime}} 开抢</view>
+                            <view wx:if="{{isStarted == false}}" slot="extra" class="limit-item-time" style="color:{{color.red}}">{{startFormatTime}} 开抢</view>
+                            <view wx:else slot="extra" class="limit-item-time" style="color:{{color.red}}">正在抢购</view>
                             <view slot="price" class="limit-item-price">
                                 <view class="limit-item-price">¥{{item.price}}
                                     <text wx:if="{{item.oriPrice > 0}}">¥{{item.oriPrice}}</text>
                                 </view>
                             </view>
+                            <image slot="cart" src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="chooseSpec(0, {{index}})" />
                         </product>
                     </repeat>
                 </view>
@@ -283,18 +434,23 @@ page {
                 <view class="coupon-block-title">优选拼单购</view>
                 <view class="coupon-group-product">
                     <repeat for="{{groupProduct}}" key="id">
-                        <product :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name">
-                            <view slot="extra" class="group-item-sold">
-                                <repeat for="{{item.buyer}}" key="id">
-                                    <image src="{{item.avatar}}" class="group-item-buyer" />
-                                </repeat>
-                                <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
-                                <text>已团{{item.soldCount}}件</text>
+                        <view class="product-item" @tap="navToProduct({{item.id}})">
+                            <image src="{{item.imgUrl}}" class="product-item-img" />
+                            <view class="product-item-content">
+                                <view class="product-item-name">{{item.name}}</view>
+                                <view class="group-item-sold">
+                                    <repeat for="{{item.buyer}}" key="id" item="buyer">
+                                        <image src="{{buyer.avatar}}" class="group-item-buyer" />
+                                    </repeat>
+                                    <image src="/icons/coupon/ellipsis.png" class="group-item-ellipsis" />
+                                    <text>已团{{item.soldCount}}件</text>
+                                </view>
+                                <view class="group-item-price" style="color:{{color.red}}">¥{{item.price}}
+                                    <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
+                                </view>
+                                <image src="/icons/cart-recommend.png" class="product-icon-cart" @tap.stop="chooseSpec(1, {{index}})" />
                             </view>
-                            <view slot="price" class="group-item-price" style="color:{{color.red}}">¥{{item.price}}
-                                <text wx:if="{{item.oriPrice>0}}">¥{{item.oriPrice}}</text>
-                            </view>
-                        </product>
+                        </view>
                     </repeat>
                 </view>
             </view>
@@ -307,6 +463,36 @@ page {
                 <view class="coupon-game-content" style="background:{{color.red}}">敬请期待</view>
             </view>
         </scroll-view>
+        <view wx:if="{{isChoosing}}" class="product-select" @tap="selectClose()">
+            <view class="product-select-container" @tap.stop="selectContent()">
+                <view class="product-select-close" @tap="selectClose()">×</view>
+                <view class="product-select-content">
+                    <image mode="aspectFill" src="{{curProduct.imgUrl}}" class="product-select-img" />
+                    <view class="product-select-info">
+                        <view class="product-select-name">{{curProduct.name}}</view>
+                        <view class="product-select-price" style="color:{{color.red}}">￥{{curProduct.spec[specChoose].price}}</view>
+                        <view class="product-select-remain">库存：{{curProduct.remain}}</view>
+                    </view>
+                    <view class="product-select-spec">
+                        <view class="product-spec-title">规格：</view>
+                        <view class="product-spec-content">
+                            <repeat for="{{curProduct.spec}}" key="index">
+                                <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
+                            </repeat>
+                        </view>
+                    </view>
+                    <view class="product-select-count">
+                        <text>数量：</text>
+                        <view class="product-count-choose">
+                            <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
+                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <view class="product-count-add" style="{{count < curProduct.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
+                        </view>
+                    </view>
+                    <view hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap.stop="addToCart">加入购物车</view>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -314,7 +500,7 @@ page {
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
 import Product from '@/components/productBlock';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class Coupon extends wepy.page {
     components = {
@@ -332,6 +518,12 @@ export default class Coupon extends wepy.page {
         curModule: 0,
         scrollToModule: '',
         recommendImg: '',
+        isStarted: false,
+        startTime: '',
+        endTime: '',
+        startFormatTime: '',
+        endFormatTime: '',
+        restTime: {},
         update: [
             {
                 user: {
@@ -370,105 +562,15 @@ export default class Coupon extends wepy.page {
                 }
             }
         ],
-        limit: {
-            isStarted: false,
-            startTime: '7月24日 12：00',
-            restTime: ['10', '39', '06'],
-            product: [
-                {
-                    id: '00001',
-                    name: '日式蝴蝶结通勤女鞋',
-                    desc: '甜美通勤，轻松搭配',
-                    imgUrl: '',
-                    price: 209.3,
-                    oriPrice: 299
-                },
-                {
-                    id: '00002',
-                    name: '随便阅读灯',
-                    desc: '无极调光，360°自由旋转',
-                    imgUrl: '',
-                    price: 45
-                },
-                {
-                    id: '00003',
-                    name: '男士都市轻生活弹力牛仔裤',
-                    desc: '自如转换多场景，让双腿保持昂扬活力',
-                    imgUrl: '',
-                    oriPrice: 103.3,
-                    price: 83.3
-                }
-            ]
-        },
-        groupProduct: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 299,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                imgUrl: '',
-                price: 45,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                imgUrl: '',
-                price: 83.3,
-                oriPrice: 103.3,
-                soldCount: 289,
-                buyer: [
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    },
-                    {
-                        id: '',
-                        avatar: ''
-                    }
-                ]
-            }
-        ],
+        limitProduct: [],
+        groupProduct: [],
         moduleTop: [],
         moveStartPos: 0,
+        isChoosing: false,
+        curProduct: {},
+        specChoose: 0,
+        count: 1,
+        isIphoneX: false,
         color: {}
     };
 
@@ -510,10 +612,206 @@ export default class Coupon extends wepy.page {
 
         changeUpdate() {
             return false;
+        },
+
+        chooseSpec(type, index) {
+            var self = this;
+            if (type == 0) {
+                self.curProduct = self.limitProduct[index];
+            } else if (type == 1) {
+                self.curProduct = self.groupProduct[index];
+            }
+            self.specChoose = 0;
+            self.count = 1;
+            self.isChoosing = true;
+            self.$apply();
+            console.log(self.curProduct);
+        },
+
+        specChoose(spec, e) {
+            this.specChoose = spec;
+            this.$apply();
+        },
+
+        selectClose() {
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        selectContent() {
+            return;
+        },
+
+        countMinus() {
+            if (this.count > 1) {
+                this.count--;
+                this.$apply();
+            }
+        },
+
+        countPlus() {
+            if (this.count < this.curProduct.remain) {
+                this.count++;
+                this.$apply();
+            }
+        },
+
+        addToCart() {
+            var self = this;
+            var shoppingCart = wx.getStorageSync('shoppingCart');
+            var hasCur = false;
+            if (shoppingCart.length > 0) {
+                shoppingCart.forEach(element => {
+                    if (element.id == self.id) {
+                        hasCur = true;
+                        element.count += self.count;
+                        return;
+                    }
+                });
+            } else {
+                shoppingCart = [];
+            }
+
+            if (hasCur == false) {
+                shoppingCart.push({
+                    id: self.curProduct.id,
+                    name: self.curProduct.name,
+                    image: self.curProduct.imgUrl,
+                    spec: self.curProduct.spec[self.specChoose].name,
+                    price: self.curProduct.spec[self.specChoose].price,
+                    oriPrice: self.curProduct.oriPrice,
+                    count: self.count
+                });
+            }
+
+            wx.setStorageSync('shoppingCart', shoppingCart);
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000
+            });
+
+            console.log(shoppingCart);
+            this.isChoosing = false;
+            this.$apply();
         }
     };
 
     events = {};
+
+    getFormatTime() {
+        var self = this;
+        let startTimeStr = self.data.startTime;
+        let startTime = new Date(startTimeStr);
+        var month, day, hour, minute;
+
+        month = startTime.getMonth() + 1;
+        day = startTime.getDate();
+        hour = startTime.getHours();
+        minute = startTime.getMinutes();
+
+        self.startFormatTime =
+            month +
+            '月' +
+            day +
+            '日 ' +
+            self.timeFormat(hour) +
+            ':' +
+            self.timeFormat(minute);
+        self.$apply();
+    }
+
+    timeFormat(param) {
+        //小于10的格式化函数
+        var format = parseInt(param);
+        return format < 10 ? '0' + format : format;
+    }
+
+    countDown() {
+        var self = this;
+        let nowTime = new Date().getTime();
+        let startTimeStr = self.data.startTime;
+        let endTimeStr = self.data.endTime;
+        let countDown = {};
+
+        // 对结束时间进行处理渲染到页面
+        let startTime = new Date(startTimeStr).getTime();
+        let endTime = new Date(endTimeStr).getTime();
+        // 如果活动未结束，对时间进行处理
+        if (nowTime > endTime) {
+            self.isStarted = true;
+            countDown = {
+                day: '0',
+                hour: '00',
+                minute: '00',
+                second: '00'
+            };
+        } else {
+            var time;
+            if (nowTime >= startTime) {
+                self.isStarted = true;
+                time = (endTime - nowTime) / 1000;
+            } else {
+                time = (startTime - nowTime) / 1000;
+            }
+            let day = parseInt(time / (60 * 60 * 24));
+            let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+            let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+            let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+            countDown = {
+                day: day,
+                hour: self.timeFormat(hou),
+                minute: self.timeFormat(min),
+                second: self.timeFormat(sec)
+            };
+        }
+        // 渲染，然后每隔一秒执行一次倒计时函数
+        self.restTime = countDown;
+        self.$apply();
+        if (self.timer) {
+            clearInterval(self.timer);
+        }
+        self.timer = setInterval(function() {
+            if (self.restTime.second > 0) {
+                self.restTime.second--;
+            } else if (self.restTime.minute > 0) {
+                self.restTime.second = 59;
+                self.restTime.minute--;
+            } else if (self.restTime.hour > 0) {
+                self.restTime.second = 59;
+                self.restTime.minute = 59;
+                self.restTime.hour--;
+            } else if (self.restTime.day > 0) {
+                self.restTime.hour = 23;
+                self.restTime.second = 59;
+                self.restTime.minute = 59;
+                self.restTime.day--;
+            } else {
+                nowTime = new Date().getTime();
+                if (nowTime >= endTime) {
+                    clearInterval(this);
+                } else if (nowTime >= startTime) {
+                    self.isStarted = true;
+                    let time = (endTime - nowTime) / 1000;
+                    let day = parseInt(time / (60 * 60 * 24));
+                    let hou = parseInt((time % (60 * 60 * 24)) / 3600);
+                    let min = parseInt(((time % (60 * 60 * 24)) % 3600) / 60);
+                    let sec = parseInt(((time % (60 * 60 * 24)) % 3600) % 60);
+                    self.restTime = {
+                        day: day,
+                        hour: hou,
+                        minute: min,
+                        second: sec
+                    };
+                }
+            }
+            self.restTime.hour = self.timeFormat(self.restTime.hour);
+            self.restTime.minute = self.timeFormat(self.restTime.minute);
+            self.restTime.second = self.timeFormat(self.restTime.second);
+            self.$apply();
+        }, 1000);
+        self.$apply();
+    }
 
     onShareAppMessage() {
         return {
@@ -527,15 +825,22 @@ export default class Coupon extends wepy.page {
         self.curModule = 0;
         self.scrollToModule = self.couponModule[0].id;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
 
         let products = await api.getCouponProducts({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
             }
-        })
-        console.log(products)
-        
+        });
+        console.log(products);
+        self.groupProduct = products.data.groupProducts;
+        self.limitProduct = products.data.limitProducts;
+        self.startTime = self.limitProduct[0].limitStartTime;
+        self.endTime = self.limitProduct[0].limitEndTime;
+        self.$apply();
+        self.countDown();
+        self.getFormatTime();
 
         var query = wx.createSelectorQuery();
         var top = 0;

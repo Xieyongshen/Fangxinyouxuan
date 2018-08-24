@@ -14,57 +14,35 @@ page {
     padding-left: 10rpx;
     margin-bottom: 35rpx;
 }
+
+.coupon-empty{
+    color: #999999;
+    font-size: 26rpx;
+    line-height: 200rpx;
+    text-align: center;
+}
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选" isChildPage="y"></navBar>
-        <view class="myCoupon-recommend">
-            <view class="myCoupon-recommend-title">推荐商品</view>
-            <repeat for="{{recommend}}" key="id">
-                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price"></recommend>
-            </repeat>
-        </view>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <view wx:if="{{coupon.length == 0}}" class="coupon-empty">暂无可使用优惠券</view>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import Recommend from '@/components/recommendBlock';
+import api from '@/api/api'
 
 export default class MyCoupon extends wepy.page {
     components = {
-        navBar: NavBar,
-        recommend: Recommend
+        navBar: NavBar
     };
 
     data = {
-        recommend: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000002',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000003',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000004',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            }
-        ]
+        coupon: [],
+        isIphoneX: false,
+        color: {}
     };
 
     methods = {
@@ -73,6 +51,11 @@ export default class MyCoupon extends wepy.page {
 
     events = {};
 
-    onLoad() {}
+    async onLoad() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.$apply();
+    }
 }
 </script>

@@ -170,7 +170,6 @@ page {
     width: 100rpx;
     height: 100rpx;
     border-radius: 10rpx;
-    background: #fdedeb;
 }
 
 .order-product-img:not(:first-child) {
@@ -256,8 +255,8 @@ page {
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="填写订单" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="填写订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <image src="/icons/address-bg.png" class="order-header" />
         <view class="order-block order-info">
             <view wx:if="{{deliverChoose < 1}}" class="order-shop">
@@ -299,7 +298,7 @@ page {
                 </view>
                 <block wx:if="{{type == 2}}">
                     <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
-                        <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text>
+                        <!-- <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text> -->
                     </view>
                 </block>
             </view>
@@ -308,14 +307,14 @@ page {
             <view class="order-item">商品总价
                 <text>￥{{subtotal}}</text>
             </view>
-            <view class="order-item order-total-redPacket" @tap="navToRedPacket()">
+            <navigator url="../redPacket/redPacket?type=1" class="order-item order-total-redPacket">
                 <image src="/icons/redPacket.png" class="order-redPacket-icon" /> 红包
                 <image src="/icons/in.png" class="icon-in" />
                 <text style="color:{{redPacket.count == 0 ? '#bfbfbf' : color.red}}">
                     <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
                     <block wx:else>{{redPacket.count}}元</block>
                 </text>
-            </view>
+            </navigator>
             <view class="order-item">商品实付
                 <text>￥{{total}}</text>
             </view>
@@ -385,11 +384,12 @@ export default class Order extends wepy.page {
             id: '',
             count: 0
         },
-        remain: 8.88,
+        remain: 0.00,
         type: 0,
         sendTime: '2018-08-20',
         product: [],
         subtotal: 0,
+        isIphoneX: false,
         color: {}
     };
 
@@ -399,7 +399,7 @@ export default class Order extends wepy.page {
             var redPacket = this.redPacket.count * 100;
             var total = subtotal - redPacket;
             total = parseInt(total);
-            return total / 100;
+            return total > 0 ? total / 100 : 0;
         },
 
         totalFinal() {
@@ -408,7 +408,7 @@ export default class Order extends wepy.page {
             var freight = this.freightChoose * 100;
             var totalFinal = total + freight - remain;
             totalFinal = parseInt(totalFinal);
-            return totalFinal / 100;
+            return totalFinal > 0 ? totalFinal / 100 : 0;
         }
     };
 
@@ -427,12 +427,6 @@ export default class Order extends wepy.page {
         navToProductList(index, events) {
             wx.navigateTo({
                 url: '../productList/productList'
-            });
-        },
-
-        navToRedPacket() {
-            wx.navigateTo({
-                url: '../redPacket/redPacket'
             });
         }
     };
@@ -454,7 +448,7 @@ export default class Order extends wepy.page {
 
     events = {};
 
-    onShow() {
+    async onShow() {
         var self = this;
 
         wx.getStorage({
@@ -471,13 +465,25 @@ export default class Order extends wepy.page {
                 self.$apply();
             }
         });
+        
+        var jwt = wx.getStorageSync('jwt');
+        if (jwt.data.access_token != null) {
+            let myBalance = await api.getMyBalance({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            
+            self.remain = myBalance.data.balance;
+            self.$apply();
+        }
     }
 
     onLoad(options) {
         var self = this;
         self.type = options.type;
         self.shopChoose = wx.getStorageSync('shopChoose');
-        console.log(self.shopChoose+'111')
         self.product = wx.getStorageSync('orderProduct');
         wx.getStorage({
             key: 'deliverChoose',
@@ -490,6 +496,7 @@ export default class Order extends wepy.page {
             }
         });
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
         self.updateTotal();
     }

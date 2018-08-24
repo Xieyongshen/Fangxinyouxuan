@@ -1,9 +1,7 @@
 <style lang="less">
 .navBar {
     width: 750rpx;
-    height: 62px;
     text-align: center;
-    padding-top: 20px;
     background: #ffffff;
     box-sizing: border-box;
     position: fixed;
@@ -13,6 +11,7 @@
 
 .nav-back {
     width: 50rpx;
+    height: 42px;
     text-align: left;
     position: absolute;
     left: 30rpx;
@@ -30,7 +29,7 @@
 }
 </style>
 <template>
-    <view class="navBar">
+    <view class="navBar" style="padding-top:{{isIphoneX ? '45px' : '20px'}}">
         <block wx:if="{{isChildPage == 'y'}}">
             <navigator open-type="navigateBack" delta="1" hover-class="none" class="nav-back">
                 <image src="/icons/out.png" class="icon-out" />
@@ -43,11 +42,16 @@
 import wepy from 'wepy';
 
 export default class NavBar extends wepy.component {
+
     props = {
         navTitle: String,
         isChildPage: {
             type: String,
             default: 'n'
+        },
+        isIphoneX: {
+            type: Boolean,
+            default: false
         }
     };
 }

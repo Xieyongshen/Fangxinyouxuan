@@ -23,8 +23,8 @@
 }
 </style>
 <template>
-  <view class="container">
-        <navBar navTitle="放心优选" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="balance-content">
             <view class="balance-title">优选储值余额</view>
             <view class="balance-count" style="color:{{color.red}}">￥{{balance}}</view>
@@ -44,6 +44,7 @@ import api from '@/api/api'
 
     data = {
         balance: 32.9,
+        isIphoneX: false,
         color: {}
     }
 
@@ -58,6 +59,7 @@ import api from '@/api/api'
     async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         var jwt = wx.getStorageSync('jwt');
         if (jwt.data.access_token != null) {
             let myBalance = await api.getMyBalance({
@@ -67,8 +69,8 @@ import api from '@/api/api'
                 }
             });
             
-            console.log(myBalance)
-            self.balance = myBalance.data.balance
+            console.log(myBalance);
+            self.balance = myBalance.data.balance;
             self.$apply();
         }
         self.$apply();

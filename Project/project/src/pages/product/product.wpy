@@ -510,8 +510,8 @@ page {
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="商品详情" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="商品详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="product-image">
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{imageShow}}" key="index">
@@ -529,7 +529,7 @@ page {
             </button>
             <view class="product-intro-name">{{product.name}}</view>
             <view class="product-intro-desc">{{product.desc}}</view>
-            <view class="product-intro-oriPrice" style="color:{{color.red}}">￥{{product.price}}</view>
+            <view class="product-intro-oriPrice" style="color:{{color.red}}">￥{{product.type == 2 ? product.oriPrice : product.price}}</view>
             <view class="product-intro-price" style="color:{{color.yellow}}">￥{{priceShow}}</view>
             <view class="product-intro-soldCount">已售{{product.soldCount}}份</view>
             <view class="product-intro-label">
@@ -561,7 +561,7 @@ page {
                         <view class="product-group-head">{{item.head.name}}</view>
                         <view class="product-group-time">还差{{item.reachCount - item.count}}人成团，剩余 {{restTimeList[index].hour}}:{{restTimeList[index].minute}}:{{restTimeList[index].second}} 结束</view>
                     </view>
-                    <view class="product-group-btn" style="background:{{color.red}}">去参团</view>
+                    <view class="product-group-btn" style="background:{{color.red}}" @tap="buyNow({{product.type}})">去参团</view>
                 </view>
             </repeat>
         </view>
@@ -604,9 +604,9 @@ page {
                 <view hover-class="navigator-hover" class="product-btn-purchase" style="background:{{color.red}}" @tap="chooseSpec(1)">立即购买</view>
             </block>
         </view>
-        <view wx:if="{{isChoosing}}" class="product-select">
-            <view class="product-select-container">
-                <view class="product-select-close" @tap="selectClose()">×</view>
+        <view wx:if="{{isChoosing}}" class="product-select" @tap="selectClose()">
+            <view class="product-select-container" @tap.stop="selectContent()">
+                <view class="product-select-close" @tap.stop="selectClose()">×</view>
                 <view class="product-select-content">
                     <image mode="aspectFill" src="{{imageCover}}" class="product-select-img" />
                     <view class="product-select-info">
@@ -693,6 +693,7 @@ export default class Product extends wepy.page {
         priceShow: 0,
         restTimeList: [],
         operation: 0,
+        isIphoneX: false,
         color: {}
     };
 
@@ -778,6 +779,8 @@ export default class Product extends wepy.page {
                 shoppingCart = [];
             }
 
+            var oriPrice;
+
             if (hasCur == false) {
                 shoppingCart.push({
                     id: self.productID,
@@ -785,7 +788,10 @@ export default class Product extends wepy.page {
                     image: self.imageCover,
                     spec: self.product.spec[self.specChoose].name,
                     price: self.product.spec[self.specChoose].price,
-                    oriPrice: self.product.oriPrice,
+                    oriPrice:
+                        self.product.type == 2
+                            ? self.product.oriPrice
+                            : self.product.price,
                     count: self.count
                 });
             }
@@ -805,6 +811,10 @@ export default class Product extends wepy.page {
         selectClose() {
             this.isChoosing = false;
             this.$apply();
+        },
+
+        selectContent(){
+            return;
         },
 
         specChoose(spec, e) {
@@ -919,18 +929,8 @@ export default class Product extends wepy.page {
         };
     }
 
-    async onLoad(options) {
-        let self = this;
-        self.productID = options.id;
-        console.log(self.productID);
-        let productDetail = await api.getProductDetail({
-            query: {
-                productId: self.productID
-            }
-        });
-        console.log(productDetail);
-        self.product = productDetail.data;
-        self.color = self.$parent.globalData.color;
+    filterProductInfo() {
+        var self = this;
         self.product.image.forEach(element => {
             if (element.type == 0) {
                 self.imageCover = element.imgUrl;
@@ -940,12 +940,34 @@ export default class Product extends wepy.page {
                 self.imageDetail.push(element.imgUrl);
             }
         });
-        self.priceShow = parseFloat(self.product.spec[0].price);
-        self.product.spec.forEach((item, index) => {
-            if (item.price < self.priceShow) {
-                self.priceShow = parseFloat(item.price);
+        if (self.product.type == 2) {
+            self.priceShow = self.product.group.price;
+        } else {
+            self.priceShow = parseFloat(self.product.spec[0].price);
+            self.product.spec.forEach((item, index) => {
+                if (item.price < self.priceShow) {
+                    self.priceShow = parseFloat(item.price);
+                }
+            });
+        }
+        self.$apply();
+    }
+
+    async onLoad(options) {
+        let self = this;
+        self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.productID = options.id;
+        console.log(self.productID);
+        let productDetail = await api.getProductDetail({
+            query: {
+                productId: self.productID
             }
         });
+        console.log(productDetail);
+        self.product = productDetail.data;
+
+        self.filterProductInfo();
         self.$apply();
         if (self.product.type == 2 && self.product.group.list.length > 0) {
             self.countDown();

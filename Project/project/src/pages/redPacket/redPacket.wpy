@@ -5,14 +5,42 @@ page {
 
 .redPacket-content {
     width: 750rpx;
-    margin-top: 20rpx;
+}
+
+.redPacket-use {
+    width: 750rpx;
+    height: 90rpx;
+    padding: 0 30rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.redPacket-use-title {
+    font-size: 28rpx;
+    line-height: 90rpx;
+    display: inline-block;
+}
+
+.redPacket-use-cancel {
+    width: 45rpx;
+    height: 45rpx;
+    margin: 22rpx 0;
+    border-radius: 50%;
+    float: right;
+}
+
+.redPacket-empty{
+    color: #999999;
+    font-size: 26rpx;
+    line-height: 200rpx;
+    text-align: center;
 }
 
 .redPacket-tip {
     font-size: 24rpx;
     line-height: 30rpx;
     padding-left: 20rpx;
-    margin-bottom: 15rpx;
+    margin: 15rpx 0;
 }
 
 .redPacket-item {
@@ -34,7 +62,8 @@ page {
     height: 190rpx;
     font-size: 30rpx;
     line-height: 70rpx;
-    padding: 60rpx 0 60rpx 50rpx;
+    text-align: center;
+    padding: 60rpx 0;
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
@@ -94,29 +123,35 @@ page {
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="redPacket-content">
-            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有<text style="color:{{color.red}}">{{tipCount}}</text>个红包已将过期</view>
-            <repeat for="{{redPacket}}" key="id">
-                <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
-                    <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
-                        <view class="redPacket-item-count" style="color:{{color.red}}">￥<text>{{item.count}}</text></view>
+            <view wx:if="{{type == 1}}" class="redPacket-use">
+                <view class="redPacket-use-title">不使用红包</view>
+                <image src="/icons/select-{{use == false?'yes':'no'}}.png" class="redPacket-use-cancel" @tap="cancelUse" />
+            </view>
+            <block wx:if="{{redPacket.length == 0}}">
+                <view wx:if="{{coupon.length == 0}}" class="redPacket-empty">当前暂无红包</view>
+            </block>
+            <block wx:else>
+                <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有
+                    <text style="color:{{color.red}}">{{tipCount}}</text>个红包已过期</view>
+                <repeat for="{{redPacket}}" key="id">
+                    <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
+                        <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
+                        <view class="redPacket-item-count" style="color:{{color.red}}">￥
+                            <text>{{item.count}}</text>
+                        </view>
                         <view class="redPacket-item-content">
                             <view class="redPacket-item-name">{{item.name}}</view>
                             <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
                             <view class="redPacket-item-date">有效期：{{item.date}}</view>
                         </view>
                         <view class="redPacket-item-use" @tap="redPacketChoose({{item.overdue}}, {{item.id}}, {{item.count}})">立即使用</view>
-                </view>
-            </repeat>
-            <view class="redPacket-more">没有更多了</view>
-        </view>
-        <view class="redPacket-recommend">
-            <view class="redPacket-recommend-title">推荐商品</view>
-            <repeat for="{{recommend}}" key="id">
-                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price" :priceColor.sync="color.red"></recommend>
-            </repeat>
+                    </view>
+                </repeat>
+                <view class="redPacket-more">没有更多了</view>
+            </block>
         </view>
     </view>
 </template>
@@ -124,95 +159,103 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import Recommend from '@/components/recommendBlock';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class RedPacket extends wepy.page {
     components = {
-        navBar: NavBar,
-        recommend: Recommend
+        navBar: NavBar
     };
 
     data = {
-        tipCount: 2,
-        redPacket: [
-            {
-                id: '000001',
-                name: '放心优选全场红包',
-                satisfy: 25,
-                count: 15,
-                date: '2018.08.01',
-                overdue: false
-            },
-            {
-                id: '000002',
-                name: '放心优选全场红包',
-                satisfy: 25,
-                count: 5,
-                date: '2018.08.01',
-                overdue: false
-            },
-            {
-                id: '000003',
-                name: '放心优选全场红包',
-                satisfy: 25,
-                count: 15,
-                date: '2018.08.01',
-                overdue: true
-            }
-        ],
-        recommend: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000002',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000003',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000004',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            }
-        ],
+        type: 0,
+        use: false,
+        tipCount: 0,
+        redPacket: [],
+        isIphoneX: false,
         color: {}
     };
 
     methods = {
-        redPacketChoose(overdue, id, count, events){
-            if(overdue) return;
-            
+        redPacketChoose(overdue, id, count, events) {
+            if (overdue) return;
+
             wx.setStorage({
                 key: 'redPacket',
                 data: {
-                    'id': id,
-                    'count': count
+                    id: id,
+                    count: count
                 }
             });
 
             wx.navigateBack({
                 delta: 1
-            })
+            });
+        },
+
+        cancelUse() {
+            if (this.use) {
+                this.use = false;
+                this.$apply();
+
+                wx.setStorage({
+                    key: 'redPacket',
+                    data: {
+                        id: '',
+                        count: 0
+                    }
+                });
+
+                wx.navigateBack({
+                    delta: 1
+                });
+            }
         }
     };
 
     events = {};
 
-    async onLoad() {
+    filterRedPacket() {
         var self = this;
+        let nowTime = new Date().getTime();
+        let overTimeStr = '';
+        var overTime;
+
+        self.redPacket.forEach((item, index) => {
+            if (item.overdue) {
+                overTimeStr = item.date;
+                overTime = new Date(overTimeStr).getTime();
+                console.log(overTime);
+                let time = (nowTime - overTime) / 1000;
+                console.log(time);
+                let day = parseInt(time / (60 * 60 * 24));
+                if (day >= 7) {
+                    self.redPacket.splice(index, 1);
+                } else {
+                    self.tipCount++;
+                }
+            }
+        });
+
+        self.redPacket.forEach(element => {
+            element.count = parseInt(element.count);
+        });
+
+        self.$apply();
+    }
+
+    whetherUse() {
+        var redPacket = wx.getStorageSync('redPacket');
+        if (redPacket.id != '') {
+            this.use = true;
+            this.$apply();
+        }
+    }
+
+    async onLoad(options) {
+        var self = this;
+        self.type = options.type;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -223,19 +266,18 @@ export default class RedPacket extends wepy.page {
                     }
                 });
                 console.log(redPackets);
-                self.redPacket = redPackets.data
+                self.redPacket = redPackets.data;
                 self.$apply();
             }
         } catch (error) {
             console.log(error);
         }
-        let recommendPros = await api.getRecommendPros({
-            query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
-            }
-        })
-        console.log(recommendPros)
-        self.recommend = recommendPros.data
+
+        self.filterRedPacket();
+        if (self.type == 1) {
+            self.whetherUse();
+        }
+
         self.$apply();
     }
 }

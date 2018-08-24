@@ -57,8 +57,8 @@
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="商品列表" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="商品列表" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="productList-content">
             <repeat for="{{product}}" key="id">
                 <view class="productList-item">
@@ -84,7 +84,8 @@ export default class ProductList extends wepy.page {
     };
 
     data = {
-        product: []
+        product: [],
+        isIphoneX: false
     };
 
     methods = {};
@@ -94,7 +95,7 @@ export default class ProductList extends wepy.page {
     onLoad(options) {
         this.type = options.type;
         this.product = wx.getStorageSync('orderProduct');
-        wx.removeStorageSync('orderProduct');
+        this.isIphoneX = this.$parent.globalData.isIphoneX;
         this.$apply();
     }
 }

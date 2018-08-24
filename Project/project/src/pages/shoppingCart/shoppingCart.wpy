@@ -181,7 +181,6 @@ page {
     height: 165rpx;
     margin: 0 15rpx;
     border-radius: 10rpx;
-    background: #fdedeb;
     vertical-align: top;
 }
 
@@ -379,8 +378,8 @@ page {
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
         <view wx:if="{{shoppingCart.length > 0}}" class="shoppingCart-content">
             <image src="/icons/address-bg.png" class="shoppingCart-header" />
             <view wx:if="{{deliverChoose < 1}}" class="shoppingCart-block shoppingCart-shop">
@@ -417,7 +416,7 @@ page {
                     <repeat for="{{shoppingCart}}" key="id">
                         <view class="shoppingCart-product-item" @tap="navToProduct({{item.id}})">
                             <image src="/icons/select-{{isChoosen[index] == true?'yes':'no'}}.png" class="shoppingCart-icon-select" @tap.stop="chooseProduct({{index}})" />
-                            <image src="{{item.imgUrl}}" mode="aspectFill" class="product-item-image" />
+                            <image src="{{item.image}}" mode="aspectFill" class="product-item-image" />
                             <view class="product-item-content">
                                 <view class="product-item-name">{{item.name}}</view>
                                 <view class="product-item-price" style="color:{{color.red}}">￥{{item.price}}
@@ -436,7 +435,7 @@ page {
                     <text>小计：</text>￥{{subtotal}}
                 </view>
             </view>
-            <navigator url="../redPacket/redPacket" class="shoppingCart-block shoppingCart-redPacket">
+            <navigator url="../redPacket/redPacket?type=1" class="shoppingCart-block shoppingCart-redPacket">
                 <view class="shoppingCart-item">
                     <image src="/icons/redPacket.png" class="shoppingCart-redPacket-icon" /> 红包
                     <image src="/icons/in.png" class="icon-in" />
@@ -539,32 +538,8 @@ export default class ShoppingCart extends wepy.page {
             id: '',
             count: 0
         },
-        recommend: [
-            {
-                id: '000001',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000002',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000003',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            },
-            {
-                id: '000004',
-                name: '韩国制造，花洒替代品',
-                price: 39.2,
-                imgUrl: ''
-            }
-        ],
+        recommend: [],
+        isIphoneX: false,
         color: {}
     };
 
@@ -583,7 +558,7 @@ export default class ShoppingCart extends wepy.page {
                 total = total - discount;
             }
             total = parseInt(total);
-            return total / 100;
+            return total > 0 ? total / 100 : 0;
         },
 
         priceFinal() {
@@ -591,7 +566,7 @@ export default class ShoppingCart extends wepy.page {
             var freight = this.freightChoose * 100;
             var priceFinal = total + freight;
             priceFinal = parseInt(priceFinal);
-            return priceFinal / 100;
+            return priceFinal > 0 ? priceFinal / 100 : 0;
         },
 
         difference() {
@@ -737,6 +712,7 @@ export default class ShoppingCart extends wepy.page {
     async onLoad(option) {
         var self = this;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
         wx.setStorage({
             key: 'address',
@@ -751,29 +727,30 @@ export default class ShoppingCart extends wepy.page {
             data: -1
         });
 
-        var jwt = wx.getStorageSync('jwt');
-        try {
-            if (jwt.data.access_token != null) {
-                let res = await api.getShoppingCart({
-                    query: {
-                        access_token: jwt.data.access_token,
-                        account_id: jwt.data.account_id
-                    }
-                });
-                console.log(res);
-                self.$apply();
-            }
-        } catch (error) {
-            console.log('jwt is null');
-        }
+        // var jwt = wx.getStorageSync('jwt');
+        // try {
+        //     if (jwt.data.access_token != null) {
+        //         let res = await api.getShoppingCart({
+        //             query: {
+        //                 access_token: jwt.data.access_token,
+        //                 account_id: jwt.data.account_id
+        //             }
+        //         });
+        //         console.log(res);
+        //         self.$apply();
+        //     }
+        // } catch (error) {
+        //     console.log('jwt is null');
+        // }
 
         let recommendPros = await api.getRecommendPros({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
             }
         })
-        console.log(recommendPros)
-        self.recommend = recommendPros.data
+        console.log(recommendPros);
+        self.recommend = recommendPros.data;
+        self.$apply();
     }
 }
 </script>

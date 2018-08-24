@@ -241,8 +241,8 @@ page {
 }
 </style>
 <template>
-    <view class="container">
-        <navBar navTitle="放心优选" isChildPage="y"></navBar>
+    <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
+        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="search-bar">
             <view class="search-bar-content">
                 <image src="/icons/search.png" class="search-bar-icon" />
@@ -322,73 +322,10 @@ export default class Search extends wepy.page {
             '颈部按摩'
         ],
         history: [],
-        recommend: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                desc: '甜美通勤，轻松搭配',
-                imgUrl: '',
-                price: 209.3,
-                oriPrice: 299
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                desc: '无极调光，360°自由旋转',
-                imgUrl: '',
-                price: 45
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                oriPrice: 103.3,
-                price: 83.3
-            }
-        ],
-        match: [
-            '水蜜桃',
-            '苹果',
-            '驱蚊水',
-            '床上用品',
-            '睡裙',
-            '虾',
-            '纯牛奶',
-            '蜂蜜',
-            '香薰',
-            '颈部按摩'
-        ],
-        result: [
-            {
-                id: '00001',
-                name: '日式蝴蝶结通勤女鞋',
-                desc: '甜美通勤，轻松搭配',
-                imgUrl: '',
-                price: 399
-            },
-            {
-                id: '00002',
-                name: '随便阅读灯',
-                desc: '无极调光，360°自由旋转',
-                imgUrl: '',
-                price: 45
-            },
-            {
-                id: '00003',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 103.3
-            },
-            {
-                id: '00004',
-                name: '男士都市轻生活弹力牛仔裤',
-                desc: '自如转换多场景，让双腿保持昂扬活力',
-                imgUrl: '',
-                price: 499
-            }
-        ],
+        recommend: [],
+        match: [],
+        result: [],
+        isIphoneX: false,
         color: {}
     };
 
@@ -408,9 +345,9 @@ export default class Search extends wepy.page {
             var self = this;
             self.showResult = false;
             self.searchValue = e.detail.value;
-            // if (self.searchValue != '') {
-            //     self.doMatch(self.searchValue);
-            // }
+            if (self.searchValue != '') {
+                self.doMatch(self.searchValue);
+            }
             self.$apply();
         },
 
@@ -428,23 +365,41 @@ export default class Search extends wepy.page {
         }
     };
 
+    async doMatch(keyword) {
+        var self = this;
+        let res = await api.getSearchResult({
+            query: {
+                searchValue: self.searchValue,
+                searchType: 1
+            }
+        });
+        var data = res.data;
+        if (data.length > 0) {
+            self.match = [];
+            data.forEach(element => {
+                self.match.push(element.name);
+            });
+        }
+        self.$apply();
+    }
+
     async doSearch(keyword) {
         var self = this;
         self.searchValue = keyword;
         self.showResult = true;
         self.history.push(keyword);
-        self.$apply();
         wx.setStorage({
             key: 'history',
-            data: history
+            data: self.history
         });
         let searchResult = await api.getSearchResult({
             query: {
                 searchValue: keyword
             }
         })
-        console.log(searchResult)
-        self.result = searchResult
+        console.log(searchResult);
+        self.result = searchResult.data;
+        self.$apply();
     }
 
     events = {};
@@ -452,6 +407,7 @@ export default class Search extends wepy.page {
     async onLoad() {
         var self = this;
         self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
         let recommendProducts = await api.getRecommendPros({
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
@@ -461,7 +417,13 @@ export default class Search extends wepy.page {
         self.recommend = recommendProducts.data
 
         let hotSearch = await api.getHotSearch()
-        console.log(hotSearch)
+        console.log(hotSearch);
+
+
+        var history = wx.getStorageSync('history');
+        if(history){
+            self.history = history;
+        }
 
         self.$apply();
     }

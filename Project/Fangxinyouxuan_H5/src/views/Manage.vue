@@ -337,6 +337,9 @@ export default {
     width: 3.75rem /* 60/16 */;
     font-size: 0.875rem /* 14/16 */;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .manage-list-item-productRebate,

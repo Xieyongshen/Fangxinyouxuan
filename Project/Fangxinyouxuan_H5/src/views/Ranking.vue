@@ -40,107 +40,111 @@
 </template>
 
 <script>
-import { PopupRadio } from 'vux'
+import { PopupRadio } from "vux";
 
 export default {
-  name: 'ranking',
-  components: {
-    PopupRadio
-  },
+    name: "ranking",
+    components: {
+        PopupRadio
+    },
 
-  data: function () {
-    return {
-      rankingOrder: '',
-      rankingOrderList: [{key: '0', value: '本月消费top10用户'}, {key: '1', value: '本周消费top10用户'}, {key: '2', value: '累计消费排名'}],
-      items: [
-        {
-          number: '1',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '2',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '3',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '4',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '5',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '6',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '7',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '8',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '9',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '10',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        }
-      ]
+    data: function() {
+        return {
+            rankingOrder: "",
+            rankingOrderList: [
+                { key: "0", value: "本月消费top10用户" },
+                { key: "1", value: "本周消费top10用户" },
+                { key: "2", value: "累计消费排名" }
+            ],
+            items: [
+                {
+                    number: "1",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "2",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "3",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "4",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "5",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "6",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "7",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "8",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "9",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "10",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                }
+            ]
+        };
     }
-  }
-}
+};
 </script>
 
 <style scoped>
-.divider{
+.divider {
     color: #888888;
     margin: 1.25rem 0;
     line-height: 1px;
@@ -156,12 +160,11 @@ export default {
 .me-userinfo {
     width: 100%;
     height: 14.6875rem;
-    margin-bottom: 4.375rem;
+    margin-bottom: 5rem;
     padding-top: 0.9375rem;
     text-align: center;
     box-sizing: border-box;
     position: relative;
-
 }
 
 .me-userinfo-avatar {
@@ -178,7 +181,7 @@ export default {
     width: 100%;
     height: 2.1875rem;
     color: #ffffff;
-    font-size: 1.0625rem /* 17/16 */;
+    font-size: 1rem /* 16/16 */;
     line-height: 1.875rem;
     text-align: center;
     margin-top: 0.625rem;
@@ -188,59 +191,59 @@ export default {
 
 .me-share {
     color: #ffffff;
-    font-size: 1.0625rem /* 17/16 */;
+    font-size: 1rem /* 16/16 */;
     line-height: 30px;
     position: absolute;
     top: 0.625rem;
     left: 1.875rem;
 }
 
-.ranking-order{
-    margin: 0 auto .625rem;
+.ranking-order {
+    margin: 0 auto 0.625rem;
 }
 
-.ranking-list{
+.ranking-list {
     display: flex;
     flex-direction: column;
 }
 
-.ranking-list-item{
+.ranking-list-item {
     display: flex;
     flex-direction: column;
-    margin: 0 .9375rem;
+    margin: 0 0.9375rem;
 }
 
-.ranking-list-item-content{
+.ranking-list-item-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.ranking-list-item-number{
-    width: 2.5rem;
-    height: 1.875rem;
-    background:#ddbe59;
-    border-radius:.625rem;
+.ranking-list-item-number {
+    width: 1.875rem /* 30/16 */;
+    height: 1.25rem /* 20/16 */;
+    line-height: 1.25rem /* 20/16 */;
+    background: #ddbe59;
+    border-radius: 0.625rem;
     text-align: center;
     color: #ffffff;
     /* margin-left: .9375rem; */
 }
 
-.icon-user{
+.icon-user {
     width: 3.75rem;
     height: 3.75rem;
     /* margin: 0 auto; */
 }
 
-.ranking-list-userinfo-baseinfo{
+.ranking-list-userinfo-baseinfo {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.ranking-list-userinfo-contact{
+.ranking-list-userinfo-contact {
     display: flex;
     flex-direction: column;
 }
-
 </style>

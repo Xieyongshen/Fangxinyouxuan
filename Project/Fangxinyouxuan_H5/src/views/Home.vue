@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+    <div class="home">
         <img src="@/assets/me-bg.png" class="me-bg">
 
         <div class="me-userinfo">
@@ -60,49 +60,48 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
+import navBar from "@/components/navBar.vue";
 
 export default {
-  name: 'home',
-  components: {
-    navBar
-  },
+    name: "home",
+    components: {
+        navBar
+    },
 
-  data: function () {
-    return {
-      postConfig: '已开启'
+    data: function() {
+        return {
+            postConfig: "已开启"
+        };
+    },
+
+    methods: {
+        goOrder() {
+            this.$router.push("/order");
+        },
+        goIncome() {
+            this.$router.push("/income");
+        },
+        goManage() {
+            this.$router.push("/manage");
+        },
+        goAccount() {
+            this.$router.push("/account");
+        },
+        goTeam() {
+            this.$router.push("/team");
+        },
+        goRanking() {
+            this.$router.push("/ranking");
+        },
+        goDeliver() {
+            this.$router.push("/deliver");
+        }
     }
-  },
-
-  methods: {
-    goOrder () {
-      this.$router.push('/order')
-    },
-    goIncome () {
-      this.$router.push('/income')
-    },
-    goManage () {
-      this.$router.push('/manage')
-    },
-    goAccount () {
-      this.$router.push('/account')
-    },
-    goTeam () {
-      this.$router.push('/team')
-    },
-    goRanking () {
-      this.$router.push('/ranking')
-    },
-    goDeliver () {
-      this.$router.push('/deliver')
-    }
-  }
-
-}
+};
 </script>
 
 <style scoped>
-.home{
+.home {
     position: relative;
 }
 
@@ -116,12 +115,11 @@ export default {
 .me-userinfo {
     width: 100%;
     height: 14.6875rem;
-    margin-bottom: 4.375rem;
+    margin-bottom: 5rem;
     padding-top: 0.9375rem;
     text-align: center;
     box-sizing: border-box;
     position: relative;
-
 }
 
 .me-userinfo-avatar {
@@ -138,7 +136,7 @@ export default {
     width: 100%;
     height: 2.1875rem;
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 1.875rem;
     text-align: center;
     margin-top: 0.625rem;
@@ -148,20 +146,19 @@ export default {
 
 .me-share {
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 30px;
     position: absolute;
     top: 0.625rem;
     left: 1.875rem;
 }
 
-.me-function{
+.me-function {
     margin: 0 auto;
     display: flex;
-
 }
 
-.me-function-item{
+.me-function-item {
     width: 13.75rem;
     padding: 0.9375rem;
     display: flex;
@@ -169,15 +166,19 @@ export default {
     align-items: center;
 }
 
-.me-function-item-a{
-    font-size: 17px;
+.me-function-item-a {
+    font-size: 1rem /* 16/16 */;
     text-decoration: none;
     color: #333;
 }
 
-.me-icon{
+.me-icon {
     width: 2.5rem;
     height: 2.5rem;
     margin-bottom: 0.625rem;
+}
+
+.me-manage {
+    font-size: 1rem /* 16/16 */;
 }
 </style>

@@ -4,7 +4,7 @@
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
-            <img src="" class="me-userinfo-avatar">
+            <img class="me-userinfo-avatar">
             <div class="me-userinfo-name">nickName</div>
         </div>
 
@@ -67,19 +67,17 @@ export default {
     width: 100%;
     height: 18.75rem;
     position: absolute;
-    top: 3.875rem;
     z-index: -1;
 }
 
 .me-userinfo {
     width: 100%;
     height: 14.6875rem;
-    margin-bottom: 4.375rem;
+    margin-bottom: 5rem;
     padding-top: 0.9375rem;
     text-align: center;
     box-sizing: border-box;
     position: relative;
-    top:3.875rem;
 
 }
 
@@ -97,7 +95,7 @@ export default {
     width: 100%;
     height: 2.1875rem;
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 1.875rem;
     text-align: center;
     margin-top: 0.625rem;
@@ -107,7 +105,7 @@ export default {
 
 .me-share {
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 30px;
     position: absolute;
     top: 0.625rem;
@@ -115,7 +113,7 @@ export default {
 }
 
 .accountDetail-list{
-    margin: 10rem auto 0;
+    margin: 0;
 }
 
 .accountDetail-list-item{

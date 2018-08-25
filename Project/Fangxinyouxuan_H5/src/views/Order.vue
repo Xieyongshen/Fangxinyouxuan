@@ -256,10 +256,7 @@
     </div>
 </template>
 <script>
-import { Flexbox, FlexboxItem } from "vux";
-import { Countup } from "vux";
-import { Tab, TabItem } from "vux";
-import { CheckIcon } from "vux";
+import { Flexbox, FlexboxItem, Countup, Tab, TabItem, CheckIcon } from "vux";
 
 export default {
     name: "order",
@@ -674,7 +671,7 @@ export default {
 }
 
 .userInfo-name {
-    font-size: 1.125rem /* 18/16 */;
+    font-size: .875rem /* 14/16 */;
     line-height: 1.875rem /* 30/16 */;
     margin: 0 0.3125rem /* 5/16 */;
     vertical-align: top;

@@ -78,11 +78,11 @@
             <view class="addressChange-content">
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">收货人</view>
-                    <input type="text" value="{{address.name}}" placeholder="姓名" class="addressChange-item-input" />
+                    <input type="text" value="{{address.name}}" placeholder="姓名" class="addressChange-item-input" bindinput="changeAddressName" />
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">联系电话</view>
-                    <input type="text" value="{{address.phone}}" placeholder="手机或固话" class="addressChange-item-input" />
+                    <input type="text" value="{{address.phone}}" placeholder="手机或固话" class="addressChange-item-input" bindinput="changeAddressPhone" />
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">收货地区</view>
@@ -96,7 +96,7 @@
                 </view>
                 <view class="addressChange-item">
                     <view class="addressChange-item-title">详细地址</view>
-                    <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input" />
+                    <input type="text" value="{{address.desc}}" placeholder="请输入您的详细地址" class="addressChange-item-input" bindinput="changeAddressDesc" />
                 </view>
             </view>
             <button class="addressChange-btn addressChange-save" style="background:{{color.red}}" @tap="saveMyAddress()">保存</button>
@@ -132,7 +132,22 @@ export default class Coupon extends wepy.page {
                 province: this.curRegion[0],
                 city: this.curRegion[1],
                 area: this.curRegion[2]
-            }
+            };
+            this.$apply();
+        },
+
+        changeAddressName(e){
+            this.address.name = e.detail.value;
+            this.$apply();
+        },
+
+        changeAddressPhone(e){
+            this.address.phone = e.detail.value;
+            this.$apply();
+        },
+
+        changeAddressDesc(e){
+            this.address.desc = e.detail.value;
             this.$apply();
         }
     };
@@ -140,7 +155,7 @@ export default class Coupon extends wepy.page {
     events = {};
 
     async saveMyAddress(){
-        let self = this
+        let self = this;
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -162,6 +177,10 @@ export default class Coupon extends wepy.page {
             console.log(error)
             console.log('jwt is null');
         }
+
+        wx.navigateBack({
+            delta: 1
+        })
     }
 
     async deleteMyAddress(){
@@ -187,6 +206,10 @@ export default class Coupon extends wepy.page {
             console.log(error)
             console.log('jwt is null');
         }
+
+        wx.navigateBack({
+            delta: 1
+        })
     }
 
     async onLoad(options) {

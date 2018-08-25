@@ -491,6 +491,12 @@ export default class OrderDetail extends wepy.page {
         },
 
         navToProductList(index, events) {
+            var self = this;
+            var orderProduct = self.order.product;
+            orderProduct.forEach(element => {
+                element.image = element.imgUrl;
+            });
+            wx.setStorageSync('orderProduct', orderProduct);
             wx.navigateTo({
                 url: '../../productList/productList'
             });

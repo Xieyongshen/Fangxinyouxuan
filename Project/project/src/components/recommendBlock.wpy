@@ -38,6 +38,158 @@
     bottom: 10rpx;
     right: 10rpx;
 }
+
+.product-select {
+    width: 750rpx;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.product-select-container {
+    width: 750rpx;
+    padding-top: 30rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+}
+
+.product-select-close {
+    width: 80rpx;
+    height: 80rpx;
+    font-size: 60rpx;
+    font-weight: 900;
+    line-height: 80rpx;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: -40rpx;
+    right: 60rpx;
+}
+
+.product-select-content {
+    max-height: 80vh;
+    overflow: scroll;
+}
+
+.product-select-img {
+    width: 160rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 30rpx;
+    vertical-align: top;
+}
+
+.product-select-info {
+    width: 500rpx;
+    height: 160rpx;
+    margin: 30rpx 30rpx 0 0;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-name {
+    width: 500rpx;
+    height: 45rpx;
+    color: #999999;
+    font-size: 28rpx;
+    line-height: 45rpx;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 60rpx;
+}
+
+.product-select-price {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-select-remain {
+    font-size: 28rpx;
+    line-height: 40rpx;
+    margin-right: 30rpx;
+    float: right;
+}
+
+.product-select-spec {
+    width: 750rpx;
+    margin-top: 45rpx;
+    padding: 0 30rpx;
+}
+
+.product-spec-title {
+    font-size: 28rpx;
+    line-height: 50rpx;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.product-spec-content {
+    display: inline-block;
+}
+
+.product-spec-item {
+    height: 64rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    margin-left: 20rpx;
+    padding: 0 50rpx;
+    border: 2rpx solid #cccccc;
+    display: inline-block;
+}
+
+.product-select-count {
+    width: 750rpx;
+    margin-top: 35rpx;
+    padding: 0 30rpx;
+    text-align: right;
+    text {
+        font-size: 28rpx;
+        line-height: 64rpx;
+        margin-right: 40rpx;
+        display: inline-block;
+    }
+}
+
+.product-count-choose {
+    height: 64rpx;
+    display: inline-block;
+}
+
+.product-count-reduce,
+.product-count-current,
+.product-count-add {
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    text-align: center;
+    border: 2rpx solid #cccccc;
+    box-sizing: content-box;
+    display: inline-block;
+}
+
+.product-count-current,
+.product-count-add {
+    border-left: none;
+}
+
+.product-select-buy {
+    width: 750rpx;
+    height: 100rpx;
+    color: #ffffff;
+    font-size: 32rpx;
+    line-height: 100rpx;
+    text-align: center;
+    margin: 20rpx 0;
+}
 </style>
 <template>
     <view class="recommend-item" @tap="navToProduct({{id}})">
@@ -45,7 +197,7 @@
         <view class="recommend-item-content">
             <view class="recommend-item-name">{{name}}</view>
             <view class="recommend-item-price" style="color:{{priceColor}}">￥{{price}}</view>
-            <image src="/icons/cart-recommend.png" class="recommend-icon-cart" />
+            <slot name="cart"></slot>
         </view>
     </view>
 </template>
@@ -70,7 +222,7 @@ export default class RecommendBlock extends wepy.component {
     methods = {
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=08458a07-4a4f-4de2-a71f-2526bbe2d395'
+                url: '/pages/product/product?id=' + product
             });
         }
     }

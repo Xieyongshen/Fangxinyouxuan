@@ -218,32 +218,6 @@
             <slot name="cart"></slot>
         </view>
     </view>
-    <!-- <view wx:if="{{isChoosing && current == id}}" class="product-select" @tap="selectClose()">
-        <view class="product-select-container" @tap.stop="selectContent()">
-            <view class="product-select-close" @tap="selectClose()">×</view>
-            <view class="product-select-content">
-                <image mode="aspectFill" src="{{imgUrl}}" class="product-select-img" />
-                <view class="product-select-info">
-                    <view class="product-select-name">{{name}}</view>
-                    <view class="product-select-price" style="color:{{priceColor}}">￥{{price}}</view>
-                    <view class="product-select-remain">库存：{{remain}}</view>
-                </view>
-                <view class="product-select-spec">
-                    <view class="product-spec-title">规格：</view>
-                        <slot name="spec"></slot>
-                </view>
-                <view class="product-select-count">
-                    <text>数量：</text>
-                    <view class="product-count-choose">
-                        <view class="product-count-reduce" style="{{count > 1 ? 'color:' + priceColor + ';' : ''}}" @tap="countMinus">-</view>
-                        <view class="product-count-current" style="color:{{priceColor}};">{{count}}</view>
-                        <view class="product-count-add" style="{{count < remain ? 'color:' + priceColor + ';' : ''}}" @tap="countPlus">+</view>
-                    </view>
-                </view>
-                <view hover-class="navigator-hover" class="product-select-buy" style="background:{{priceColor}}" @tap="addToCart">加入购物车</view>
-            </view>
-        </view>
-    </view> -->
 </template>
 <script>
 import wepy from 'wepy';
@@ -258,25 +232,6 @@ export default class ProductBlock extends wepy.component {
         imgUrl: String,
         name: String,
         desc: String
-        // priceColor: {
-        //     type: String,
-        //     default: '#f5333f'
-        // },
-        // current: {
-        //     type: String,
-        //     default: '',
-        //     twoWay: true
-        // },
-        // isChoosing: {
-        //     type: Boolean,
-        //     default: false,
-        //     twoWay: true
-        // },
-        // type: String,
-        // price: String,
-        // spec: String,
-        // oriPrice: String,
-        // remain: String
     };
 
     methods = {
@@ -285,75 +240,6 @@ export default class ProductBlock extends wepy.component {
                 url: '/pages/product/product?id=' + product
             });
         }
-
-        // selectClose() {
-        //     this.isChoosing = false;
-        //     this.$apply();
-        //     console.log(this.isChoosing);
-        //     console.log(this.$parent.isChoosing);
-        // },
-
-        // selectContent() {
-        //     console.log(this);
-        //     return;
-        // },
-
-        // countMinus() {
-        //     if (this.count > 1) {
-        //         this.count--;
-        //         this.$apply();
-        //     }
-        // },
-
-        // countPlus() {
-        //     if (this.count < this.remain) {
-        //         this.count++;
-        //         this.$apply();
-        //     }
-        // },
-
-        // addToCart() {
-        //     var self = this;
-        //     var shoppingCart = wx.getStorageSync('shoppingCart');
-        //     var hasCur = false;
-        //     if (shoppingCart.length > 0) {
-        //         shoppingCart.forEach(element => {
-        //             if (element.id == self.id) {
-        //                 hasCur = true;
-        //                 element.count += self.count;
-        //                 return;
-        //             }
-        //         });
-        //     } else {
-        //         shoppingCart = [];
-        //     }
-
-        //     var oriPrice;
-        //     console.log(self.id);
-
-        //     if (hasCur == false) {
-        //         shoppingCart.push({
-        //             id: self.id,
-        //             name: self.name,
-        //             image: self.imageCover,
-        //             spec: self.spec,
-        //             price: self.price,
-        //             oriPrice: self.oriPrice,
-        //             count: self.count
-        //         });
-        //     }
-
-        //     wx.setStorageSync('shoppingCart', shoppingCart);
-        //     wx.showToast({
-        //         title: '添加成功',
-        //         icon: 'success',
-        //         duration: 1000
-        //     });
-
-        //     console.log(shoppingCart);
-        //     this.isChoosing = false;
-        //     this.$apply();
-        // }
     };
 }
 </script>

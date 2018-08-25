@@ -662,7 +662,7 @@ export default class Coupon extends wepy.page {
             var hasCur = false;
             if (shoppingCart.length > 0) {
                 shoppingCart.forEach(element => {
-                    if (element.id == self.id) {
+                    if (element.id == self.curProduct.id) {
                         hasCur = true;
                         element.count += self.count;
                         return;

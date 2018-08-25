@@ -582,7 +582,7 @@ page {
                         <image src="{{item.imgUrl}}" class="product-recommend-img" />
                         <view class="product-recommend-name">{{item.name}}</view>
                         <view class="product-recommend-price">￥{{item.price}}</view>
-                        <image src="/icons/cart-recommend.png" class="product-recommend-cart" />
+                        <image src="/icons/cart-recommend.png" class="product-recommend-cart" @tap.stop="chooseRecommendSpec({{index}})" />
                     </view>
                 </repeat>
             </scroll-view>
@@ -608,16 +608,16 @@ page {
             <view class="product-select-container" @tap.stop="selectContent()">
                 <view class="product-select-close" @tap.stop="selectClose()">×</view>
                 <view class="product-select-content">
-                    <image mode="aspectFill" src="{{imageCover}}" class="product-select-img" />
+                    <image mode="aspectFill" src="{{operation == 0 ? imageCover : curProduct.imgUrl}}" class="product-select-img" />
                     <view class="product-select-info">
-                        <view class="product-select-name">{{product.name}}</view>
+                        <view class="product-select-name">{{operation == 0 ? product.name : curProduct.name}}</view>
                         <view class="product-select-price" style="color:{{color.red}}">￥{{curPrice}}</view>
-                        <view class="product-select-remain">库存：{{product.remain}}</view>
+                        <view class="product-select-remain">库存：{{operation == 0 ? product.remain : curProduct.remain}}</view>
                     </view>
                     <view class="product-select-spec">
                         <view class="product-spec-title">规格：</view>
                         <view class="product-spec-content">
-                            <repeat for="{{product.spec}}" key="index">
+                            <repeat for="{{operation == 0 ? product.spec : curProduct.spec}}" key="index">
                                 <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
                             </repeat>
                         </view>
@@ -630,7 +630,7 @@ page {
                             <view class="product-count-add" style="{{count < product.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
                         </view>
                     </view>
-                    <view wx:if="{{operation == 0}}" hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="addToCart">加入购物车</view>
+                    <view wx:if="{{operation == 0 || operation == 3}}" hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="addToCart">加入购物车</view>
                     <view wx:else hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="buyNow({{product.type}})">立即购买</view>
                 </view>
             </view>
@@ -651,6 +651,7 @@ export default class Product extends wepy.page {
     data = {
         curImage: 0,
         isChoosing: false,
+        curProduct: {},
         specChoose: 0,
         count: 1,
         productID: '',
@@ -699,7 +700,13 @@ export default class Product extends wepy.page {
 
     computed = {
         curPrice() {
-            return this.product.spec[this.specChoose].price;
+            var price = 0;
+            if (this.operation == 0) {
+                price = this.product.spec[this.specChoose].price;
+            } else if (this.operation == 3) {
+                price = this.curProduct.spec[this.specChoose].price;
+            }
+            return price;
         }
     };
 
@@ -755,6 +762,16 @@ export default class Product extends wepy.page {
             });
         },
 
+        chooseRecommendSpec(index) {
+            var self = this;
+            self.curProduct = self.product.recommend[index];
+            self.operation = 3;
+            self.specChoose = 0;
+            self.count = 1;
+            self.isChoosing = true;
+            self.$apply();
+        },
+
         chooseSpec(ope) {
             this.operation = ope;
             this.specChoose = 0;
@@ -767,9 +784,15 @@ export default class Product extends wepy.page {
             var self = this;
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
+            var id = '';
+            if (self.operation == 0) {
+                id = self.productID;
+            } else if (self.operation == 3) {
+                id = self.curProduct.id;
+            }
             if (shoppingCart.length > 0) {
                 shoppingCart.forEach(element => {
-                    if (element.id == self.productID) {
+                    if (element.id == id) {
                         hasCur = true;
                         element.count += self.count;
                         return;
@@ -782,18 +805,30 @@ export default class Product extends wepy.page {
             var oriPrice;
 
             if (hasCur == false) {
-                shoppingCart.push({
-                    id: self.productID,
-                    name: self.product.name,
-                    image: self.imageCover,
-                    spec: self.product.spec[self.specChoose].name,
-                    price: self.product.spec[self.specChoose].price,
-                    oriPrice:
-                        self.product.type == 2
-                            ? self.product.oriPrice
-                            : self.product.price,
-                    count: self.count
-                });
+                if (self.operation == 0) {
+                    shoppingCart.push({
+                        id: id,
+                        name: self.product.name,
+                        image: self.imageCover,
+                        spec: self.product.spec[self.specChoose].name,
+                        price: self.product.spec[self.specChoose].price,
+                        oriPrice:
+                            self.product.type == 2
+                                ? self.product.oriPrice
+                                : self.product.price,
+                        count: self.count
+                    });
+                } else if (self.operation == 3) {
+                    shoppingCart.push({
+                        id: id,
+                        name: self.curProduct.name,
+                        image: self.curProduct.imgUrl,
+                        spec: self.curProduct.spec[self.specChoose].name,
+                        price: self.curProduct.spec[self.specChoose].price,
+                        oriPrice: self.curProduct.oriPrice,
+                        count: self.count
+                    });
+                }
             }
 
             wx.setStorageSync('shoppingCart', shoppingCart);
@@ -813,7 +848,7 @@ export default class Product extends wepy.page {
             this.$apply();
         },
 
-        selectContent(){
+        selectContent() {
             return;
         },
 

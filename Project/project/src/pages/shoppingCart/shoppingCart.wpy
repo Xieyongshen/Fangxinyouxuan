@@ -420,12 +420,12 @@ page {
                             <view class="product-item-content">
                                 <view class="product-item-name">{{item.name}}</view>
                                 <view class="product-item-price" style="color:{{color.red}}">￥{{item.price}}
-                                    <text>￥{{item.oriPrice}}</text>
+                                    <text wx:if="{{item.oriPrice > 0}}">￥{{item.oriPrice}}</text>
                                 </view>
                                 <view class="product-item-count">
-                                    <image wx:if="{{item.count > 0}}" src="/icons/Reduce.png" class="count-reduce" @tap.stop="countMinus({{index}})" />
+                                    <image wx:if="{{item.count > 0}}" src="/icons/Reduce.png" class="count-reduce" @tap.stop="countReduce({{index}})" />
                                     <text>{{item.count}}</text>
-                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countPlus({{index}})" />
+                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countAdd({{index}})" />
                                 </view>
                             </view>
                         </view>
@@ -470,7 +470,9 @@ page {
         <view class="shoppingCart-block shoppingCart-recommend">
             <view class="shoppingCart-recommend-title">推荐商品</view>
             <repeat for="{{recommend}}" key="id">
-                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price" :priceColor.sync="color.red"></recommend>
+                <recommend :id.sync="item.id" :imgUrl.sync="item.imgUrl" :name.sync="item.name" :price.sync="item.price" :priceColor.sync="color.red">
+                    <image slot="cart" src="/icons/cart-recommend.png" class="recommend-icon-cart" @tap.stop="chooseSpec({{index}})" />
+                </recommend>
             </repeat>
         </view>
         <view wx:if="{{shoppingCart.length > 0}}" class="shoppingCart-settle">
@@ -485,6 +487,36 @@ page {
                 <view class="price-freight">运费￥{{freightChoose}}</view>
             </view>
             <view hover-class="navigator-hover" class="shoppingCart-settle-btn" style="background:{{color.red}}" @tap="buyNow()">去结算</view>
+        </view>
+        <view wx:if="{{isChoosing}}" class="product-select" @tap="selectClose()">
+            <view class="product-select-container" @tap.stop="selectContent()">
+                <view class="product-select-close" @tap="selectClose()">×</view>
+                <view class="product-select-content">
+                    <image mode="aspectFill" src="{{curProduct.imgUrl}}" class="product-select-img" />
+                    <view class="product-select-info">
+                        <view class="product-select-name">{{curProduct.name}}</view>
+                        <view class="product-select-price" style="color:{{color.red}}">￥{{curProduct.spec[specChoose].price}}</view>
+                        <view class="product-select-remain">库存：{{curProduct.remain}}</view>
+                    </view>
+                    <view class="product-select-spec">
+                        <view class="product-spec-title">规格：</view>
+                        <view class="product-spec-content">
+                            <repeat for="{{curProduct.spec}}" key="index">
+                                <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
+                            </repeat>
+                        </view>
+                    </view>
+                    <view class="product-select-count">
+                        <text>数量：</text>
+                        <view class="product-count-choose">
+                            <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
+                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <view class="product-count-add" style="{{count < curProduct.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
+                        </view>
+                    </view>
+                    <view hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap.stop="addToCart">加入购物车</view>
+                </view>
+            </view>
         </view>
     </view>
 </template>
@@ -539,6 +571,10 @@ export default class ShoppingCart extends wepy.page {
             count: 0
         },
         recommend: [],
+        isChoosing: false,
+        curProduct: {},
+        specChoose: 0,
+        count: 1,
         isIphoneX: false,
         color: {}
     };
@@ -583,7 +619,7 @@ export default class ShoppingCart extends wepy.page {
             });
         },
 
-        countMinus(index, event) {
+        countReduce(index, event) {
             var self = this;
             var subtotal = self.subtotal * 1000;
             self.shoppingCart[index].count--;
@@ -599,7 +635,7 @@ export default class ShoppingCart extends wepy.page {
             self.$apply();
         },
 
-        countPlus(index, event) {
+        countAdd(index, event) {
             var self = this;
             var subtotal = self.subtotal * 1000;
             self.shoppingCart[index].count++;
@@ -650,6 +686,85 @@ export default class ShoppingCart extends wepy.page {
             wx.navigateTo({
                 url: '/pages/order/order?type=0'
             });
+        },
+
+        chooseSpec(index) {
+            var self = this;
+            self.curProduct = self.recommend[index];
+            self.specChoose = 0;
+            self.count = 1;
+            self.isChoosing = true;
+            self.$apply();
+            console.log(self.curProduct);
+        },
+
+        specChoose(spec, e) {
+            this.specChoose = spec;
+            this.$apply();
+        },
+
+        selectClose() {
+            this.isChoosing = false;
+            this.$apply();
+        },
+
+        selectContent() {
+            return;
+        },
+
+        countMinus() {
+            if (this.count > 1) {
+                this.count--;
+                this.$apply();
+            }
+        },
+
+        countPlus() {
+            if (this.count < this.curProduct.remain) {
+                this.count++;
+                this.$apply();
+            }
+        },
+
+        addToCart() {
+            var self = this;
+            var shoppingCart = wx.getStorageSync('shoppingCart');
+            var hasCur = false;
+            if (shoppingCart.length > 0) {
+                shoppingCart.forEach(element => {
+                    if (element.id == self.curProduct.id) {
+                        hasCur = true;
+                        element.count += self.count;
+                        return;
+                    }
+                });
+            } else {
+                shoppingCart = [];
+            }
+
+            if (hasCur == false) {
+                shoppingCart.push({
+                    id: self.curProduct.id,
+                    name: self.curProduct.name,
+                    image: self.curProduct.imgUrl,
+                    spec: self.curProduct.spec[self.specChoose].name,
+                    price: self.curProduct.spec[self.specChoose].price,
+                    oriPrice: self.curProduct.oriPrice,
+                    count: self.count
+                });
+            }
+
+            wx.setStorageSync('shoppingCart', shoppingCart);
+            wx.showToast({
+                title: '添加成功',
+                icon: 'success',
+                duration: 1000
+            });
+
+            console.log(shoppingCart);
+            self.shoppingCart = shoppingCart;
+            this.isChoosing = false;
+            this.$apply();
         }
     };
 
@@ -679,7 +794,7 @@ export default class ShoppingCart extends wepy.page {
     onShow() {
         var self = this;
         self.shoppingCart = wx.getStorageSync('shoppingCart');
-        if(self.shoppingCart.length == 0){
+        if (self.shoppingCart.length == 0) {
             return;
         }
         self.shoppingCart.forEach(element => {
@@ -747,7 +862,7 @@ export default class ShoppingCart extends wepy.page {
             query: {
                 shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
             }
-        })
+        });
         console.log(recommendPros);
         self.recommend = recommendPros.data;
         self.$apply();

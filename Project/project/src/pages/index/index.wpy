@@ -678,7 +678,6 @@ export default class Index extends wepy.page {
         self.shopChoose = shopClosest;
         console.log(self.shopChoose);
         self.$apply();
-<<<<<<< HEAD
         
         let categories = await api.getShopCategory();
         console.log(categories);
@@ -704,9 +703,7 @@ export default class Index extends wepy.page {
             }
         })
         console.log(banners)
-=======
         wx.setStorageSync('shopChoose', self.shopChoose);
->>>>>>> 3fe9e60b44686326ef0c1a63d162b7a5516c65e3
     }
 }
 </script>

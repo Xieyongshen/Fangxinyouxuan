@@ -15,7 +15,6 @@
                     <div class="accountDetail-list-item-change">{{item.change}}</div>
                 </div>
                 <div class="accountDetail-list-item-time">{{item.time}}</div>
-                <hr class="divider">
             </div>
         </div>
 
@@ -57,11 +56,6 @@ export default {
 </script>
 
 <style scoped>
-.divider{
-    color: #888888;
-    margin: 1.25rem 0;
-    line-height: 1px;
-}
 
 .me-bg {
     width: 100%;
@@ -120,6 +114,8 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 0 .9375rem;
+    padding: .9375rem /* 15/16 */ 0;
+    border-bottom: 1px solid #cccccc;
 }
 
 .accountDetail-list-item-row1{

@@ -4,7 +4,7 @@
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
-            <img src="" class="me-userinfo-avatar">
+            <img class="me-userinfo-avatar">
             <div class="me-userinfo-name">nickName</div>
         </div>
 
@@ -32,7 +32,6 @@
                         <div class="fan-list-userinfo-tel">电话: {{item.tel}}</div>
                     </div>
                 </div>
-                <hr class="divider">
             </div>
         </div>
 
@@ -140,30 +139,22 @@ export default {
 </script>
 
 <style scoped>
-.divider{
-    color: #888888;
-    margin: 1.25rem 0;
-    line-height: 1px;
-}
 
 .me-bg {
     width: 100%;
     height: 18.75rem;
     position: absolute;
-    top: 3.875rem;
     z-index: -1;
 }
 
 .me-userinfo {
     width: 100%;
     height: 14.6875rem;
-    margin-bottom: 4.375rem;
+    margin-bottom: 5rem;
     padding-top: 0.9375rem;
     text-align: center;
     box-sizing: border-box;
     position: relative;
-    top:3.875rem;
-
 }
 
 .me-userinfo-avatar {
@@ -180,7 +171,7 @@ export default {
     width: 100%;
     height: 2.1875rem;
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 1.875rem;
     text-align: center;
     margin-top: 0.625rem;
@@ -190,15 +181,11 @@ export default {
 
 .me-share {
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 30px;
     position: absolute;
     top: 0.625rem;
     left: 1.875rem;
-}
-
-.fan-order{
-    margin: 10rem auto .625rem;
 }
 
 .fan-list{
@@ -209,7 +196,11 @@ export default {
 .fan-list-item{
     display: flex;
     flex-direction: column;
-    margin: 0 .9375rem;
+    margin: 0 .625rem /* 10/16 */;
+    font-size: .875rem /* 14/16 */;
+    line-height: 1.5625rem /* 25/16 */;
+    padding: .9375rem /* 15/16 */ 0;
+    border-bottom: 1px solid #cccccc;
 }
 
 .fan-list-item-content{
@@ -219,19 +210,25 @@ export default {
 }
 
 .fan-list-item-number{
-    width: 2.5rem;
-    height: 1.875rem;
-    background:#ddbe59;
-    border-radius:.625rem;
+    width: 1.875rem /* 30/16 */;
+    height: 1.25rem /* 20/16 */;
+    line-height: 1.25rem /* 20/16 */;
+    background: #ddbe59;
+    border-radius: 0.625rem;
     text-align: center;
     color: #ffffff;
-    /* margin-left: .9375rem; */
 }
 
 .icon-user{
-    width: 3.75rem;
-    height: 3.75rem;
-    /* margin: 0 auto; */
+    width: 3.125rem /* 50/16 */;
+    height: 3.125rem /* 50/16 */;
+}
+
+.fan-list-userinfo-name{
+    max-width: 4.6875rem /* 75/16 */;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .fan-list-userinfo-baseinfo{

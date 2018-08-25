@@ -4,7 +4,7 @@
 
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
-            <img src="" class="me-userinfo-avatar">
+            <img class="me-userinfo-avatar">
             <div class="me-userinfo-name">nickName</div>
         </div>
 
@@ -15,7 +15,6 @@
                     <div class="withdrawRecord-list-item-change">{{item.change}}</div>
                 </div>
                 <div class="withdrawRecord-list-item-time">{{item.time}}</div>
-                <hr class="divider">
             </div>
         </div>
 
@@ -69,30 +68,22 @@ export default {
 </script>
 
 <style scoped>
-.divider{
-    color: #888888;
-    margin: 1.25rem 0;
-    line-height: 1px;
-}
 
 .me-bg {
     width: 100%;
     height: 18.75rem;
     position: absolute;
-    top: 3.875rem;
     z-index: -1;
 }
 
 .me-userinfo {
     width: 100%;
     height: 14.6875rem;
-    margin-bottom: 4.375rem;
+    margin-bottom: 4.0625rem /* 65/16 */;
     padding-top: 0.9375rem;
     text-align: center;
     box-sizing: border-box;
     position: relative;
-    top:3.875rem;
-
 }
 
 .me-userinfo-avatar {
@@ -109,7 +100,7 @@ export default {
     width: 100%;
     height: 2.1875rem;
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 1.875rem;
     text-align: center;
     margin-top: 0.625rem;
@@ -119,7 +110,7 @@ export default {
 
 .me-share {
     color: #ffffff;
-    font-size: 17px;
+    font-size: 1rem /* 16/16 */;
     line-height: 30px;
     position: absolute;
     top: 0.625rem;
@@ -127,7 +118,6 @@ export default {
 }
 
 .withdrawRecord-list{
-    margin: 10rem auto 0;
     display: flex;
     flex-direction: column;
 }
@@ -136,6 +126,8 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 0 .9375rem;
+    padding: .9375rem /* 15/16 */ 0;
+    border-bottom: 1px solid #cccccc;
 }
 
 .withdrawRecord-list-item-row1{

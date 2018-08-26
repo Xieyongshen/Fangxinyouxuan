@@ -246,7 +246,7 @@
                     <div class="order-complete-product">
                         <div class="order-complete-product-item" v-for="(item, index) in item.product" :key="index">
                             <div class="order-complete-product-name">{{item.name}}</div>
-                            <div class="order-complete-product-count">×  {{item.count}}</div>
+                            <div class="order-complete-product-count">× {{item.count}}</div>
                             <div class="order-complete-product-price">￥{{item.price}}</div>
                         </div>
                     </div>
@@ -671,7 +671,7 @@ export default {
 }
 
 .userInfo-name {
-    font-size: .875rem /* 14/16 */;
+    font-size: 0.875rem /* 14/16 */;
     line-height: 1.875rem /* 30/16 */;
     margin: 0 0.3125rem /* 5/16 */;
     vertical-align: top;
@@ -1058,7 +1058,7 @@ export default {
     border-bottom: 1px solid #cccccc;
 }
 
-.order-complete-status{
+.order-complete-status {
     margin-right: 1.5625rem /* 25/16 */;
 }
 

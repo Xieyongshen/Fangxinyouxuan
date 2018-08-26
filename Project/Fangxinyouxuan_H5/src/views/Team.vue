@@ -132,7 +132,6 @@ function getResult(val) {
 </script>
 
 <style scoped>
-
 .team-toolBar {
     display: flex;
     flex-direction: row;
@@ -154,7 +153,7 @@ function getResult(val) {
     display: flex;
     flex-direction: column;
     margin: 0 0.9375rem;
-    padding: .9375rem /* 15/16 */ 0;
+    padding: 0.9375rem /* 15/16 */ 0;
     border-bottom: 1px solid #cccccc;
 }
 

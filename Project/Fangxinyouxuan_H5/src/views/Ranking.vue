@@ -1,12 +1,6 @@
 <template>
     <div class="ranking">
-        <img src="@/assets/me-bg.png" class="me-bg">
-
-        <div class="me-userinfo">
-            <div class="me-share">分享店铺</div>
-            <img class="me-userinfo-avatar">
-            <div class="me-userinfo-name">nickName</div>
-        </div>
+        <user-info></user-info>
 
         <div class="ranking-order">
             <group>
@@ -39,11 +33,13 @@
 </template>
 
 <script>
+import userInfo from "@/components/userInfo.vue";
 import { PopupRadio } from "vux";
 
 export default {
     name: "ranking",
     components: {
+        userInfo,
         PopupRadio
     },
 
@@ -143,60 +139,6 @@ export default {
 </script>
 
 <style scoped>
-.divider {
-    color: #888888;
-    margin: 1.25rem 0;
-    line-height: 1px;
-}
-
-.me-bg {
-    width: 100%;
-    height: 18.75rem;
-    position: absolute;
-    z-index: -1;
-}
-
-.me-userinfo {
-    width: 100%;
-    height: 14.6875rem;
-    margin-bottom: 5rem;
-    padding-top: 0.9375rem;
-    text-align: center;
-    box-sizing: border-box;
-    position: relative;
-}
-
-.me-userinfo-avatar {
-    width: 6.25rem;
-    height: 6.25rem;
-    border: 0.3125rem solid #ffffff;
-    border-radius: 50%;
-    background: #d4d5d2;
-    box-sizing: border-box;
-    margin-top: 3.125rem;
-}
-
-.me-userinfo-name {
-    width: 100%;
-    height: 2.1875rem;
-    color: #ffffff;
-    font-size: 1rem /* 16/16 */;
-    line-height: 1.875rem;
-    text-align: center;
-    margin-top: 0.625rem;
-    box-sizing: border-box;
-    display: block;
-}
-
-.me-share {
-    color: #ffffff;
-    font-size: 1rem /* 16/16 */;
-    line-height: 30px;
-    position: absolute;
-    top: 0.625rem;
-    left: 1.875rem;
-}
-
 .ranking-list {
     display: flex;
     flex-direction: column;
@@ -205,10 +147,10 @@ export default {
 .ranking-list-item {
     display: flex;
     flex-direction: column;
-    margin: 0 .625rem /* 10/16 */;
-    font-size: .875rem /* 14/16 */;
+    margin: 0 0.625rem /* 10/16 */;
+    font-size: 0.875rem /* 14/16 */;
     line-height: 1.5625rem /* 25/16 */;
-    padding: .9375rem /* 15/16 */ 0;
+    padding: 0.9375rem /* 15/16 */ 0;
     border-bottom: 1px solid #cccccc;
 }
 
@@ -233,7 +175,7 @@ export default {
     height: 3.125rem /* 50/16 */;
 }
 
-.ranking-list-userinfo-name{
+.ranking-list-userinfo-name {
     max-width: 4.6875rem /* 75/16 */;
     overflow: hidden;
     white-space: nowrap;

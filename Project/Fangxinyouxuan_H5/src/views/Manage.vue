@@ -1,54 +1,54 @@
 <template>
-  <div class="manage">
+    <div class="manage">
 
-    <div class="manage-head">
-      <img src="@/assets/ic_user.png" class="icon-user">
-      <div class="manage-head-username">{{username}}</div>
-      <div class="manage-head-identity">{{identity}}</div>
-      <div class="manage-head-selector">
-        <group>
-          <PopupRadio @on-hide="onhide" title="" placeholder="在线商品" v-model="productStatusSelected" :options="productStatusList"></PopupRadio>
-        </group>
-      </div>
+        <div class="manage-head">
+            <img src="@/assets/ic_user.png" class="icon-user">
+            <div class="manage-head-username">{{username}}</div>
+            <div class="manage-head-identity">{{identity}}</div>
+            <div class="manage-head-selector">
+                <group>
+                    <PopupRadio @on-hide="onhide" title="" placeholder="在线商品" v-model="productStatusSelected" :options="productStatusList"></PopupRadio>
+                </group>
+            </div>
+        </div>
+
+        <div class="manage-list">
+            <div class="manage-list-title">
+                <span>{{productStatusSelected}}</span>
+                <div class="manage-search">
+                    <x-icon type="ios-search-strong" class="manage-search-icon"></x-icon>
+                    <input type="text" placeholder="商品" class="manage-search-input" v-model="searchValue">
+                </div>
+            </div>
+            <div class="manage-list-label">
+                <div class="manage-list-label-item manage-list-label-rebate">每单返利</div>
+                <div class="manage-list-label-item">价格</div>
+                <div class="manage-list-label-item">库存</div>
+            </div>
+            <checker v-model="productSelected" type="checkbox" default-item-class="manage-list-item-selector" selected-item-class="manage-list-item-selector-selected">
+                <div class="manage-list-item" v-for="item in searchFor(items, searchValue)" :key="item.number">
+                    <checker-item :value="item.number"></checker-item>
+                    <img class="img-product">
+                    <div class="manage-list-item-productName">{{item.productName}}</div>
+                    <div class="manage-list-item-productRebate">{{item.productRebate}}</div>
+                    <div class="manage-list-item-productPrice">￥{{item.productPrice}}</div>
+                    <div class="manage-list-item-productAmount">{{item.productAmount}}</div>
+                    <div class="manage-list-item-productStatus">{{item.productStatus}}</div>
+                </div>
+                <div class="button-more">
+                    <XButton @click.native="viewmore" mini>查看更多</XButton>
+                </div>
+                <div class="manage-list-tollbar">
+                    <checker-item :value="-1"></checker-item>
+                    <div class="manage-selectAll">全选</div>
+                    <div class="button-option">
+                        <XButton mini type="primary">{{productOption}}</XButton>
+                    </div>
+                </div>
+            </checker>
+        </div>
+
     </div>
-
-    <div class="manage-list">
-      <div class="manage-list-title">
-        <span>{{productStatusSelected}}</span>
-        <div class="manage-search">
-          <x-icon type="ios-search-strong" class="manage-search-icon"></x-icon>
-          <input type="text" placeholder="商品" class="manage-search-input" v-model="searchValue">
-        </div>
-      </div>
-      <div class="manage-list-label">
-        <div class="manage-list-label-item manage-list-label-rebate">每单返利</div>
-        <div class="manage-list-label-item">价格</div>
-        <div class="manage-list-label-item">库存</div>
-      </div>
-      <checker v-model="productSelected" type="checkbox" default-item-class="manage-list-item-selector" selected-item-class="manage-list-item-selector-selected">
-        <div class="manage-list-item" v-for="item in searchFor(items, searchValue)" :key="item.number">
-          <checker-item :value="item.number"></checker-item>
-          <img class="img-product">
-          <div class="manage-list-item-productName">{{item.productName}}</div>
-          <div class="manage-list-item-productRebate">{{item.productRebate}}</div>
-          <div class="manage-list-item-productPrice">￥{{item.productPrice}}</div>
-          <div class="manage-list-item-productAmount">{{item.productAmount}}</div>
-          <div class="manage-list-item-productStatus">{{item.productStatus}}</div>
-        </div>
-        <div class="button-more">
-          <XButton @click.native="viewmore" mini>查看更多</XButton>
-        </div>
-        <div class="manage-list-tollbar">
-          <checker-item :value="-1"></checker-item>
-          <div class="manage-selectAll">全选</div>
-          <div class="button-option">
-            <XButton mini type="primary">{{productOption}}</XButton>
-          </div>
-        </div>
-      </checker>
-    </div>
-
-  </div>
 </template>
 
 <script>
@@ -258,7 +258,7 @@ export default {
     box-sizing: border-box;
     position: absolute;
     right: 0;
-    top: .4375rem /* 7/16 */;
+    top: 0.4375rem /* 7/16 */;
 }
 
 .manage-search-icon {

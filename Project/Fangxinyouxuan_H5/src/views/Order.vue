@@ -1,8 +1,8 @@
 <template>
     <div class="order">
         <div class="order-userInfo">
-            <img class="userInfo-avatar">
-            <div class="userInfo-name">xxx</div>
+            <img src="@/assets/ic_user.png" class="userInfo-avatar">
+            <div class="userInfo-name">小鱼</div>
             <div class="userInfo-label">小区店长</div>
         </div>
 

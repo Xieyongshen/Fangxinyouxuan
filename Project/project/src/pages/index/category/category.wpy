@@ -140,7 +140,7 @@
             <view class="category-header">
                 <view class="category-shop">
                     <image src="/icons/position.png" class="category-icon-position" />
-                    <text class="shop-name">{{shopChoose}}</text>
+                    <text class="shop-name">{{shopChoose.name}}</text>
                     <image src="/icons/down.png" class="category-icon-down" />
                 </view>
                 <image src="/icons/search.png" class="category-icon-search" />
@@ -229,7 +229,10 @@ export default class Category extends wepy.page {
 
     data = {
         curType: '',
-        shopChoose: '春树馆街小区',
+        shopChoose: {
+            id: '',
+            name: ''
+        },
         category: '',
         categoryID: '',
         banner: [
@@ -286,7 +289,6 @@ export default class Category extends wepy.page {
             self.count = 1;
             self.isChoosing = true;
             self.$apply();
-            console.log(self.curProduct);
         },
 
         specChoose(spec, e) {
@@ -352,7 +354,6 @@ export default class Category extends wepy.page {
                 duration: 1000
             });
 
-            console.log(shoppingCart);
             this.isChoosing = false;
             this.$apply();
         }
@@ -371,17 +372,22 @@ export default class Category extends wepy.page {
         self.categoryID = options.id;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
         let res = await api.getCategoryProduct({
             query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
+                shopId: self.shopChoose.id,
                 categoryId: self.categoryID
             }
         });
         console.log(res);
         let categoryBannners = await api.getCategoryBanners({
             query: {
-                shopId: '95c5106b900e47caab71ad7b049d9697',
-                typeId: '6c9c617d84da4454afca1c06bba07eec'
+                shopId: self.shopChoose.id,
+                typeId: self.categoryID
             }
         })
         console.log(categoryBannners)

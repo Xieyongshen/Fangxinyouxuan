@@ -695,7 +695,6 @@ export default class ShoppingCart extends wepy.page {
             self.count = 1;
             self.isChoosing = true;
             self.$apply();
-            console.log(self.curProduct);
         },
 
         specChoose(spec, e) {
@@ -761,7 +760,6 @@ export default class ShoppingCart extends wepy.page {
                 duration: 1000
             });
 
-            console.log(shoppingCart);
             self.shoppingCart = shoppingCart;
             this.isChoosing = false;
             this.$apply();
@@ -803,11 +801,6 @@ export default class ShoppingCart extends wepy.page {
         self.updateTotal();
         self.$apply();
         console.log(self.shoppingCart);
-        var shop = wx.getStorageSync('shopChoose');
-        if (shop != '') {
-            self.shopChoose = shop;
-            self.$apply();
-        }
         wx.getStorage({
             key: 'address',
             success: function(res) {
@@ -841,26 +834,15 @@ export default class ShoppingCart extends wepy.page {
             key: 'deliverChoose',
             data: -1
         });
-
-        // var jwt = wx.getStorageSync('jwt');
-        // try {
-        //     if (jwt.data.access_token != null) {
-        //         let res = await api.getShoppingCart({
-        //             query: {
-        //                 access_token: jwt.data.access_token,
-        //                 account_id: jwt.data.account_id
-        //             }
-        //         });
-        //         console.log(res);
-        //         self.$apply();
-        //     }
-        // } catch (error) {
-        //     console.log('jwt is null');
-        // }
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
 
         let recommendPros = await api.getRecommendPros({
             query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+                shopId: self.shopChoose.id
             }
         });
         console.log(recommendPros);

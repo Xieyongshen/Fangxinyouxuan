@@ -65,7 +65,7 @@ export default {
 
     data: function() {
         return {
-            username: "青冥",
+            username: "小鱼",
             identity: "小区店长",
             productStatusChoose: 0,
             productStatusSelected: "在线商品",

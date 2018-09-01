@@ -5,7 +5,7 @@
         <div class="me-userinfo">
             <div class="me-share">分享店铺</div>
             <img class="me-userinfo-avatar">
-            <div class="me-userinfo-name">nickName</div>
+            <div class="me-userinfo-name">小鱼</div>
         </div>
     </div>
 </template>

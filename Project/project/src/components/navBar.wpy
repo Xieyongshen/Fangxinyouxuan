@@ -35,6 +35,11 @@
                 <image src="/icons/out.png" class="icon-out" />
             </navigator>
         </block>
+        <block wx:elif="{{isChildPage == 'index'}}">
+            <navigator open-type="switchTab" url="pages/index/index" hover-class="none" class="nav-back">
+                <image src="/icons/out.png" class="icon-out" />
+            </navigator>
+        </block>
         <text class="nav-title">{{navTitle}}</text>
     </view>
 </template>

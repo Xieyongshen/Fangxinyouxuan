@@ -190,6 +190,7 @@
     border: 2rpx solid #cccccc;
     box-sizing: content-box;
     display: inline-block;
+    vertical-align: top;
 }
 
 .product-count-current,

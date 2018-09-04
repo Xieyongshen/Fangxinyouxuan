@@ -511,7 +511,8 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="商品详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar wx:if="{{back == 'index'}}" navTitle="商品详情" isChildPage="index" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar wx:else navTitle="商品详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="product-image">
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{imageShow}}" key="index">
@@ -541,7 +542,7 @@ page {
                 </repeat>
                 <view wx:if="{{product.type == 4}}" class="label-text">
                     <view class="label-mark"></view>
-                    <text wx:if="{{product.reachTime != ''}}">预计到货时间：{{product.reachTime}}</text>
+                    <text wx:if="{{product.reachTime != ''}}">预售：预计到货时间：{{product.reachTime}}</text>
                     <text wx:else>已到货</text>
                 </view>
             </view>
@@ -626,7 +627,7 @@ page {
                         <text>数量：</text>
                         <view class="product-count-choose">
                             <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
-                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <input type="number" value="{{count}}" bindinput="countLimit" class="product-count-current" style="color:{{color.red}};" />
                             <view class="product-count-add" style="{{count < product.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
                         </view>
                     </view>
@@ -695,7 +696,8 @@ export default class Product extends wepy.page {
         restTimeList: [],
         operation: 0,
         isIphoneX: false,
-        color: {}
+        color: {},
+        back: ''
     };
 
     computed = {
@@ -816,6 +818,7 @@ export default class Product extends wepy.page {
                             self.product.type == 2
                                 ? self.product.oriPrice
                                 : self.product.price,
+                        remain: self.product.remain,
                         count: self.count
                     });
                 } else if (self.operation == 2) {
@@ -826,6 +829,7 @@ export default class Product extends wepy.page {
                         spec: self.curProduct.spec[self.specChoose].name,
                         price: self.curProduct.spec[self.specChoose].price,
                         oriPrice: self.curProduct.oriPrice,
+                        remain: self.curProduct.remain,
                         count: self.count
                     });
                 }
@@ -854,6 +858,18 @@ export default class Product extends wepy.page {
         specChoose(spec, e) {
             this.specChoose = spec;
             this.$apply();
+        },
+
+        countLimit(e) {
+            var count = e.detail.value;
+            if (count == '' || count <= 1) {
+                count = 1;
+            } else if (count >= this.curProduct.remain) {
+                count = this.curProduct.remain;
+            }
+            this.count = count;
+            this.$apply();
+            return count;
         },
 
         countMinus() {
@@ -960,7 +976,7 @@ export default class Product extends wepy.page {
     onShareAppMessage() {
         return {
             title: '放心优选',
-            path: '/pages/product/product?id=' + productID
+            path: '/pages/product/product?id=' + productID + '&back=index'
         };
     }
 
@@ -993,6 +1009,7 @@ export default class Product extends wepy.page {
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.productID = options.id;
+        self.back = options.back;
         let productDetail = await api.getProductDetail({
             query: {
                 productId: self.productID

@@ -492,6 +492,7 @@ page {
     border: 2rpx solid #cccccc;
     box-sizing: content-box;
     display: inline-block;
+    vertical-align: top;
 }
 
 .product-count-current,
@@ -511,8 +512,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar wx:if="{{back == 'index'}}" navTitle="商品详情" isChildPage="index" :isIphoneX.sync="isIphoneX"></navBar>
-        <navBar wx:else navTitle="商品详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+            <navBar navTitle="商品详情" :isChildPage.sync="back" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="product-image">
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{imageShow}}" key="index">
@@ -697,7 +697,7 @@ export default class Product extends wepy.page {
         operation: 0,
         isIphoneX: false,
         color: {},
-        back: ''
+        back: 'y'
     };
 
     computed = {
@@ -974,9 +974,10 @@ export default class Product extends wepy.page {
     }
 
     onShareAppMessage() {
+        var self = this;
         return {
             title: '放心优选',
-            path: '/pages/product/product?id=' + productID + '&back=index'
+            path: '/pages/product/product?back=index&id=' + self.productID
         };
     }
 
@@ -1008,8 +1009,12 @@ export default class Product extends wepy.page {
         let self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        console.log('options: ');
+        console.log(options);
         self.productID = options.id;
-        self.back = options.back;
+        if (options.back != '') {
+            self.back = options.back;
+        }
         let productDetail = await api.getProductDetail({
             query: {
                 productId: self.productID
@@ -1020,6 +1025,7 @@ export default class Product extends wepy.page {
 
         self.filterProductInfo();
         self.$apply();
+        console.log(self.back);
         if (self.product.type == 2 && self.product.group.list.length > 0) {
             self.countDown();
         }

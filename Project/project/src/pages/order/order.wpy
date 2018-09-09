@@ -384,7 +384,7 @@ export default class Order extends wepy.page {
             id: '',
             count: 0
         },
-        remain: 0.0,
+        remain: 0,
         type: 0,
         sendTime: '2018-09-03',
         product: [],

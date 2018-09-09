@@ -431,9 +431,8 @@ page {
                                 </view>
                                 <view class="product-item-count" @tap.stop="selectContent()">
                                     <image src="/icons/Reduce.png" class="count-reduce" @tap.stop="countReduce({{index}})" />
-                                    <!-- <text>{{item.count}}</text> -->
                                     <input type="number" value="{{item.count}}" bindinput="itemCountLimit({{index}})" class="count-num" />
-                                    <image wx:if="{{item.count < item.remain}}" src="/icons/Add.png" class="count-add" @tap.stop="countAdd({{index}})" />
+                                    <image src="/icons/Add.png" class="count-add" @tap.stop="countAdd({{index}})" />
                                 </view>
                             </view>
                         </view>
@@ -651,6 +650,17 @@ export default class ShoppingCart extends wepy.page {
 
         countAdd(index, event) {
             var self = this;
+            if (
+                self.shoppingCart[index].count >=
+                self.shoppingCart[index].remain
+            ) {
+                wx.showToast({
+                    title: '库存不足',
+                    icon: 'none',
+                    duration: 1000
+                });
+                return;
+            }
             var subtotal = self.subtotal * 1000;
             self.shoppingCart[index].count++;
             if (self.isChoosen[index]) {

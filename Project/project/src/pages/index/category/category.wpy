@@ -54,13 +54,13 @@
 .category-banner-img {
     width: 690rpx;
     height: 280rpx;
-    margin: 0 30rpx;
-    border-radius: 20rpx;
 }
 
 .category-banner {
+    margin: 0 30rpx;
     margin-bottom: 45rpx;
     background: #fdedeb;
+    border-radius: 20rpx;
 }
 
 .category-type {
@@ -148,7 +148,7 @@
             <swiper indicator-dots="true" indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#ffffff" autoplay="true" interval="5000" duration="1000" circular="true" class="category-banner">
                 <repeat for="{{banner}}" key="index">
                     <swiper-item class="category-banner-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="category-banner-img" @tap="navToProduct({{item.productID}})" />
+                        <image src="{{item.url}}" mode="aspectFill" class="category-banner-img"/>
                     </swiper-item>
                 </repeat>
             </swiper>
@@ -404,6 +404,7 @@ export default class Category extends wepy.page {
             }
         });
         console.log(categoryBannners);
+        self.banner = categoryBannners.data;
         self.type = res.data.type;
         self.type.forEach((item, index) => {
             item.scrollID = 'type' + index;

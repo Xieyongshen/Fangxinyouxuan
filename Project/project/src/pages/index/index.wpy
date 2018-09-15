@@ -715,6 +715,7 @@ export default class Index extends wepy.page {
         }
 
         self.getBanners();
+        self.getCategory();
         self.getProduct();
         self.$apply();
     }

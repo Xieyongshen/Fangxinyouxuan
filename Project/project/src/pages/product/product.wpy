@@ -976,7 +976,8 @@ export default class Product extends wepy.page {
     onShareAppMessage() {
         var self = this;
         return {
-            title: '放心优选',
+            title: self.product.desc,
+            imageUrl: self.imageCover,
             path: '/pages/product/product?back=index&id=' + self.productID
         };
     }

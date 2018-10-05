@@ -31,6 +31,9 @@ from shop.models import Order
 from shop.models import OrderItem
 from shop.models import GroupUser
 
+import hashlib
+from django.views.decorators.csrf import csrf_exempt
+
 # APP_ID = '1'
 # APP_SECRET = '2'
 APP_IMG_URL = 'http://119.23.225.244/uploads/'
@@ -303,7 +306,11 @@ def getProductDetail(request):
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
-            recomendList.append(dict(id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+            specList = list(ProductSpec.objects.filter(product__pro_id=recPros.pro_id))
+            productSpec = list()
+            for specs in specList:
+                productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
+            recomendList.append(dict(id=str(recPros.pro_id),spec=productSpec,name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
         specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
         productSpec = list()
         for specs in specList:
@@ -319,7 +326,11 @@ def getProductDetail(request):
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
-            recomendList.append(dict(id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+            specList = list(ProductSpec.objects.filter(product__pro_id=recPros.pro_id))
+            productSpec = list()
+            for specs in specList:
+                productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
+            recomendList.append(dict(id=str(recPros.pro_id),spec=productSpec,name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
         specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
         productSpec = list()
         for specs in specList:
@@ -334,7 +345,11 @@ def getProductDetail(request):
         recomendProList = list(ShopProduct.objects.filter(pro_type__type_id=the_product.pro_type.type_id))
         recomendList = list()
         for recPros in recomendProList:
-            recomendList.append(dict(id=str(recPros.pro_id),name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
+            specList = list(ProductSpec.objects.filter(product__pro_id=recPros.pro_id))
+            productSpec = list()
+            for specs in specList:
+                productSpec.append(dict(name=specs.spec_name,price=str(specs.spec_price)))
+            recomendList.append(dict(id=str(recPros.pro_id),spec=productSpec,name=recPros.pro_name,price=str(recPros.pro_price),imgUrl=APP_IMG_URL+str(recPros.pro_image)))
         specList = list(ProductSpec.objects.filter(product__pro_id=the_product.pro_id))
         productSpec = list()
         for specs in specList:
@@ -566,7 +581,7 @@ def getSearchResult(request):
     return HttpResponse(res_json)
 
 def saveMyAddress(request):
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode('utf-8'))
     client_access_token = data['access_token']
     client_account_id = data['account_id']
     addressData = data['address']
@@ -595,7 +610,7 @@ def saveMyAddress(request):
     return HttpResponse('ok')
 
 def deleteMyAddress(request):
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode('utf-8'))
     client_access_token = data['access_token']
     client_account_id = data['account_id']
     addressData = data['address']
@@ -627,3 +642,174 @@ def getCategoryBanners(request):
         res_dict.append(dict(url=APP_IMG_URL+str(banners.bannar_url)))
     res_json = json.dumps(res_dict)
     return HttpResponse(res_json)
+
+
+
+
+#公众号接口
+
+@csrf_exempt
+def getToken(request):
+    signature = request.GET.get('signature')
+    timestamp = request.GET.get('timestamp')
+    nonce = request.GET.get('nonce')
+    echostr = request.GET.get('echostr')
+    token = 'fangxinyouxuan'
+
+    hashlist = [token, timestamp, nonce]
+    hashlist.sort()
+    print('[token, timestamp, nonce]', hashlist)
+    hashstr = ''.join([s for s in hashlist]).encode('utf-8')
+    print('hashstr befor sha1', hashstr)
+    hashstr = hashlib.sha1(hashstr).hexdigest()
+    print('hashstr sha1', hashstr)
+    if hashstr ==signature:
+        return HttpResponse(echostr)
+    else:
+        return HttpResponse('error')
+
+# #1.01 获取微信签名 signature
+# @csrf_exempt
+# def get_access_token(request):
+#     """
+#     : 获取微信签名 signature
+#     :param request:
+#     :return:
+#     """
+#     ACCESS_TOKEN = r.get('wx:ACCESS_TOKEN')  # 从redis中获取ACCESS_TOKEN
+#     if ACCESS_TOKEN:
+#         return JsonResponse({
+#             "status": "success",
+#             "code": 200,
+#             "WechatJSConfig": get_wechat_config(request)
+#         })
+#     try:
+#         ACCESS_TOKEN = get_token()  # 调用获取token 方法
+#         r.setex('wx:ACCESS_TOKEN', ACCESS_TOKEN, 7200)  # 将获取到的 ACCESS_TOKEN 存入redis中并且设置过期时间为7200s
+#         return JsonResponse({
+#             "status": "success",
+#             "code": 200,
+#             "WechatJSConfig": get_wechat_config(request)
+#         })
+#     except Exception as e:
+#         logger.error(e)
+#         return HttpResponse(str(e))
+
+
+# # 1.02 微信网页授权
+# def auth(request):
+#     """
+#     : 微信网页授权 通过code换取网页授权access_token， 
+#     :param request:
+#     :return:
+#     """
+#     if request.method == 'GET':
+#         code = request.GET['code'] if 'code' in request.GET else None
+#         state = request.GET['state']
+ 
+#         redirect_uri = "https://" + request.get_host() + request.get_full_path()  # OAuth2 redirect URI
+#         # oauthClient.redirect_uri = redirect_uri  # 这个方法和上面代码一样  获取授权地址
+#         if code:
+#             res = oauthClient.fetch_access_token(code=code)
+#             refresh_token = res['refresh_token']
+#             print('oauthClient.check_access_token():{} type={}'.format(oauthClient.check_access_token(),
+#                                                                        type(oauthClient.check_access_token()), ))
+#             if oauthClient.check_access_token():  # 检查access_token 有效性 ， 如果无效则返回 4001， 拿着refresh_token 刷新access_token
+#                 try:  # 利用access_token  获取用户信息
+#                     user_info = oauthClient.get_user_info()  # 拉取用户信息  此用户可能是 未关注公众号的
+#                     print("user_info= {} type={}".format(user_info, type(user_info)))
+#                     wechat_id = user_info['openid']
+#                     users = Wx_user_info.objects.filter(openid=wechat_id)  # 数据库中已经创建此用户  则更新
+#                     if not users:  # 如果没有此用户则 创建用户 粗如用户信息
+#                         user = Wx_user_info.objects.create(openid=user_info["openid"],
+#                                                            nickname=user_info["nickname"],
+#                                                            headimgurl=user_info["headimgurl"],
+#                                                            sex=int(user_info["sex"]),
+#                                                            city=user_info['city'] if user_info['city'] != None and
+#                                                                                      user_info['city'] != "" else "",
+#                                                            country=user_info['country'] if user_info[
+#                                                                                                'country'] != None and
+#                                                                                            user_info[
+#                                                                                                'country'] != "" else "",
+#                                                            province=user_info['province'] if user_info[
+#                                                                                                  'province'] != None and
+#                                                                                              user_info[
+#                                                                                                  'province'] != "" else ""
+#                                                            )
+#                         request.session['user'] = user  # 将用户信息 存至session 中
+#                         return redirect(state + "?access_token=" + res['access_token'] + "&openid=" + res['openid'])  # 重定向到 state(授权成功 跳转，由前端传state)
+#                     else:  # 如果存在 则更新用户信息
+ 
+#                         user = Wx_user_info.objects.filter(openid=user_info['openid']).update(
+#                             nickname=user_info["nickname"],
+#                             headimgurl=user_info["headimgurl"],
+#                             sex=int(user_info["sex"]),
+#                             city=user_info['city'] if user_info['city'] != None and user_info['city'] != "" else "",
+#                             country=user_info['country'] if user_info['country'] != None and user_info[
+#                                                                                                  'country'] != "" else "",
+#                             province=user_info['province'] if user_info['province'] != None and user_info[
+#                                                                                                     'province'] != "" else ""
+#                         )
+#                         request.session['user'] = user
+#                         return redirect(state + "?access_token=" + res['access_token'] + "&openid=" + res['openid'])
+#                 except Exception as e:
+#                     logger.error(e)
+#                     return JsonResponse({
+#                         "status": "failed",
+#                         "code": 400,
+#                         "msg": str(e)
+#                     })
+#             else:
+#                 res = oauthClient.refresh_access_token(refresh_token)
+#                 print('res={}'.format(res))
+#                 try:  # 利用access_token  获取用户信息
+#                     access_token = res['access_token']
+#                     user_info = oauthClient.get_user_info()
+#                     print("user_info= {} type={}".format(user_info, type(user_info)))
+ 
+#                     users = Wx_user_info.objects.filter(openid=user_info['openid'])
+#                     if not users:
+#                         user = Wx_user_info.objects.create(openid=user_info["openid"],
+#                                                            nickname=user_info["nickname"],
+#                                                            headimgurl=user_info["headimgurl"],
+#                                                            sex=int(user_info["sex"]),
+#                                                            city=user_info['city'] if user_info['city'] != None and
+#                                                                                      user_info['city'] != "" else "",
+#                                                            country=user_info['country'] if user_info[
+#                                                                                                'country'] != None and
+#                                                                                            user_info[
+#                                                                                                'country'] != "" else "",
+#                                                            province=user_info['province'] if user_info[
+#                                                                                                  'province'] != None and
+#                                                                                              user_info[
+#                                                                                                  'province'] != "" else ""
+#                                                            )
+#                         request.session['user'] = user
+#                         return redirect(state + "?access_token=" + access_token + "&openid=" + res['openid'])
+#                     else:
+#                         user = Wx_user_info.objects.filter(openid=user_info['openid']).update(
+#                             nickname=user_info["nickname"],
+#                             headimgurl=user_info["headimgurl"],
+#                             sex=int(user_info["sex"]),
+#                             city=user_info['city'] if user_info['city'] != None and user_info['city'] != "" else "",
+#                             country=user_info['country'] if user_info['country'] != None and user_info[
+#                                                                                                  'country'] != "" else "",
+#                             province=user_info['province'] if user_info['province'] != None and user_info[
+#                                                                                                     'province'] != "" else ""
+#                         )
+#                         request.session['user'] = user
+#                         return redirect(state + "?access_token=" + access_token + "&openid=" + res['openid'])
+#                 except Exception as e:
+#                     logger.error(e)
+#                     return JsonResponse({
+#                         "status": "failed",
+#                         "code": 400,
+#                         "msg": str(e)
+#                     })
+#         else:  # 如果code 不存在 则重定向到 之前的页面
+#             scope = "snsapi_userinfo"
+#             state = "STATE"
+#             _OAUTH_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state={3}#wechat_redirect"
+#             _OAUTH_URL.format(AppId=AppId, redirect_url=quote(redirect_uri), scope=scope, state=state)
+#             return redirect(_OAUTH_URL)
+

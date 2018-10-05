@@ -8,7 +8,7 @@ const log_in = async (params) => {
     let iv = get_res.iv || 'iv';
     let jwt = await wepy.request({
         url:
-            'http://119.23.225.244' +
+            'http://fangxintech.com' +
             '/auth/token?code=' +
             code,
         data: {

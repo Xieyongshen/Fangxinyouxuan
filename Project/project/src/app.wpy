@@ -101,10 +101,10 @@ export default class extends wepy.app {
     onLaunch() {
         this.testAsync();
         var res = wx.getSystemInfoSync();
-        console.log(res.model);
-        if (res.model == 'iPhone X') {
+        console.log(res.model.substring(0, 8));
+        if (res.model.substring(0, 8) == 'iPhone X') {
             this.globalData.isIphoneX = true;
-            console.log('Rich man here！');
+            console.log('iPhone X here！');
         }
     }
 

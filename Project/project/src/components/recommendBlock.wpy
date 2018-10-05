@@ -173,6 +173,7 @@
     text-align: center;
     border: 2rpx solid #cccccc;
     box-sizing: content-box;
+    vertical-align: top;
     display: inline-block;
 }
 

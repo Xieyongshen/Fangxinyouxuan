@@ -392,7 +392,7 @@
             </view>
             <view class="orderDetail-refund-more">
                 <textarea auto-height placeholder="补充详细信息以使商家更快帮您处理" class="refund-more-input" />
-                <view class="refund-more-update">+</view>
+                <!-- <view class="refund-more-update">+</view> -->
             </view>
             <view class="orderDetail-item">
                 <view class="orderDetail-btn" @tap="refundSubmit">提交申请</view>
@@ -491,6 +491,12 @@ export default class OrderDetail extends wepy.page {
         },
 
         navToProductList(index, events) {
+            var self = this;
+            var orderProduct = self.order.product;
+            orderProduct.forEach(element => {
+                element.image = element.imgUrl;
+            });
+            wx.setStorageSync('orderProduct', orderProduct);
             wx.navigateTo({
                 url: '../../productList/productList'
             });

@@ -54,13 +54,13 @@
 .category-banner-img {
     width: 690rpx;
     height: 280rpx;
-    margin: 0 30rpx;
-    border-radius: 20rpx;
 }
 
 .category-banner {
+    margin: 0 30rpx;
     margin-bottom: 45rpx;
     background: #fdedeb;
+    border-radius: 20rpx;
 }
 
 .category-type {
@@ -140,7 +140,7 @@
             <view class="category-header">
                 <view class="category-shop">
                     <image src="/icons/position.png" class="category-icon-position" />
-                    <text class="shop-name">{{shopChoose}}</text>
+                    <text class="shop-name">{{shopChoose.name}}</text>
                     <image src="/icons/down.png" class="category-icon-down" />
                 </view>
                 <image src="/icons/search.png" class="category-icon-search" />
@@ -148,7 +148,7 @@
             <swiper indicator-dots="true" indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#ffffff" autoplay="true" interval="5000" duration="1000" circular="true" class="category-banner">
                 <repeat for="{{banner}}" key="index">
                     <swiper-item class="category-banner-item">
-                        <image src="{{item.imgUrl}}" mode="aspectFill" class="category-banner-img" @tap="navToProduct({{item.productID}})" />
+                        <image src="{{item.url}}" mode="aspectFill" class="category-banner-img"/>
                     </swiper-item>
                 </repeat>
             </swiper>
@@ -200,7 +200,7 @@
                         <text>数量：</text>
                         <view class="product-count-choose">
                             <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
-                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <input type="number" value="{{count}}" bindinput="countLimit" class="product-count-current" style="color:{{color.red}};" />
                             <view class="product-count-add" style="{{count < curProduct.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
                         </view>
                     </view>
@@ -229,7 +229,10 @@ export default class Category extends wepy.page {
 
     data = {
         curType: '',
-        shopChoose: '春树馆街小区',
+        shopChoose: {
+            id: '',
+            name: ''
+        },
         category: '',
         categoryID: '',
         banner: [
@@ -286,7 +289,6 @@ export default class Category extends wepy.page {
             self.count = 1;
             self.isChoosing = true;
             self.$apply();
-            console.log(self.curProduct);
         },
 
         specChoose(spec, e) {
@@ -317,6 +319,18 @@ export default class Category extends wepy.page {
             }
         },
 
+        countLimit(e) {
+            var count = e.detail.value;
+            if (count == '' || count <= 1) {
+                count = 1;
+            } else if (count >= this.curProduct.remain) {
+                count = this.curProduct.remain;
+            }
+            this.count = count;
+            this.$apply();
+            return count;
+        },
+
         addToCart() {
             var self = this;
             var shoppingCart = wx.getStorageSync('shoppingCart');
@@ -341,6 +355,7 @@ export default class Category extends wepy.page {
                     spec: self.curProduct.spec[self.specChoose].name,
                     price: self.curProduct.spec[self.specChoose].price,
                     oriPrice: self.curProduct.oriPrice,
+                    remain: self.curProduct.remain,
                     count: self.count
                 });
             }
@@ -352,7 +367,6 @@ export default class Category extends wepy.page {
                 duration: 1000
             });
 
-            console.log(shoppingCart);
             this.isChoosing = false;
             this.$apply();
         }
@@ -371,20 +385,26 @@ export default class Category extends wepy.page {
         self.categoryID = options.id;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
         let res = await api.getCategoryProduct({
             query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1',
+                shopId: self.shopChoose.id,
                 categoryId: self.categoryID
             }
         });
         console.log(res);
         let categoryBannners = await api.getCategoryBanners({
             query: {
-                shopId: '95c5106b900e47caab71ad7b049d9697',
-                typeId: '6c9c617d84da4454afca1c06bba07eec'
+                shopId: self.shopChoose.id,
+                typeId: self.categoryID
             }
-        })
-        console.log(categoryBannners)
+        });
+        console.log(categoryBannners);
+        self.banner = categoryBannners.data;
         self.type = res.data.type;
         self.type.forEach((item, index) => {
             item.scrollID = 'type' + index;

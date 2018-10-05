@@ -1,12 +1,6 @@
 <template>
-  <div class="home">
-        <img src="@/assets/me-bg.png" class="me-bg">
-
-        <div class="me-userinfo">
-            <div class="me-share">分享店铺</div>
-            <img class="me-userinfo-avatar">
-            <div class="me-userinfo-name">nickName</div>
-        </div>
+    <div class="home">
+        <user-info></user-info>
 
         <div class="me-function">
             <div class="me-function-item">
@@ -60,108 +54,57 @@
 </template>
 
 <script>
-import navBar from '@/components/navBar.vue'
+import userInfo from "@/components/userInfo.vue";
 
 export default {
-  name: 'home',
-  components: {
-    navBar
-  },
+    name: "home",
+    components: {
+        userInfo
+    },
 
-  data: function () {
-    return {
-      postConfig: '已开启'
+    data: function() {
+        return {
+            postConfig: "已开启"
+        };
+    },
+
+    methods: {
+        goOrder() {
+            this.$router.push("/order");
+        },
+        goIncome() {
+            this.$router.push("/income");
+        },
+        goManage() {
+            this.$router.push("/manage");
+        },
+        goAccount() {
+            this.$router.push("/account");
+        },
+        goTeam() {
+            this.$router.push("/team");
+        },
+        goRanking() {
+            this.$router.push("/ranking");
+        },
+        goDeliver() {
+            this.$router.push("/deliver");
+        }
     }
-  },
-
-  methods: {
-    goOrder () {
-      this.$router.push('/order')
-    },
-    goIncome () {
-      this.$router.push('/income')
-    },
-    goManage () {
-      this.$router.push('/manage')
-    },
-    goAccount () {
-      this.$router.push('/account')
-    },
-    goTeam () {
-      this.$router.push('/team')
-    },
-    goRanking () {
-      this.$router.push('/ranking')
-    },
-    goDeliver () {
-      this.$router.push('/deliver')
-    }
-  }
-
-}
+};
 </script>
 
 <style scoped>
-.home{
+.home {
     position: relative;
 }
 
-.me-bg {
-    width: 100%;
-    height: 18.75rem;
-    position: absolute;
-    z-index: -1;
-}
-
-.me-userinfo {
-    width: 100%;
-    height: 14.6875rem;
-    margin-bottom: 4.375rem;
-    padding-top: 0.9375rem;
-    text-align: center;
-    box-sizing: border-box;
-    position: relative;
-
-}
-
-.me-userinfo-avatar {
-    width: 6.25rem;
-    height: 6.25rem;
-    border: 0.3125rem solid #ffffff;
-    border-radius: 50%;
-    background: #d4d5d2;
-    box-sizing: border-box;
-    margin-top: 3.125rem;
-}
-
-.me-userinfo-name {
-    width: 100%;
-    height: 2.1875rem;
-    color: #ffffff;
-    font-size: 17px;
-    line-height: 1.875rem;
-    text-align: center;
-    margin-top: 0.625rem;
-    box-sizing: border-box;
-    display: block;
-}
-
-.me-share {
-    color: #ffffff;
-    font-size: 17px;
-    line-height: 30px;
-    position: absolute;
-    top: 0.625rem;
-    left: 1.875rem;
-}
-
-.me-function{
+.me-function {
     margin: 0 auto;
     display: flex;
-
 }
 
-.me-function-item{
+.me-function-item {
     width: 13.75rem;
     padding: 0.9375rem;
     display: flex;
@@ -169,15 +112,19 @@ export default {
     align-items: center;
 }
 
-.me-function-item-a{
-    font-size: 17px;
+.me-function-item-a {
+    font-size: 1rem /* 16/16 */;
     text-decoration: none;
     color: #333;
 }
 
-.me-icon{
+.me-icon {
     width: 2.5rem;
     height: 2.5rem;
     margin-bottom: 0.625rem;
+}
+
+.me-manage {
+    font-size: 1rem /* 16/16 */;
 }
 </style>

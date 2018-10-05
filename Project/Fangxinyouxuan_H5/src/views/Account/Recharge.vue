@@ -4,15 +4,12 @@
 </template>
 
 <script>
-
 export default {
-  name: 'recharge',
-  components: {
-  },
+    name: "recharge",
+    components: {},
 
-  data: function(){
-      return{
-      }
-  }
-}
+    data: function() {
+        return {};
+    }
+};
 </script>

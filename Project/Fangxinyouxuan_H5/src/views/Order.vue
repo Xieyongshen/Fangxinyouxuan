@@ -1,8 +1,8 @@
 <template>
     <div class="order">
         <div class="order-userInfo">
-            <img class="userInfo-avatar">
-            <div class="userInfo-name">xxx</div>
+            <img src="@/assets/ic_user.png" class="userInfo-avatar">
+            <div class="userInfo-name">小鱼</div>
             <div class="userInfo-label">小区店长</div>
         </div>
 
@@ -246,7 +246,7 @@
                     <div class="order-complete-product">
                         <div class="order-complete-product-item" v-for="(item, index) in item.product" :key="index">
                             <div class="order-complete-product-name">{{item.name}}</div>
-                            <div class="order-complete-product-count">×  {{item.count}}</div>
+                            <div class="order-complete-product-count">× {{item.count}}</div>
                             <div class="order-complete-product-price">￥{{item.price}}</div>
                         </div>
                     </div>
@@ -256,10 +256,7 @@
     </div>
 </template>
 <script>
-import { Flexbox, FlexboxItem } from "vux";
-import { Countup } from "vux";
-import { Tab, TabItem } from "vux";
-import { CheckIcon } from "vux";
+import { Flexbox, FlexboxItem, Countup, Tab, TabItem, CheckIcon } from "vux";
 
 export default {
     name: "order",
@@ -674,7 +671,7 @@ export default {
 }
 
 .userInfo-name {
-    font-size: 1.125rem /* 18/16 */;
+    font-size: 0.875rem /* 14/16 */;
     line-height: 1.875rem /* 30/16 */;
     margin: 0 0.3125rem /* 5/16 */;
     vertical-align: top;
@@ -1061,7 +1058,7 @@ export default {
     border-bottom: 1px solid #cccccc;
 }
 
-.order-complete-status{
+.order-complete-status {
     margin-right: 1.5625rem /* 25/16 */;
 }
 

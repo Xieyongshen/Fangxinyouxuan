@@ -1,12 +1,6 @@
 <template>
     <div class="fan">
-        <img src="@/assets/me-bg.png" class="me-bg">
-
-        <div class="me-userinfo">
-            <div class="me-share">分享店铺</div>
-            <img src="" class="me-userinfo-avatar">
-            <div class="me-userinfo-name">nickName</div>
-        </div>
+        <user-info></user-info>
 
         <div class="fan-order">
             <group>
@@ -32,7 +26,6 @@
                         <div class="fan-list-userinfo-tel">电话: {{item.tel}}</div>
                     </div>
                 </div>
-                <hr class="divider">
             </div>
         </div>
 
@@ -40,209 +33,163 @@
 </template>
 
 <script>
-import { PopupRadio } from 'vux'
+import userInfo from "@/components/userInfo.vue";
+import { PopupRadio } from "vux";
 
 export default {
-  name: 'fan',
-  components: {
-    PopupRadio
-  },
+    name: "fan",
+    components: {
+        userInfo,
+        PopupRadio
+    },
 
-  data: function () {
-    return {
-      fanOrder: '',
-      fanOrderList: [{key: '0', value: '本月消费top10用户'}, {key: '1', value: '本周消费top10用户'}, {key: '2', value: '累计消费排名'}],
-      items: [
-        {
-          number: '1',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '2',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '3',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '4',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '5',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '6',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '7',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '8',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '9',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        },
-        {
-          number: '10',
-          name: '小花',
-          sex: '女',
-          wechat: 'xiaohuazuimei',
-          cost: '999',
-          tel: '13006666666'
-        }
-      ]
+    data: function() {
+        return {
+            fanOrder: "",
+            fanOrderList: [
+                { key: "0", value: "本月消费top10用户" },
+                { key: "1", value: "本周消费top10用户" },
+                { key: "2", value: "累计消费排名" }
+            ],
+            items: [
+                {
+                    number: "1",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "2",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "3",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "4",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "5",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "6",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "7",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "8",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "9",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                },
+                {
+                    number: "10",
+                    name: "小花",
+                    sex: "女",
+                    wechat: "xiaohuazuimei",
+                    cost: "999",
+                    tel: "13006666666"
+                }
+            ]
+        };
     }
-  }
-}
+};
 </script>
 
 <style scoped>
-.divider{
-    color: #888888;
-    margin: 1.25rem 0;
-    line-height: 1px;
-}
-
-.me-bg {
-    width: 100%;
-    height: 18.75rem;
-    position: absolute;
-    top: 3.875rem;
-    z-index: -1;
-}
-
-.me-userinfo {
-    width: 100%;
-    height: 14.6875rem;
-    margin-bottom: 4.375rem;
-    padding-top: 0.9375rem;
-    text-align: center;
-    box-sizing: border-box;
-    position: relative;
-    top:3.875rem;
-
-}
-
-.me-userinfo-avatar {
-    width: 6.25rem;
-    height: 6.25rem;
-    border: 0.3125rem solid #ffffff;
-    border-radius: 50%;
-    background: #d4d5d2;
-    box-sizing: border-box;
-    margin-top: 3.125rem;
-}
-
-.me-userinfo-name {
-    width: 100%;
-    height: 2.1875rem;
-    color: #ffffff;
-    font-size: 17px;
-    line-height: 1.875rem;
-    text-align: center;
-    margin-top: 0.625rem;
-    box-sizing: border-box;
-    display: block;
-}
-
-.me-share {
-    color: #ffffff;
-    font-size: 17px;
-    line-height: 30px;
-    position: absolute;
-    top: 0.625rem;
-    left: 1.875rem;
-}
-
-.fan-order{
-    margin: 10rem auto .625rem;
-}
-
-.fan-list{
+.fan-list {
     display: flex;
     flex-direction: column;
 }
 
-.fan-list-item{
+.fan-list-item {
     display: flex;
     flex-direction: column;
-    margin: 0 .9375rem;
+    margin: 0 0.625rem /* 10/16 */;
+    font-size: 0.875rem /* 14/16 */;
+    line-height: 1.5625rem /* 25/16 */;
+    padding: 0.9375rem /* 15/16 */ 0;
+    border-bottom: 1px solid #cccccc;
 }
 
-.fan-list-item-content{
+.fan-list-item-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.fan-list-item-number{
-    width: 2.5rem;
-    height: 1.875rem;
-    background:#ddbe59;
-    border-radius:.625rem;
+.fan-list-item-number {
+    width: 1.875rem /* 30/16 */;
+    height: 1.25rem /* 20/16 */;
+    line-height: 1.25rem /* 20/16 */;
+    background: #ddbe59;
+    border-radius: 0.625rem;
     text-align: center;
     color: #ffffff;
-    /* margin-left: .9375rem; */
 }
 
-.icon-user{
-    width: 3.75rem;
-    height: 3.75rem;
-    /* margin: 0 auto; */
+.icon-user {
+    width: 3.125rem /* 50/16 */;
+    height: 3.125rem /* 50/16 */;
 }
 
-.fan-list-userinfo-baseinfo{
+.fan-list-userinfo-name {
+    max-width: 4.6875rem /* 75/16 */;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fan-list-userinfo-baseinfo {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.fan-list-userinfo-contact{
+.fan-list-userinfo-contact {
     display: flex;
     flex-direction: column;
 }
-
 </style>

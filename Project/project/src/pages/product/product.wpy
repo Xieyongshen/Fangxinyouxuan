@@ -492,6 +492,7 @@ page {
     border: 2rpx solid #cccccc;
     box-sizing: content-box;
     display: inline-block;
+    vertical-align: top;
 }
 
 .product-count-current,
@@ -511,7 +512,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="商品详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+            <navBar navTitle="商品详情" :isChildPage.sync="back" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="product-image">
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{imageShow}}" key="index">
@@ -541,7 +542,7 @@ page {
                 </repeat>
                 <view wx:if="{{product.type == 4}}" class="label-text">
                     <view class="label-mark"></view>
-                    <text wx:if="{{product.reachTime != ''}}">预计到货时间：{{product.reachTime}}</text>
+                    <text wx:if="{{product.reachTime != ''}}">预售：预计到货时间：{{product.reachTime}}</text>
                     <text wx:else>已到货</text>
                 </view>
             </view>
@@ -608,16 +609,16 @@ page {
             <view class="product-select-container" @tap.stop="selectContent()">
                 <view class="product-select-close" @tap.stop="selectClose()">×</view>
                 <view class="product-select-content">
-                    <image mode="aspectFill" src="{{operation == 0 ? imageCover : curProduct.imgUrl}}" class="product-select-img" />
+                    <image mode="aspectFill" src="{{operation == 2 ? curProduct.imgUrl : imageCover}}" class="product-select-img" />
                     <view class="product-select-info">
-                        <view class="product-select-name">{{operation == 0 ? product.name : curProduct.name}}</view>
+                        <view class="product-select-name">{{operation == 2 ? curProduct.name : product.name}}</view>
                         <view class="product-select-price" style="color:{{color.red}}">￥{{curPrice}}</view>
-                        <view class="product-select-remain">库存：{{operation == 0 ? product.remain : curProduct.remain}}</view>
+                        <view class="product-select-remain">库存：{{operation == 2 ? curProduct.remain : product.remain}}</view>
                     </view>
                     <view class="product-select-spec">
                         <view class="product-spec-title">规格：</view>
                         <view class="product-spec-content">
-                            <repeat for="{{operation == 0 ? product.spec : curProduct.spec}}" key="index">
+                            <repeat for="{{operation == 2 ? curProduct.spec : product.spec}}" key="index">
                                 <view class="product-spec-item" style="{{index == specChoose? 'color:' + color.red + ';border: 2rpx solid ' + color.red + ';' : ''}}" @tap="specChoose({{index}})">{{item.name}}</view>
                             </repeat>
                         </view>
@@ -626,11 +627,11 @@ page {
                         <text>数量：</text>
                         <view class="product-count-choose">
                             <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
-                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <input type="number" value="{{count}}" bindinput="countLimit" class="product-count-current" style="color:{{color.red}};" />
                             <view class="product-count-add" style="{{count < product.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
                         </view>
                     </view>
-                    <view wx:if="{{operation == 0 || operation == 3}}" hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="addToCart">加入购物车</view>
+                    <view wx:if="{{operation != 1}}" hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="addToCart">加入购物车</view>
                     <view wx:else hover-class="navigator-hover" class="product-select-buy" style="background:{{color.red}}" @tap="buyNow({{product.type}})">立即购买</view>
                 </view>
             </view>
@@ -695,15 +696,16 @@ export default class Product extends wepy.page {
         restTimeList: [],
         operation: 0,
         isIphoneX: false,
-        color: {}
+        color: {},
+        back: 'y'
     };
 
     computed = {
         curPrice() {
             var price = 0;
-            if (this.operation == 0) {
+            if (this.operation == 0 || this.operation == 1) {
                 price = this.product.spec[this.specChoose].price;
-            } else if (this.operation == 3) {
+            } else if (this.operation == 2) {
                 price = this.curProduct.spec[this.specChoose].price;
             }
             return price;
@@ -765,7 +767,7 @@ export default class Product extends wepy.page {
         chooseRecommendSpec(index) {
             var self = this;
             self.curProduct = self.product.recommend[index];
-            self.operation = 3;
+            self.operation = 2;
             self.specChoose = 0;
             self.count = 1;
             self.isChoosing = true;
@@ -787,7 +789,7 @@ export default class Product extends wepy.page {
             var id = '';
             if (self.operation == 0) {
                 id = self.productID;
-            } else if (self.operation == 3) {
+            } else if (self.operation == 2) {
                 id = self.curProduct.id;
             }
             if (shoppingCart.length > 0) {
@@ -816,9 +818,10 @@ export default class Product extends wepy.page {
                             self.product.type == 2
                                 ? self.product.oriPrice
                                 : self.product.price,
+                        remain: self.product.remain,
                         count: self.count
                     });
-                } else if (self.operation == 3) {
+                } else if (self.operation == 2) {
                     shoppingCart.push({
                         id: id,
                         name: self.curProduct.name,
@@ -826,6 +829,7 @@ export default class Product extends wepy.page {
                         spec: self.curProduct.spec[self.specChoose].name,
                         price: self.curProduct.spec[self.specChoose].price,
                         oriPrice: self.curProduct.oriPrice,
+                        remain: self.curProduct.remain,
                         count: self.count
                     });
                 }
@@ -838,7 +842,6 @@ export default class Product extends wepy.page {
                 duration: 1000
             });
 
-            console.log(shoppingCart);
             this.isChoosing = false;
             this.$apply();
         },
@@ -855,6 +858,18 @@ export default class Product extends wepy.page {
         specChoose(spec, e) {
             this.specChoose = spec;
             this.$apply();
+        },
+
+        countLimit(e) {
+            var count = e.detail.value;
+            if (count == '' || count <= 1) {
+                count = 1;
+            } else if (count >= this.curProduct.remain) {
+                count = this.curProduct.remain;
+            }
+            this.count = count;
+            this.$apply();
+            return count;
         },
 
         countMinus() {
@@ -887,6 +902,7 @@ export default class Product extends wepy.page {
         let endTimeList = [];
         let countDown = {};
         list.forEach(element => {
+            element.endTime = element.endTime.replace(/\-/g, '/');
             endTimeList.push(element.endTime);
         });
 
@@ -917,7 +933,7 @@ export default class Product extends wepy.page {
             clearInterval(self.timer);
         }
         self.timer = setInterval(function() {
-            self.restTimeList.forEach(element => {
+            self.restTimeList.forEach((element, index) => {
                 if (element.second > 0) {
                     element.second--;
                 } else if (element.minute > 0) {
@@ -929,7 +945,7 @@ export default class Product extends wepy.page {
                     element.hour--;
                 } else {
                     nowTime = new Date().getTime();
-                    let endTime = new Date(element).getTime();
+                    let endTime = new Date(endTimeList[index]).getTime();
                     if (nowTime >= endTime) {
                         clearInterval(this);
                     } else {
@@ -958,9 +974,11 @@ export default class Product extends wepy.page {
     }
 
     onShareAppMessage() {
+        var self = this;
         return {
-            title: '放心优选',
-            path: '/pages/product/product?id=' + productID
+            title: self.product.desc,
+            imageUrl: self.imageCover,
+            path: '/pages/product/product?back=index&id=' + self.productID
         };
     }
 
@@ -992,8 +1010,12 @@ export default class Product extends wepy.page {
         let self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        console.log('options: ');
+        console.log(options);
         self.productID = options.id;
-        console.log(self.productID);
+        if (options.back != '') {
+            self.back = options.back;
+        }
         let productDetail = await api.getProductDetail({
             query: {
                 productId: self.productID
@@ -1004,6 +1026,7 @@ export default class Product extends wepy.page {
 
         self.filterProductInfo();
         self.$apply();
+        console.log(self.back);
         if (self.product.type == 2 && self.product.group.list.length > 0) {
             self.countDown();
         }

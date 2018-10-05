@@ -283,26 +283,26 @@ page {
                 </view>
             </navigator>
         </view>
-        <repeat for="{{product}}" key="type">
-            <view class="order-block order-product">
-                <view wx:if="{{deliverChoose > 0}}" class="order-product-deliver order-item">送达时间
-                    <text style="color:{{color.red}}">{{sendTime}}</text>
-                </view>
-                <view class="order-product-items" @tap="navToProductList()">
-                    <image wx:if="{{index < 5}}" src="{{item.image}}" mode="aspectFill" class="order-product-img" />
-                    <view wx:if="{{type == 2}}" class="order-product-label">拼团中</view>
-                    <view wx:if="{{type == 4}}" class="order-product-label">预售款</view>
-                    <view class="order-product-count">共{{product.length}}件
-                        <image src="/icons/in.png" class="icon-in" />
-                    </view>
-                </view>
-                <block wx:if="{{type == 2}}">
-                    <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
-                        <!-- <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text> -->
-                    </view>
-                </block>
+        <view class="order-block order-product">
+            <view class="order-product-deliver order-item">{{deliverChoose > 0 ? '发货时间' : '送达时间'}}
+                <text style="color:{{color.red}}">{{sendTime}}</text>
             </view>
-        </repeat>
+            <view class="order-product-items" @tap="navToProductList()">
+                <repeat for="{{product}}" key="type">
+                    <image wx:if="{{index < 5}}" src="{{item.image}}" mode="aspectFill" class="order-product-img" />
+                </repeat>
+                <view wx:if="{{type == 2}}" class="order-product-label">拼团中</view>
+                <view wx:if="{{type == 4}}" class="order-product-label">预售款</view>
+                <view class="order-product-count">共{{product.length}}件
+                    <image src="/icons/in.png" class="icon-in" />
+                </view>
+            </view>
+            <block wx:if="{{type == 2}}">
+                <view class="order-product-status order-item">如拼团失败，即刻退款至支付宝账户
+                    <!-- <text>已拼：{{listItem.people}}/{{listItem.maxpeople}}</text> -->
+                </view>
+            </block>
+        </view>
         <view class="order-block order-total">
             <view class="order-item">商品总价
                 <text>￥{{subtotal}}</text>
@@ -351,7 +351,7 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import api from '@/api/api'
+import api from '@/api/api';
 
 export default class Order extends wepy.page {
     components = {
@@ -384,9 +384,9 @@ export default class Order extends wepy.page {
             id: '',
             count: 0
         },
-        remain: 0.00,
+        remain: 0,
         type: 0,
-        sendTime: '2018-08-20',
+        sendTime: '2018-09-03',
         product: [],
         subtotal: 0,
         isIphoneX: false,
@@ -465,7 +465,7 @@ export default class Order extends wepy.page {
                 self.$apply();
             }
         });
-        
+
         var jwt = wx.getStorageSync('jwt');
         if (jwt.data.access_token != null) {
             let myBalance = await api.getMyBalance({
@@ -474,10 +474,24 @@ export default class Order extends wepy.page {
                     account_id: jwt.data.account_id
                 }
             });
-            
+
             self.remain = myBalance.data.balance;
             self.$apply();
         }
+    }
+
+    timeFormat(param) {
+        //小于10的格式化函数
+        var format = parseInt(param);
+        return format < 10 ? '0' + format : format;
+    }
+
+    updateTime() {
+        var self = this;
+        var nowTime = new Date().getTime();
+        var nextTime = new Date((nowTime / 1000 + 24 * 60 * 60) * 1000);
+        self.sendTime = nextTime.getFullYear() + '-' + self.timeFormat(nextTime.getMonth() + 1) + '-' + self.timeFormat(nextTime.getDate());
+        self.$apply();
     }
 
     onLoad(options) {
@@ -497,15 +511,16 @@ export default class Order extends wepy.page {
         });
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.updateTime();
         self.$apply();
         self.updateTotal();
     }
 
-    async submitOrder(){
-        let self = this
+    async submitOrder() {
+        let self = this;
         var jwt = wx.getStorageSync('jwt');
-        console.log(self.redPacket)
-        console.log(self.product)
+        console.log(self.redPacket);
+        console.log(self.product);
         try {
             if (jwt.data.access_token != null) {
                 let res = await api.submitOrder({

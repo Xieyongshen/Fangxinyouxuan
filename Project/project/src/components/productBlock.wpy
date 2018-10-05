@@ -190,6 +190,7 @@
     border: 2rpx solid #cccccc;
     box-sizing: content-box;
     display: inline-block;
+    vertical-align: top;
 }
 
 .product-count-current,
@@ -237,7 +238,7 @@ export default class ProductBlock extends wepy.component {
     methods = {
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?id=' + product
+                url: '/pages/product/product?back=index&id=' + product
             });
         }
     };

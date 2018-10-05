@@ -169,7 +169,7 @@
                     </view>
                     <view wx:if="{{item.type == 2}}" class="orderList-productAll-label">拼团中</view>
                     <view wx:if="{{item.type == 4}}" class="orderList-productAll-label">预售款</view>
-                    <scroll-view scroll-x class="orderList-item-list">
+                    <scroll-view scroll-x class="orderList-item-list" @tap="toOrderDetail({{item.id}}, {{item.status}})">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
                             <view class="orderList-product">
                                 <image src="{{product.imgUrl}}" mode="aspectFill" class="orderList-product-img" />
@@ -199,9 +199,9 @@
                         <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
                         <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
-                        <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}}, {{item.type}})">查看详情</view>
+                        <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}})">查看详情</view>
                         <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
-                        <view wx:if="{{item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}}, {{item.type}})">申请退款</view>
+                        <view wx:if="{{item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}})">申请退款</view>
                     </view>
                 </view>
             </repeat>

@@ -254,9 +254,9 @@
                 <image src="/icons/search.png" class="index-icon-search" @tap="navToSearch" />
             </view>
             <view class="index-banner">
-                <image class="banner-top" />
-                <image class="banner-left" />
-                <image class="banner-right" />
+                <image src="{{banner[0]}}" mode="aspectFill" class="banner-top" />
+                <image src="{{banner[1]}}" class="banner-left" />
+                <image src="{{banner[2]}}" class="banner-right" />
             </view>
             <view class="index-category" style="justify-content: {{category.length > 4 ? 'space-between' : 'space-around'}};">
                 <repeat for="{{category}}" key="index">
@@ -291,7 +291,7 @@
                 </repeat>
                 <view wx:if="{{!product.today}}" class="index-empty">暂无相关商品</view>
             </view>
-            <image class="index-banner-middle" />
+            <image src="{{banner[3]}}" class="index-banner-middle" />
             <view class="index-hot">
                 <view class="hot-title">热卖爆款</view>
                 <repeat for="{{product.hot}}" key="id">
@@ -310,7 +310,7 @@
                 </repeat>
                 <view wx:if="{{!product.hot}}" class="index-empty">暂无相关商品</view>
             </view>
-            <image class="index-banner-middle" />
+            <image src="{{banner[4]}}" class="index-banner-middle" />
             <view class="index-selected">
                 <view class="selected-title">放心精选</view>
                 <repeat for="{{product.selected}}" key="id">
@@ -352,7 +352,7 @@
                         <text>数量：</text>
                         <view class="product-count-choose">
                             <view class="product-count-reduce" style="{{count > 1 ? 'color:' + color.red + ';' : ''}}" @tap="countMinus">-</view>
-                            <view class="product-count-current" style="color:{{color.red}};">{{count}}</view>
+                            <input type="number" value="{{count}}" bindinput="countLimit" class="product-count-current" style="color:{{color.red}};" />
                             <view class="product-count-add" style="{{count < curProduct.remain ? 'color:' + color.red + ';' : ''}}" @tap="countPlus">+</view>
                         </view>
                     </view>
@@ -382,6 +382,7 @@ export default class Index extends wepy.page {
             id: '',
             name: ''
         },
+        banner: [],
         category: [],
         product: {
             hot: [],
@@ -432,18 +433,17 @@ export default class Index extends wepy.page {
 
         chooseSpec(type, index) {
             var self = this;
-            if(type == 0){
+            if (type == 0) {
                 self.curProduct = self.product.today[index];
-            }else if(type == 1){
+            } else if (type == 1) {
                 self.curProduct = self.product.hot[index];
-            }else if(type == 2){
+            } else if (type == 2) {
                 self.curProduct = self.product.selected[index];
             }
             self.specChoose = 0;
             self.count = 1;
             self.isChoosing = true;
             self.$apply();
-            console.log(self.curProduct);
         },
 
         specChoose(spec, e) {
@@ -474,6 +474,18 @@ export default class Index extends wepy.page {
             }
         },
 
+        countLimit(e) {
+            var count = e.detail.value;
+            if (count == '' || count <= 1) {
+                count = 1;
+            } else if (count >= this.curProduct.remain) {
+                count = this.curProduct.remain;
+            }
+            this.count = count;
+            this.$apply();
+            return count;
+        },
+
         addToCart() {
             var self = this;
             var shoppingCart = wx.getStorageSync('shoppingCart');
@@ -498,6 +510,7 @@ export default class Index extends wepy.page {
                     spec: self.curProduct.spec[self.specChoose].name,
                     price: self.curProduct.spec[self.specChoose].price,
                     oriPrice: self.curProduct.oriPrice,
+                    remain: self.curProduct.remain,
                     count: self.count
                 });
             }
@@ -509,7 +522,6 @@ export default class Index extends wepy.page {
                 duration: 1000
             });
 
-            console.log(shoppingCart);
             this.isChoosing = false;
             this.$apply();
         }
@@ -528,6 +540,11 @@ export default class Index extends wepy.page {
         let nowTime = new Date().getTime();
         let startTimeStr = self.startTime;
         let endTimeStr = self.endTime;
+        startTimeStr = startTimeStr.replace(/\-/g, '/');
+        endTimeStr = endTimeStr.replace(/\-/g, '/');
+        console.log("index");
+        console.log(startTimeStr);
+        console.log(endTimeStr);
         let countDown = {};
 
         // 对结束时间进行处理渲染到页面
@@ -609,28 +626,75 @@ export default class Index extends wepy.page {
         self.$apply();
     }
 
-    async onShow() {
-        let self = this;
+    async getInitial() {
+        var self = this;
+        self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
 
-        var shop = wx.getStorageSync('shopChoose');
-        if (shop != '') {
-            self.shopChoose = shop;
-            self.$apply();
+        var latitude = 0.0;
+        var longitude = 0.0;
+        wx.getLocation({
+            type: 'wgs84',
+            success: function(res) {
+                latitude = res.latitude;
+                longitude = res.longitude;
+                self.$apply();
+                console.log('position: ' + latitude + ' , ' + longitude);
+            }
+        });
+        let shops = await api.getShops({
+            query: {
+                currentX: latitude,
+                currentY: longitude
+            }
+        });
+        var shopClosest = shops.data[0];
+        self.shopChoose = shopClosest;
+        self.$apply();
+    }
+
+    async getBanners() {
+        var self = this;
+        let banners = await api.getBanners({
+            query: {
+                shopId: self.shopChoose.id
+            }
+        });
+        self.banner = [];
+        for (var i = 0; i < 5; i++) {
+            var found = false;
+            banners.data.forEach(element => {
+                if (element.position == i) {
+                    self.banner.push(element.url);
+                    found = true;
+                }
+            });
+            if (found) continue;
+            self.banner.push('');
         }
+        console.log(self.banner);
+        self.$apply();
+    }
 
+    async getCategory() {
+        var self = this;
         let categories = await api.getShopCategory();
-        console.log(categories);
         self.category = categories.data;
         console.log(self.category);
         self.$apply();
+    }
 
+    async getProduct() {
+        var self = this;
         let res = await api.getShopProduct({
             query: {
                 shopId: self.shopChoose.id
             }
         });
-        console.log(res);
         self.product = res.data;
+        console.log(self.product);
+        self.$apply();
+
         if (self.product.today) {
             self.startTime = self.product.today[0].limitStartTime;
             self.endTime = self.product.today[0].limitEndTime;
@@ -639,6 +703,20 @@ export default class Index extends wepy.page {
             self.endTime = self.startTime;
         }
         self.countDown();
+        self.$apply();
+    }
+
+    onShow() {
+        let self = this;
+
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+        }
+
+        self.getBanners();
+        self.getCategory();
+        self.getProduct();
         self.$apply();
     }
 
@@ -653,14 +731,12 @@ export default class Index extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
-        self.$apply();
 
         var latitude = 0.0;
         var longitude = 0.0;
         wx.getLocation({
             type: 'wgs84',
             success: function(res) {
-                console.log(res);
                 latitude = res.latitude;
                 longitude = res.longitude;
                 self.$apply();
@@ -673,35 +749,11 @@ export default class Index extends wepy.page {
                 currentY: longitude
             }
         });
-        var shopClosest = shops.data[3];
+        var shopClosest = shops.data[0];
         self.shopChoose = shopClosest;
-        console.log(self.shopChoose);
+        wx.setStorageSync('shopChoose', self.shopChoose);
+        self.getBanners();
         self.$apply();
-        
-        let categories = await api.getShopCategory();
-        console.log(categories);
-        self.category = categories.data;
-        console.log(self.category);
-        self.$apply();
-
-        let res = await api.getShopProduct({
-            query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
-            }
-        });
-        console.log(res);
-        self.product = res.data;
-        self.startTime = self.product.today[0].limitStartTime;
-        self.endTime = self.product.today[0].limitEndTime;
-        self.$apply();
-        self.countDown();
-
-        let banners = await api.getBanners({
-            query: {
-                shopId: '95c5106b900e47caab71ad7b049d9697'
-            }
-        })
-        console.log(banners)
     }
 }
 </script>

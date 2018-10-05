@@ -4,15 +4,12 @@
 </template>
 
 <script>
-
 export default {
-  name: 'withdraw',
-  components: {
-  },
+    name: "withdraw",
+    components: {},
 
-  data: function(){
-      return{
-      }
-  }
-}
+    data: function() {
+        return {};
+    }
+};
 </script>

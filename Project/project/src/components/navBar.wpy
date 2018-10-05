@@ -22,16 +22,21 @@
     }
 }
 
-.nav-title{
+.nav-title {
     font-size: 18px;
     line-height: 42px;
     display: inline-block;
 }
 </style>
 <template>
-    <view class="navBar" style="padding-top:{{isIphoneX ? '45px' : '20px'}}">
+    <view class="navBar" style="padding-top:{{isIphoneX ? '45px' : '20px'}}" @tap="log">
         <block wx:if="{{isChildPage == 'y'}}">
             <navigator open-type="navigateBack" delta="1" hover-class="none" class="nav-back">
+                <image src="/icons/out.png" class="icon-out" />
+            </navigator>
+        </block>
+        <block wx:elif="{{isChildPage == 'index'}}">
+            <navigator open-type="switchTab" url="/pages/index/index" hover-class="none" class="nav-back">
                 <image src="/icons/out.png" class="icon-out" />
             </navigator>
         </block>
@@ -42,7 +47,6 @@
 import wepy from 'wepy';
 
 export default class NavBar extends wepy.component {
-
     props = {
         navTitle: String,
         isChildPage: {
@@ -52,6 +56,12 @@ export default class NavBar extends wepy.component {
         isIphoneX: {
             type: Boolean,
             default: false
+        }
+    };
+
+    methods = {
+        log() {
+            console.log(this.isChildPage);
         }
     };
 }

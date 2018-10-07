@@ -755,7 +755,10 @@ export default {
 }
 
 .order-search-input {
+    width: 10rem /* 160/16 */;
     height: 1.5rem /* 24/16 */;
+    font-size: .75rem /* 12/16 */;
+    line-height: 1.5rem /* 24/16 */;
     margin: 0;
     padding: 0 0.75rem /* 12/16 */;
     border: 1px solid #cccccc;

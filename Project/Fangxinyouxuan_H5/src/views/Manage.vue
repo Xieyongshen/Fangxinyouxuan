@@ -280,7 +280,7 @@ export default {
 .manage-list-label {
     width: 9.375rem /* 150/16 */;
     margin-top: 0.9375rem;
-    margin-left: 9.375rem /* 150/16 */;
+    margin-left: 8.75rem /* 140/16 */;
     display: flex;
     justify-content: space-between;
 }

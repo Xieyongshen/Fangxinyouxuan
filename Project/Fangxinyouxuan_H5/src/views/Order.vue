@@ -50,7 +50,6 @@
                             </div>
                         </div>
                     </div>
-                    <transition name="detail">
                     <div v-if="showDetail[index] == true" class="order-detail">
                         <div>电话：{{item.user.phone}}</div>
                         <div>微信号：{{item.user.wechat}}</div>
@@ -63,7 +62,6 @@
                         </div>
                             <div class="order-total">共计￥{{item.total}}</div>
                     </div>
-                    </transition>
                 </div>
             </div>
 
@@ -646,7 +644,8 @@ export default {
         },
 
         showDetails: function(index) {
-            this.showDetail[index] = !this.showDetail[index];
+            var showCur = !this.showDetail[index];
+            this.showDetail.splice(index, 1, showCur);
             console.log(index + " - " + this.showDetail[index]);
         }
     },
@@ -828,14 +827,6 @@ export default {
 .order-toReceive-detail {
     padding: 0.3125rem /* 5/16 */ 1.25rem /* 20/16 */;
     border-bottom: 1px solid #cccccc;
-}
-
-.detail-enter-active, .detail-leave-active {
-  transition: all 1s ease;
-}
-
-.detail-enter, .detail-leave-to {
-  height: 0;
 }
 
 .order-product-item {

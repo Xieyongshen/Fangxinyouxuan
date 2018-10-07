@@ -542,9 +542,6 @@ export default class Index extends wepy.page {
         let endTimeStr = self.endTime;
         startTimeStr = startTimeStr.replace(/\-/g, '/');
         endTimeStr = endTimeStr.replace(/\-/g, '/');
-        console.log("index");
-        console.log(startTimeStr);
-        console.log(endTimeStr);
         let countDown = {};
 
         // 对结束时间进行处理渲染到页面

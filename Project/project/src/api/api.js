@@ -2,7 +2,7 @@ import {
     wxRequest
 } from '@/api/wxRequest';
 
-// const apiFanxin = 'http://119.23.225.244';
+// const apiFanxin = 'http://fangxintech.com';
 // const apiFanxin = 'http://127.0.0.1:8000';
 const apiFanxin = 'http://fangxintech.com';
 //根据位置获取商店

@@ -27,11 +27,33 @@
     line-height: 40rpx;
     position: absolute;
     top: 10rpx;
-    left: 30rpx;
+    left: 45rpx;
 }
 
-.me-invite::after {
+.me-register {
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    position: absolute;
+    top: 10rpx;
+    right: 45rpx;
+}
+
+.me-invite::after,
+.me-register::after {
     border: none;
+}
+
+.me-point {
+    color: #ffffff;
+    font-size: 28rpx;
+    line-height: 40rpx;
+    position: absolute;
+    bottom: 190rpx;
+    right: 45rpx;
 }
 
 .me-userinfo {
@@ -64,7 +86,7 @@
     display: block;
 }
 
-.me-userinfo-login{
+.me-userinfo-login {
     width: 160rpx;
     height: 160rpx;
     color: #ffffff;
@@ -149,6 +171,8 @@
         <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="me-header">
             <button open-type="share" hover-class="none" class="me-invite">邀请好友</button>
+            <button hover-class="none" class="me-register" @tap="registerNow">{{hasRegister === false ? '今日签到' : '今日已签到'}}</button>
+            <view class="me-point">积分：{{userInfo.point}}</view>
             <view class="me-userinfo">
                 <block wx:if="{{hasUserInfo === false}}">
                     <button class="me-userinfo-login" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
@@ -210,10 +234,12 @@ export default class Me extends wepy.page {
     };
 
     data = {
+        hasRegister: false,
         hasUserInfo: false,
         userInfo: {
             name: '小鱼',
-            avatar: ''
+            avatar: '',
+            point: 0
         },
         globalData: {},
         isIphoneX: false
@@ -233,7 +259,7 @@ export default class Me extends wepy.page {
             self.hasUserInfo = true;
             self.$apply();
         }
-    };
+    }
 
     methods = {
         toOrderList(index, e) {
@@ -242,6 +268,18 @@ export default class Me extends wepy.page {
             });
         },
 
+        registerNow() {
+            if (!this.hasRegister) {
+                this.userInfo.point += 10;
+                this.hasRegister = true;
+                this.$apply();
+                wx.showToast({
+                    title: '签到成功！',
+                    icon: 'success',
+                    duration: 1000
+                });
+            }
+        }
     };
 
     events = {};
@@ -268,7 +306,7 @@ export default class Me extends wepy.page {
             });
             self.globalData.globalUserInfo = res.data;
             self.hasUserInfo = true;
-            console.log(self.globalData.globalUserInfo)
+            console.log(self.globalData.globalUserInfo);
             self.$apply();
         }
     }

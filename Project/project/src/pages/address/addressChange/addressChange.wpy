@@ -157,6 +157,7 @@ export default class Coupon extends wepy.page {
     async saveMyAddress(){
         let self = this;
         var jwt = wx.getStorageSync('jwt');
+        console.log(self.address)
         try {
             if (jwt.data.access_token != null) {
                 let res = await api.saveMyAddress({

@@ -4,7 +4,7 @@ import {
 
 // const apiFanxin = 'http://fangxintech.com';
 // const apiFanxin = 'http://127.0.0.1:8000';
-const apiFanxin = 'http://fangxintech.com';
+const apiFanxin = 'https://fangxintech.com';
 //根据位置获取商店
 const getShops = (params) => wxRequest(params, apiFanxin + "/api/getShops");
 //获取首页店铺商品分类

@@ -750,6 +750,8 @@ export default class Index extends wepy.page {
         self.shopChoose = shopClosest;
         wx.setStorageSync('shopChoose', self.shopChoose);
         self.getBanners();
+        self.getCategory();
+        self.getProduct();
         self.$apply();
     }
 }

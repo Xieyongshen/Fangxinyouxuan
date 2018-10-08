@@ -3,7 +3,7 @@
     <user-info></user-info>
 
     <grid class="income-totalSales">
-      <grid-item>
+      <grid-item class="income-item">
         <div class="income-totalSales-money">
           <div class="income-totalSales-money-label">累计销售额</div>
           <div class="income-totalSales-money-total">
@@ -12,7 +12,7 @@
           </div>
         </div>
       </grid-item>
-      <grid-item label="查看我的金库" link="/account">
+      <grid-item class="income-item" label="查看我的金库" link="/account">
         <img slot="icon" src="@/assets/ic_user.png">
       </grid-item>
     </grid>
@@ -95,6 +95,10 @@ export default {
 <style scoped>
 .income-totalSales {
     margin: 0;
+}
+
+.income-item{
+    height: 6.25rem /* 100/16 */;
 }
 
 .income-totalSales-money {

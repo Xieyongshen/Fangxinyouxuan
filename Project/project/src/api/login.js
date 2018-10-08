@@ -8,7 +8,7 @@ const log_in = async (params) => {
     let iv = get_res.iv || 'iv';
     let jwt = await wepy.request({
         url:
-            'http://fangxintech.com' +
+            'https://fangxintech.com' +
             '/auth/token?code=' +
             code,
         data: {

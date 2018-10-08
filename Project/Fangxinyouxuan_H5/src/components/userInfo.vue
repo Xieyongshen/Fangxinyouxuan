@@ -15,7 +15,18 @@ export default {
     name: "userInfo",
     props: {},
 
-    methods: {}
+    methods: {
+        getAuth: function() {
+        //   var formData = JSON.stringify(this.user); // 这里才是你的表单数据
+
+            this.$http.jsonp('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5b777c0beb78fe6d&redirect_uri=https://fangxintech.com/api/getUserCodeMp&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect',).then((response) => {
+                console.log(response.data)
+            }, (response) => {
+                console.log("error1")
+            })
+        }
+
+    }
 };
 </script>
 

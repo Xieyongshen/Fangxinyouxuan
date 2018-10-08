@@ -4,7 +4,7 @@ import {
 
 // const apiFanxin = 'http://fangxintech.com';
 // const apiFanxin = 'http://127.0.0.1:8000';
-const apiFanxin = 'http://fangxintech.com';
+const apiFanxin = 'https://fangxintech.com';
 //根据位置获取商店
 const getShops = (params) => wxRequest(params, apiFanxin + "/api/getShops");
 //获取首页店铺商品分类
@@ -52,6 +52,12 @@ const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getSearc
 const saveMyAddress = (params) => wxRequest(params, apiFanxin + "/api/saveMyAddress");
 //删除收货地址
 const deleteMyAddress = (params) => wxRequest(params, apiFanxin + "/api/deleteMyAddress");
+
+//获取用户签到状态
+const getSignInfo = (params) => wxRequest(params, apiFanxin + "/api/getSignInfo");
+//签到
+const signToday = (params) => wxRequest(params, apiFanxin + "/api/signToday");
+
 export default {
     getShops,
     getShopCategory,
@@ -73,5 +79,7 @@ export default {
     getSearchResult,
     getHotSearch,
     saveMyAddress,
-    deleteMyAddress
+    deleteMyAddress,
+    getSignInfo,
+    signToday
 }

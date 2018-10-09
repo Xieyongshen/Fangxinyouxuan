@@ -643,8 +643,14 @@ export default class Order extends wepy.page {
                     fail: function(res1) {
                         console.log(res1);
                         console.log('支付失败');
+                        var errMsg = '';
+                        if(res1.errMsg == 'requestPayment:fail cancel'){
+                            errMsg = '支付取消！';
+                        }else{
+                            errMsg = '支付失败！';
+                        }
                         wx.showToast({
-                            title: '支付失败！',
+                            title: errMsg,
                             image: '/icons/cancel.png',
                             duration: 1000
                         });

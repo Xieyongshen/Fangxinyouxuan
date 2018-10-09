@@ -162,7 +162,7 @@
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <navBar navTitle="全部订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="orderList-type">
-            <scroll-view  scroll-x scroll-into-view="{{orderType[curType].id}}" scroll-with-animation="true" class="orderList-type-content">
+            <scroll-view scroll-x scroll-into-view="{{orderType[curType].id}}" scroll-with-animation="true" class="orderList-type-content">
                 <repeat for="{{orderType}}" key="index">
                     <view id="{{item.id}}" class="orderList-type-item" @tap="chooseType({{index}})">
                         <text style="{{index == curType ? 'color:' + color.red + ';border-bottom: 4rpx solid ' + color.red + ';' : ''}}">{{item.name}}</text>
@@ -208,11 +208,11 @@
                     </view>
                     <view class="orderList-item-operation">
                         <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
-                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};" @tap.stop="payNow(index)">去支付</view>
+                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};" @tap.stop="payNow({{item.id}})">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
                         <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}})">查看详情</view>
                         <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
-                        <view wx:if="{{item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}})">申请退款</view>
+                        <view wx:if="{{item.status == 2 || item.status == 3 || item.status == 5}}" class="operation-btn" @tap="toOrderRefund({{item.id}})">申请退款</view>
                     </view>
                 </view>
             </repeat>
@@ -297,19 +297,89 @@ export default class OrderList extends wepy.page {
                     }
                 }
             });
+        },
+
+        payNow(id, events) {
+            console.log(id);
+            this.gotoPay(id);
         }
     };
 
     events = {};
-    
-    async payNow(index, events) {
+
+    async gotoPay(id) {
         let self = this;
-        let orderCur = self.orderList[index];
-        console.log(orderCur);
-        self.$apply();
+        wx.showLoading({
+            title: '发起支付'
+        });
+        var jwt = wx.getStorageSync('jwt');
+        try {
+            if (jwt.data.access_token != null) {
+                let res = await api.gotoPay({
+                    query: JSON.stringify({
+                        access_token: jwt.data.access_token,
+                        account_id: jwt.data.account_id,
+                        orderId: id
+                    }),
+                    method: 'POST',
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                wx.hideLoading();
+                console.log(res);
+
+                wx.requestPayment({
+                    timeStamp: res.data.timeStamp,
+                    nonceStr: res.data.nonceStr,
+                    package: res.data.prepay_id,
+                    signType: 'MD5',
+                    paySign: res.data.paySign,
+                    success: async function(res1) {
+                        console.log('支付成功');
+                        console.log(res1);
+                        let res_data = await api.finishPay({
+                            query: JSON.stringify({
+                                orderId: res.data.newOrderId
+                            }),
+                            method: 'POST',
+                            header: {
+                                'Content-Type':
+                                    'application/x-www-form-urlencoded'
+                            }
+                        });
+                        wx.showToast({
+                            title: '支付成功！',
+                            image: '/icons/select-yes.png',
+                            duration: 1000
+                        });
+                        self.getOrderList();
+                    },
+                    fail: function(res1) {
+                        console.log(res1);
+                        console.log('支付失败');
+                        var errMsg = '';
+                        if (res1.errMsg == 'requestPayment:fail cancel') {
+                            errMsg = '支付取消！';
+                        } else {
+                            errMsg = '支付失败！';
+                        }
+                        wx.showToast({
+                            title: errMsg,
+                            image: '/icons/cancel.png',
+                            duration: 1000
+                        });
+                    },
+                    complete: function(res1) {}
+                });
+                self.$apply();
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    async onLoad(options) {
+    async getOrderList() {
         wx.showLoading({
             title: '订单加载中'
         });
@@ -330,10 +400,19 @@ export default class OrderList extends wepy.page {
         } catch (error) {
             console.log('jwt is null');
         }
+        wx.hideLoading();
+    }
+
+    onShow(){
+        this.getOrderList();
+    }
+
+    onLoad(options) {
+        var self = this;
         self.curType = options.index;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
-        wx.hideLoading();
+        self.getOrderList();
         self.$apply();
     }
 }

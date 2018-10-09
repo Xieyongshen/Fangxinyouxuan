@@ -37,6 +37,10 @@ const getMyBalance = (params) => wxRequest(params, apiFanxin + "/api/getMyBalanc
 const payOrder = (params) => wxRequest(params, apiFanxin + "/api/payOrder");
 //完成支付
 const finishPay = (params) => wxRequest(params, apiFanxin + "/api/finishPay");
+//去支付
+const gotoPay = (params) => wxRequest(params, apiFanxin + "/api/gotoPay");
+//发起退款
+const submitRefund = (params) => wxRequest(params, apiFanxin + "/api/submitRefund");
 
 //获取用户红包
 const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUserRedPacket");
@@ -83,5 +87,7 @@ export default {
     deleteMyAddress,
     getSignInfo,
     signToday,
-    finishPay
+    finishPay,
+    gotoPay,
+    submitRefund
 }

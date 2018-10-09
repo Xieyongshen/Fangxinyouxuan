@@ -49,7 +49,6 @@
     width: 690rpx;
     height: 280rpx;
     border-radius: 20rpx;
-    background: #fdedeb;
 }
 
 .banner-left {
@@ -57,7 +56,6 @@
     height: 150rpx;
     margin: 10rpx 10rpx 20rpx 0;
     border-radius: 20rpx;
-    background: #fdedeb;
 }
 
 .banner-right {
@@ -65,7 +63,6 @@
     height: 150rpx;
     margin: 10rpx 0 20rpx 10rpx;
     border-radius: 20rpx;
-    background: #fdedeb;
 }
 
 .index-category {
@@ -179,7 +176,6 @@
     width: 690rpx;
     height: 160rpx;
     border-radius: 20rpx;
-    background: #fdedeb;
 }
 
 .hot-item-label,

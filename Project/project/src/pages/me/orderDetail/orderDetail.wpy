@@ -249,14 +249,16 @@
 
 .orderDetail-refund-more {
     width: 690rpx;
-    padding: 20rpx 0;
-    border-bottom: 1rpx solid #f2f2f2;
 }
 
 .refund-more-input {
-    height: auto;
+    width: 690rpx;
+    height: 200rpx;
     font-size: 26rpx;
     line-height: 50rpx;
+    padding: 20rpx;
+    border: 1rpx solid #f2f2f2;
+    box-sizing: border-box;
 }
 
 .refund-more-update {
@@ -343,7 +345,7 @@
             </view>
             <view wx:if="{{order.status != 4}}" class="orderDetail-item">
                 <view wx:if="{{order.status == 0}}" class="orderDetail-btn">立即支付</view>
-                <view wx:elif="{{isRefund && order.status == 5}}" class="orderDetail-btn">退款成功</view>
+                <view wx:elif="{{isRefunded && order.status == 5}}" class="orderDetail-btn">退款成功</view>
                 <view wx:else class="orderDetail-btn" @tap="orderRefund()">申请退款</view>
                 <text wx:if="{{order.status == 0}}" style="color:{{color.red}}">请在15分（倒计时）内支付</text>
             </view>
@@ -363,7 +365,7 @@
                     <text>人满发货，人不满退款</text>
                 </view>
             </block>
-            <block wx:elif="{{order.status != 4}}">
+            <block wx:else>
                 <view class="orderDetail-item">订单号码:
                     <text>{{order.orderNum}}</text>
                 </view>
@@ -378,7 +380,7 @@
                 </view>
             </block>
         </view>
-        <view wx:if="{{order.status == 4}}" class="orderDetail-refund">
+        <view wx:if="{{order.status == 4 && isRefunding === false}}" class="orderDetail-refund">
             <view class="orderDetail-item">选择退款原因</view>
             <view class="orderDetail-refund-reason">
                 <radio-group bindchange="reasonChange">
@@ -391,9 +393,8 @@
                 </radio-group>
             </view>
             <view class="orderDetail-refund-more">
-                <textarea auto-height placeholder="补充详细信息以使商家更快帮您处理" class="refund-more-input" />
-                <!-- <view class="refund-more-update">+</view> -->
-            </view>
+                <textarea placeholder="补充详细信息以使商家更快帮您处理" class="refund-more-input" />
+                </view>
             <view class="orderDetail-item">
                 <view class="orderDetail-btn" @tap="refundSubmit">提交申请</view>
             </view>
@@ -411,13 +412,13 @@ export default class OrderDetail extends wepy.page {
     };
 
     data = {
-        orderID: '000001',
+        orderID: '',
         orderStatus: [
             '订单待支付',
             '拼单还未成功',
             '订单待发货',
             '订单配送中',
-            '申请售后',
+            '申请售后中',
             '订单已完成'
         ],
         refundReasons: [
@@ -427,17 +428,18 @@ export default class OrderDetail extends wepy.page {
             { id: '04', name: '有异物' }
         ],
         reasonChoose: '',
+        isRefunding: false,
         order: {
-            type: 2,
+            type: 0,
             status: 0,
-            total: 247.6,
+            total: 0,
             createTime: '',
             deliverTime: '',
-            discount: 5,
-            redPacket: 5,
+            discount: 0,
+            redPacket: 0,
             pay: '',
             remark: '',
-            isRefund: false,
+            isRefunded: false,
             shop: {
                 name: '',
                 phone: ''
@@ -446,7 +448,7 @@ export default class OrderDetail extends wepy.page {
                 count: 2,
                 users: [
                     {
-                        id: '000001',
+                        id: '0',
                         avatar: ''
                     },
                     {
@@ -522,10 +524,61 @@ export default class OrderDetail extends wepy.page {
             console.log(e.detail.value);
             this.reasonChoose = e.detail.value;
             this.$apply();
+        },
+
+        refundSubmit() {
+            this.submitRefund();
         }
     };
 
     events = {};
+
+    async submitRefund() {
+        var self = this;
+        wx.showLoading({
+            title: '提交退款申请中'
+        });
+        var jwt = wx.getStorageSync('jwt');
+        if (jwt.data.access_token != null) {
+            let res = await api.submitRefund({
+                query: JSON.stringify({
+                    orderId: self.orderID
+                }),
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+            wx.hideLoading();
+            wx.showToast({
+                title: '退款申请提交成功！',
+                icon: 'success',
+                duration: 1000
+            });
+            console.log(res);
+            self.refreshOrder();
+        }
+        self.$apply();
+    }
+
+    async refreshOrder() {
+        let self = this;
+        wx.showLoading({
+            title: '订单刷新中'
+        });
+        let orderDetail = await api.getOrderDetail({
+            query: {
+                orderId: self.orderID
+            }
+        });
+        self.order = orderDetail.data;
+        if (self.order.status == 4) {
+            self.isRefunding = true;
+        }
+        self.$apply();
+        wx.hideLoading();
+        console.log(self.order);
+    }
 
     async onLoad(options) {
         var self = this;
@@ -533,6 +586,7 @@ export default class OrderDetail extends wepy.page {
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
+        console.log(options.status);
 
         let orderDetail = await api.getOrderDetail({
             query: {
@@ -542,6 +596,10 @@ export default class OrderDetail extends wepy.page {
         self.order = orderDetail.data;
         console.log(orderDetail);
         console.log(self.order);
+
+        if (self.order.status == 4) {
+            self.isRefunding = true;
+        }
 
         if (options.status == 4) {
             self.order.status = options.status;

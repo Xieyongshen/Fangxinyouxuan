@@ -35,8 +35,11 @@ const getOrderDetail = (params) => wxRequest(params, apiFanxin + "/api/getOrderD
 const getUserAddress = (params) => wxRequest(params, apiFanxin + "/api/getUserAddress");
 //获取用户余额
 const getMyBalance = (params) => wxRequest(params, apiFanxin + "/api/getMyBalance");
-//提交订单
+//统一订单
 const payOrder = (params) => wxRequest(params, apiFanxin + "/api/payOrder");
+//完成支付
+const finishPay = (params) => wxRequest(params, apiFanxin + "/api/finishPay");
+
 //获取用户红包
 const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUserRedPacket");
 //获取推荐商品
@@ -81,5 +84,6 @@ export default {
     saveMyAddress,
     deleteMyAddress,
     getSignInfo,
-    signToday
+    signToday,
+    finishPay
 }

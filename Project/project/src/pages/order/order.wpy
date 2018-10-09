@@ -526,6 +526,8 @@ export default class Order extends wepy.page {
         var jwt = wx.getStorageSync('jwt');
         console.log(self.redPacket);
         console.log(self.product);
+        var totalPrice = parseInt(self.subtotal * 100);
+        console.log(totalPrice);
         try {
             if (jwt.data.access_token != null) {
                 let res = await api.payOrder({
@@ -553,18 +555,26 @@ export default class Order extends wepy.page {
                     package: res.data.prepay_id,
                     signType: 'MD5',
                     paySign: res.data.paySign,
-                    success: function(res1) {
+                    success: async function(res1) {
                         console.log('支付成功');
-                        console.log(res1)
+                        console.log(res1);
+                        let res_data = await api.finishPay({
+                            query: JSON.stringify({
+                                orderId: res.data.newOrderId,
+                            }),
+                            method: 'POST',
+                            header: {
+                                'Content-Type':
+                                    'application/x-www-form-urlencoded'
+                            }
+                        });
                     },
                     fail: function(res1) {
-                        console.log(res1)
+                        console.log(res1);
                         console.log('支付失败');
                         return;
                     },
-                    complete: function(res1) {
-                        
-                    }
+                    complete: function(res1) {}
                 });
                 self.$apply();
             }

@@ -35,8 +35,11 @@ const getOrderDetail = (params) => wxRequest(params, apiFanxin + "/api/getOrderD
 const getUserAddress = (params) => wxRequest(params, apiFanxin + "/api/getUserAddress");
 //获取用户余额
 const getMyBalance = (params) => wxRequest(params, apiFanxin + "/api/getMyBalance");
-//提交订单
-const submitOrder = (params) => wxRequest(params, apiFanxin + "/api/submitOrder");
+//统一订单
+const payOrder = (params) => wxRequest(params, apiFanxin + "/api/payOrder");
+//完成支付
+const finishPay = (params) => wxRequest(params, apiFanxin + "/api/finishPay");
+
 //获取用户红包
 const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUserRedPacket");
 //获取推荐商品
@@ -52,6 +55,12 @@ const getSearchResult = (params) => wxRequest(params, apiFanxin + "/api/getSearc
 const saveMyAddress = (params) => wxRequest(params, apiFanxin + "/api/saveMyAddress");
 //删除收货地址
 const deleteMyAddress = (params) => wxRequest(params, apiFanxin + "/api/deleteMyAddress");
+
+//获取用户签到状态
+const getSignInfo = (params) => wxRequest(params, apiFanxin + "/api/getSignInfo");
+//签到
+const signToday = (params) => wxRequest(params, apiFanxin + "/api/signToday");
+
 export default {
     getShops,
     getShopCategory,
@@ -69,9 +78,12 @@ export default {
     getUserRedPacket,
     getRecommendPros,
     getCouponProducts,
-    submitOrder,
+    payOrder,
     getSearchResult,
     getHotSearch,
     saveMyAddress,
-    deleteMyAddress
+    deleteMyAddress,
+    getSignInfo,
+    signToday,
+    finishPay
 }

@@ -268,11 +268,26 @@ export default class Me extends wepy.page {
             });
         },
 
-        registerNow() {
+        async registerNow() {
             if (!this.hasRegister) {
-                this.userInfo.point += 10;
-                this.hasRegister = true;
-                this.$apply();
+                // this.userInfo.point += 10;
+                // this.hasRegister = true;
+                var jwt = wx.getStorageSync('jwt');
+                let self = this;
+                if (jwt.data.access_token != null) {
+                    let res = await api.signToday({
+                        query: {
+                            access_token: jwt.data.access_token,
+                            account_id: jwt.data.account_id
+                        }
+                    });
+                    console.log(res);
+                    self.userInfo.point = res.data.point
+                    self.$apply();
+                }
+                self.hasRegister = true;
+                
+                self.$apply();
                 wx.showToast({
                     title: '签到成功！',
                     icon: 'success',
@@ -308,7 +323,21 @@ export default class Me extends wepy.page {
             self.hasUserInfo = true;
             console.log(self.globalData.globalUserInfo);
             self.$apply();
+
+            let hasRegistered = await api.getSignInfo({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            console.log(hasRegistered);
+            self.hasRegister = hasRegistered.data.signed;
+            self.userInfo.point = hasRegistered.data.point
+            self.$apply();
+            console.log(self.hasRegister);
         }
+
+
     }
 }
 </script>

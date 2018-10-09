@@ -36,7 +36,7 @@ const getUserAddress = (params) => wxRequest(params, apiFanxin + "/api/getUserAd
 //获取用户余额
 const getMyBalance = (params) => wxRequest(params, apiFanxin + "/api/getMyBalance");
 //提交订单
-const submitOrder = (params) => wxRequest(params, apiFanxin + "/api/submitOrder");
+const payOrder = (params) => wxRequest(params, apiFanxin + "/api/payOrder");
 //获取用户红包
 const getUserRedPacket = (params) => wxRequest(params, apiFanxin + "/api/getUserRedPacket");
 //获取推荐商品
@@ -75,7 +75,7 @@ export default {
     getUserRedPacket,
     getRecommendPros,
     getCouponProducts,
-    submitOrder,
+    payOrder,
     getSearchResult,
     getHotSearch,
     saveMyAddress,

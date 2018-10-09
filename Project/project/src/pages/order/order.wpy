@@ -490,7 +490,12 @@ export default class Order extends wepy.page {
         var self = this;
         var nowTime = new Date().getTime();
         var nextTime = new Date((nowTime / 1000 + 24 * 60 * 60) * 1000);
-        self.sendTime = nextTime.getFullYear() + '-' + self.timeFormat(nextTime.getMonth() + 1) + '-' + self.timeFormat(nextTime.getDate());
+        self.sendTime =
+            nextTime.getFullYear() +
+            '-' +
+            self.timeFormat(nextTime.getMonth() + 1) +
+            '-' +
+            self.timeFormat(nextTime.getDate());
         self.$apply();
     }
 
@@ -523,7 +528,7 @@ export default class Order extends wepy.page {
         console.log(self.product);
         try {
             if (jwt.data.access_token != null) {
-                let res = await api.submitOrder({
+                let res = await api.payOrder({
                     query: JSON.stringify({
                         access_token: jwt.data.access_token,
                         account_id: jwt.data.account_id,
@@ -533,7 +538,7 @@ export default class Order extends wepy.page {
                         redPacket: self.redPacket.id,
                         remain: self.remain,
                         type: self.type,
-                        total: self.total
+                        price: '1'
                     }),
                     method: 'POST',
                     header: {
@@ -541,6 +546,26 @@ export default class Order extends wepy.page {
                     }
                 });
                 console.log(res);
+
+                wx.requestPayment({
+                    timeStamp: res.data.timeStamp,
+                    nonceStr: res.data.nonceStr,
+                    package: res.data.prepay_id,
+                    signType: 'MD5',
+                    paySign: res.data.paySign,
+                    success: function(res1) {
+                        console.log('支付成功');
+                        console.log(res1)
+                    },
+                    fail: function(res1) {
+                        console.log(res1)
+                        console.log('支付失败');
+                        return;
+                    },
+                    complete: function(res1) {
+                        
+                    }
+                });
                 self.$apply();
             }
         } catch (error) {

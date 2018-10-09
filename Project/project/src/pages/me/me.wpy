@@ -183,19 +183,19 @@
                 </block>
             </view>
             <view class="me-order">
-                <view class="me-order-item" @tap="toOrderList(0)">
+                <view class="me-order-item" @tap="toOrderList(1)">
                     <image src="/icons/toPay.png" class="me-order-icon" />
                     <text>待付款</text>
                 </view>
-                <view class="me-order-item" @tap="toOrderList(1)">
+                <view class="me-order-item" @tap="toOrderList(2)">
                     <image src="/icons/toReceive.png" class="me-order-icon" />
                     <text>待收货</text>
                 </view>
-                <view class="me-order-item" @tap="toOrderList(2)">
+                <view class="me-order-item" @tap="toOrderList(3)">
                     <image src="/icons/toGroup.png" class="me-order-icon" />
                     <text>待成团</text>
                 </view>
-                <view class="me-order-item" @tap="toOrderList(3)">
+                <view class="me-order-item" @tap="toOrderList(0)">
                     <image src="/icons/orderAll.png" class="me-order-icon" />
                     <text>全部订单</text>
                 </view>

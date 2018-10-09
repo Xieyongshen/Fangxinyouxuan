@@ -747,7 +747,7 @@ export default class Product extends wepy.page {
             orderProduct.push(curProduct);
             wx.setStorageSync('orderProduct', orderProduct);
             wx.navigateTo({
-                url: '/pages/order/order?type=' + type
+                url: '/pages/order/order?entry=0&&type=' + type
             });
         },
 

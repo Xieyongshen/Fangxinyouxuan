@@ -509,6 +509,10 @@ export default class Coupon extends wepy.page {
     };
 
     data = {
+        shopChoose: {
+            id: '',
+            name: ''
+        },
         couponModule: [
             { id: 'module1', name: '社区积分榜' },
             { id: 'module2', name: '限时秒杀' },
@@ -845,10 +849,18 @@ export default class Coupon extends wepy.page {
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
+        wx.showLoading({
+            title: '商品加载中'
+        })
+        
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+        }
 
         let products = await api.getCouponProducts({
             query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+                shopId: self.shopChoose.id
             }
         });
         console.log(products);
@@ -857,6 +869,7 @@ export default class Coupon extends wepy.page {
         self.startTime = self.limitProduct[0].limitStartTime;
         self.endTime = self.limitProduct[0].limitEndTime;
         self.$apply();
+        wx.hideLoading();
         self.countDown();
         self.getFormatTime();
 

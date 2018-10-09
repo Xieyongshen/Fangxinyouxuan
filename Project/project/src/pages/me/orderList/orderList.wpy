@@ -3,12 +3,21 @@
     width: 750rpx;
     height: 65rpx;
     background: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: scroll;
+}
+
+.orderList-type-content {
+    white-space: nowrap;
+    overflow: scroll;
 }
 
 .orderList-type-item {
-    width: 180rpx;
+    width: 160rpx;
     height: 65rpx;
-    padding: 0 40rpx;
+    padding: 0 30rpx;
     box-sizing: border-box;
     display: inline-block;
     text {
@@ -153,21 +162,23 @@
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <navBar navTitle="全部订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
         <view class="orderList-type">
-            <repeat for="{{orderType}}" key="index">
-                <view class="orderList-type-item" @tap="chooseType({{index}})">
-                    <text style="{{index == curType ? 'color:' + color.red + ';border-bottom: 4rpx solid ' + color.red + ';' : ''}}">{{item}}</text>
-                </view>
-            </repeat>
+            <scroll-view  scroll-x scroll-into-view="{{orderType[curType].id}}" scroll-with-animation="true" class="orderList-type-content">
+                <repeat for="{{orderType}}" key="index">
+                    <view id="{{item.id}}" class="orderList-type-item" @tap="chooseType({{index}})">
+                        <text style="{{index == curType ? 'color:' + color.red + ';border-bottom: 4rpx solid ' + color.red + ';' : ''}}">{{item.name}}</text>
+                    </view>
+                </repeat>
+            </scroll-view>
         </view>
         <view class="orderList-content">
             <repeat for="{{orderList}}" key="id">
-                <view wx:if="{{curType == 3 || (curType == item.status)}}" class="orderList-item">
+                <view wx:if="{{curType == 0 || (curType == item.status + 1)}}" class="orderList-item">
                     <view class="orderList-item-type">
                         {{item.createTime}}
-                        <text wx:if="{{item.status == 2}}" style="color:{{color.red}}">拼团中</text>
+                        <text wx:if="{{item.status == 1}}" style="color:{{color.red}}">拼团中</text>
                         <text wx:else style="color:{{color.red}}">{{item.deliverTime}}</text>
                     </view>
-                    <view wx:if="{{item.type == 2}}" class="orderList-productAll-label">拼团中</view>
+                    <view wx:if="{{item.type == 1}}" class="orderList-productAll-label">拼团中</view>
                     <view wx:if="{{item.type == 4}}" class="orderList-productAll-label">预售款</view>
                     <scroll-view scroll-x class="orderList-item-list" @tap="toOrderDetail({{item.id}}, {{item.status}})">
                         <repeat for="{{item.product}}" key="type" item="product" index="proType">
@@ -197,7 +208,7 @@
                     </view>
                     <view class="orderList-item-operation">
                         <block wx:if="{{item.status == 1}}">如未成功自动退款</block>
-                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};">去支付</view>
+                        <view wx:if="{{item.status == 0}}" class="operation-btn" style="color:{{color.red}};border: 2rpx solid {{color.red}};" @tap.stop="payNow(index)">去支付</view>
                         <view wx:if="{{item.status > 0}}" class="operation-btn btn-major">发红包</view>
                         <view class="operation-btn" @tap="toOrderDetail({{item.id}}, {{item.status}})">查看详情</view>
                         <view wx:if="{{item.status == 4}}" class="operation-btn">退款中</view>
@@ -219,9 +230,38 @@ export default class OrderList extends wepy.page {
         navBar: NavBar
     };
     data = {
-        orderType: ['待付款', '待收货', '待成团', '全部订单'],
+        orderType: [
+            {
+                name: '全部订单',
+                id: 'type0'
+            },
+            {
+                name: '待付款',
+                id: 'type1'
+            },
+            {
+                name: '待成团',
+                id: 'type2'
+            },
+            {
+                name: '待发货',
+                id: 'type3'
+            },
+            {
+                name: '待收货',
+                id: 'type4'
+            },
+            {
+                name: '售后中',
+                id: 'type5'
+            },
+            {
+                name: '已完成',
+                id: 'type6'
+            }
+        ],
         //订单状态：待付款0，待成团1，待发货2，发货中（待收货）3, 售后中4, 已完成5
-        curType: 3,
+        curType: 0,
         orderList: [],
         isIphoneX: false,
         color: {}
@@ -249,8 +289,7 @@ export default class OrderList extends wepy.page {
                 success: function(res) {
                     if (res.confirm) {
                         wx.navigateTo({
-                            url:
-                                '../orderDetail/orderDetail?status=4&id=' + id
+                            url: '../orderDetail/orderDetail?status=4&id=' + id
                         });
                         self.$apply();
                     } else if (res.cancel) {
@@ -262,8 +301,18 @@ export default class OrderList extends wepy.page {
     };
 
     events = {};
+    
+    async payNow(index, events) {
+        let self = this;
+        let orderCur = self.orderList[index];
+        console.log(orderCur);
+        self.$apply();
+    }
 
     async onLoad(options) {
+        wx.showLoading({
+            title: '订单加载中'
+        });
         var jwt = wx.getStorageSync('jwt');
         let self = this;
         try {
@@ -274,16 +323,17 @@ export default class OrderList extends wepy.page {
                         account_id: jwt.data.account_id
                     }
                 });
-                console.log(res)
+                console.log(res);
                 self.orderList = res.data;
                 self.$apply();
             }
         } catch (error) {
-            console.log("jwt is null")
+            console.log('jwt is null');
         }
         self.curType = options.index;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        wx.hideLoading();
         self.$apply();
     }
 }

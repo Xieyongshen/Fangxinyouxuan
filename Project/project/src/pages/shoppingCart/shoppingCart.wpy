@@ -723,7 +723,7 @@ export default class ShoppingCart extends wepy.page {
             var orderProduct = self.shoppingCart;
             wx.setStorageSync('orderProduct', orderProduct);
             wx.navigateTo({
-                url: '/pages/order/order?type=0'
+                url: '/pages/order/order?entry=1&&type=0'
             });
         },
 
@@ -864,6 +864,13 @@ export default class ShoppingCart extends wepy.page {
             key: 'redPacket',
             success: function(res) {
                 self.redPacket = res.data;
+                self.$apply();
+            }
+        });
+        wx.getStorage({
+            key: 'deliverChoose',
+            success: function(res) {
+                self.deliverChoose = res.data;
                 self.$apply();
             }
         });

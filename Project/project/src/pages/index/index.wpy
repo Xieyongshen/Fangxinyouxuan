@@ -728,6 +728,10 @@ export default class Index extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        
+        wx.showLoading({
+            title: '商品加载中'
+        })
 
         var latitude = 0.0;
         var longitude = 0.0;
@@ -752,6 +756,9 @@ export default class Index extends wepy.page {
         self.getBanners();
         self.getCategory();
         self.getProduct();
+
+        wx.hideLoading();
+
         self.$apply();
     }
 }

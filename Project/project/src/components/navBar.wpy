@@ -60,9 +60,6 @@ export default class NavBar extends wepy.component {
     };
 
     methods = {
-        log() {
-            console.log(this.isChildPage);
-        }
     };
 }
 </script>

@@ -512,7 +512,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-            <navBar navTitle="商品详情" :isChildPage.sync="back" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="商品详情" :isChildPage.sync="back" />
         <view class="product-image">
             <swiper circular="true" class="product-image-scroll" bindchange="imageChange">
                 <repeat for="{{imageShow}}" key="index">
@@ -695,6 +695,7 @@ export default class Product extends wepy.page {
         priceShow: 0,
         restTimeList: [],
         operation: 0,
+        hasUserInfo: false,
         isIphoneX: false,
         color: {},
         back: 'y'
@@ -730,8 +731,11 @@ export default class Product extends wepy.page {
             });
         },
 
-        buyNow(type) {
+        async buyNow(type) {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var orderProduct = [];
             var curProduct = {
                 id: self.productID,
@@ -782,8 +786,11 @@ export default class Product extends wepy.page {
             this.$apply();
         },
 
-        addToCart() {
+        async addToCart() {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
             var id = '';
@@ -792,7 +799,7 @@ export default class Product extends wepy.page {
             } else if (self.operation == 2) {
                 id = self.curProduct.id;
             }
-            if (shoppingCart.length > 0) {
+            if (shoppingCart != null) {
                 shoppingCart.forEach(element => {
                     if (element.id == id) {
                         hasCur = true;
@@ -887,6 +894,12 @@ export default class Product extends wepy.page {
         }
     };
 
+    async getLogIn() {
+        if (self.data.hasUserInfo == false) {
+            await self.$parent.$parent.getGlobalUserInfo();
+        }
+    }
+
     events = {};
 
     timeFormat(param) {
@@ -901,6 +914,9 @@ export default class Product extends wepy.page {
         let list = self.data.product.group.list;
         let endTimeList = [];
         let countDown = {};
+        if (list == null) {
+            return;
+        }
         list.forEach(element => {
             element.endTime = element.endTime.replace(/\-/g, '/');
             endTimeList.push(element.endTime);
@@ -984,24 +1000,28 @@ export default class Product extends wepy.page {
 
     filterProductInfo() {
         var self = this;
-        self.product.image.forEach(element => {
-            if (element.type == 0) {
-                self.imageCover = element.imgUrl;
-            } else if (element.type == 1) {
-                self.imageShow.push(element.imgUrl);
-            } else if (element.type == 2) {
-                self.imageDetail.push(element.imgUrl);
-            }
-        });
+        if (self.product == null && self.product.image != null) {
+            self.product.image.forEach(element => {
+                if (element.type == 0) {
+                    self.imageCover = element.imgUrl;
+                } else if (element.type == 1) {
+                    self.imageShow.push(element.imgUrl);
+                } else if (element.type == 2) {
+                    self.imageDetail.push(element.imgUrl);
+                }
+            });
+        }
         if (self.product.type == 2) {
             self.priceShow = self.product.group.price;
         } else {
             self.priceShow = parseFloat(self.product.spec[0].price);
-            self.product.spec.forEach((item, index) => {
-                if (item.price < self.priceShow) {
-                    self.priceShow = parseFloat(item.price);
-                }
-            });
+            if (self.product == null && self.product.image != null) {
+                self.product.spec.forEach((item, index) => {
+                    if (item.price < self.priceShow) {
+                        self.priceShow = parseFloat(item.price);
+                    }
+                });
+            }
         }
         self.$apply();
     }
@@ -1010,6 +1030,8 @@ export default class Product extends wepy.page {
         let self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+        console.log(self.$parent.globalData.userInfo);
         console.log('options: ');
         console.log(options);
         self.productID = options.id;

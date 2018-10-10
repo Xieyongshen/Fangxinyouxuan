@@ -168,7 +168,7 @@
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <image src="/icons/me-bg.png" class="me-header-bg" />
-        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" />
         <view class="me-header">
             <button open-type="share" hover-class="none" class="me-invite">邀请好友</button>
             <button hover-class="none" class="me-register" @tap="registerNow">{{hasRegister === false ? '今日签到' : '今日已签到'}}</button>
@@ -178,8 +178,8 @@
                     <button class="me-userinfo-login" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
                 </block>
                 <block wx:else>
-                    <image src="{{globalData.globalUserInfo.avatar}}" class="me-userinfo-avatar" />
-                    <view class="me-userinfo-name">{{globalData.globalUserInfo.nickName}}</view>
+                    <image src="{{userInfo.avatar}}" class="me-userinfo-avatar" />
+                    <view class="me-userinfo-name">{{userInfo.nickName}}</view>
                 </block>
             </view>
             <view class="me-order">
@@ -236,36 +236,20 @@ export default class Me extends wepy.page {
     data = {
         hasRegister: false,
         hasUserInfo: false,
-        userInfo: {
-            name: '小鱼',
-            avatar: '',
-            point: 0
-        },
+        userInfo: {},
         globalData: {},
         isIphoneX: false
     };
-
-    async getUserInfoFun(e) {
-        let self = this;
-        let jwt = await log_in.log_in();
-        if (jwt.data.access_token != null) {
-            let res = await api.login({
-                query: {
-                    access_token: jwt.data.access_token,
-                    account_id: jwt.data.account_id
-                }
-            });
-            self.globalData.globalUserInfo = res.data;
-            self.hasUserInfo = true;
-            self.$apply();
-        }
-    }
 
     methods = {
         toOrderList(index, e) {
             wx.navigateTo({
                 url: 'orderList/orderList?index=' + index
             });
+        },
+
+        getUserInfoFun(e) {
+            this.$parent.getGlobalUserInfo();
         },
 
         async registerNow() {
@@ -282,11 +266,11 @@ export default class Me extends wepy.page {
                         }
                     });
                     console.log(res);
-                    self.userInfo.point = res.data.point
+                    self.userInfo.point = res.data.point;
+                    self.$parent.globalData.userInfo.point = res.data.point;
                     self.$apply();
                 }
                 self.hasRegister = true;
-                
                 self.$apply();
                 wx.showToast({
                     title: '签到成功！',
@@ -307,23 +291,38 @@ export default class Me extends wepy.page {
     }
 
     async onLoad() {
-        var jwt = wx.getStorageSync('jwt');
         let self = this;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.$apply();
 
-        if (jwt.data.access_token != null) {
+        var jwt = wx.getStorageSync('jwt');
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+        if (self.hasUserInfo) {
+            self.userInfo = self.$parent.globalData.userInfo;
+        } else if (jwt.data.access_token != null) {
+            wx.showLoading({
+                title: '登录中'
+            });
             let res = await api.login({
                 query: {
                     access_token: jwt.data.access_token,
                     account_id: jwt.data.account_id
                 }
             });
-            self.globalData.globalUserInfo = res.data;
+            self.userInfo = res.data;
             self.hasUserInfo = true;
-            console.log(self.globalData.globalUserInfo);
+            self.$parent.globalData.userInfo = res.data;
+            self.$parent.globalData.hasUserInfo = true;
+            console.log(self.userInfo);
+            console.log(self.$parent.globalData);
             self.$apply();
+            wx.hideLoading();
+        }
 
+        wx.showLoading({
+            title: '获取用户积分'
+        });
+        if (jwt.data.access_token != null) {
             let hasRegistered = await api.getSignInfo({
                 query: {
                     access_token: jwt.data.access_token,
@@ -332,12 +331,11 @@ export default class Me extends wepy.page {
             });
             console.log(hasRegistered);
             self.hasRegister = hasRegistered.data.signed;
-            self.userInfo.point = hasRegistered.data.point
+            self.userInfo.point = hasRegistered.data.point;
             self.$apply();
             console.log(self.hasRegister);
         }
-
-
+        wx.hideLoading();
     }
 }
 </script>

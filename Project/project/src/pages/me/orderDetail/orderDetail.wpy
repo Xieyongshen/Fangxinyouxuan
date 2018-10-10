@@ -279,7 +279,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="订单详情" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="订单详情" isChildPage="y" />
         <view class="orderDetail-header">
             <view wx:if="{{order.type == 2 && order.status == 5}}" class="orderDetail-status">拼单成功</view>
             <view wx:else class="orderDetail-status">{{orderStatus[order.status]}}

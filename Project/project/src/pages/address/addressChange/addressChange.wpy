@@ -73,7 +73,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar :navTitle.sync="title" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar :navTitle.sync="title" isChildPage="y" />
         <form>
             <view class="addressChange-content">
                 <view class="addressChange-item">

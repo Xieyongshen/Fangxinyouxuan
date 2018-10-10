@@ -24,7 +24,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" isChildPage="y" />
         <view class="balance-content">
             <view class="balance-title">优选储值余额</view>
             <view class="balance-count" style="color:{{color.red}}">￥{{balance}}</view>

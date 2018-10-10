@@ -24,6 +24,8 @@ view {
 <script>
 import wepy from 'wepy';
 import 'wepy-async-function';
+import api from '@/api/api';
+import log_in from '@/api/login';
 
 export default class extends wepy.app {
     config = {
@@ -84,7 +86,8 @@ export default class extends wepy.app {
     };
 
     globalData = {
-        userInfo: null,
+        hasUserInfo: false,
+        userInfo: {},
         isIphoneX: false,
         color: {
             red: '#f5333f',
@@ -106,6 +109,25 @@ export default class extends wepy.app {
             this.globalData.isIphoneX = true;
             console.log('iPhone X here！');
         }
+    }
+
+    async getGlobalUserInfo() {
+        wx.showLoading({
+            title: '登录中'
+        });
+        let self = this;
+        let jwt = await log_in.log_in();
+        if (jwt.data.access_token != null) {
+            let res = await api.login({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            self.globalData.userInfo = res.data;
+            self.globalData.hasUserInfo = true;
+        }
+        wx.hideLoading();
     }
 
     sleep(s) {

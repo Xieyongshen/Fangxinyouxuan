@@ -242,7 +242,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" isChildPage="y" />
         <view class="search-bar">
             <view class="search-bar-content">
                 <image src="/icons/search.png" class="search-bar-icon" />
@@ -339,6 +339,7 @@ export default class Search extends wepy.page {
     };
 
     data = {
+        shopChoose: {},
         searchValue: '',
         showResult: false,
         hot: [],
@@ -350,6 +351,7 @@ export default class Search extends wepy.page {
         curProduct: {},
         specChoose: 0,
         count: 1,
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -443,11 +445,14 @@ export default class Search extends wepy.page {
             return count;
         },
 
-        addToCart() {
+        async addToCart() {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
-            if (shoppingCart.length > 0) {
+            if (shoppingCart != null) {
                 shoppingCart.forEach(element => {
                     if (element.id == self.curProduct.id) {
                         hasCur = true;
@@ -494,7 +499,7 @@ export default class Search extends wepy.page {
             }
         });
         var data = res.data;
-        if (data.length > 0) {
+        if (data != null) {
             self.match = [];
             data.forEach(element => {
                 self.match.push(element.name);
@@ -528,18 +533,28 @@ export default class Search extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+
+        var shop = wx.getStorageSync('shopChoose');
+        if (shop != '') {
+            self.shopChoose = shop;
+            self.$apply();
+        }
+        console.log(self.shopChoose);
         let recommendProducts = await api.getRecommendPros({
             query: {
-                shopId: 'f8e0b4083ce54cd4ac189f857c8fdfd1'
+                shopId: self.shopChoose.id
             }
         });
         console.log(recommendProducts);
         self.recommend = recommendProducts.data;
 
         let hotSearch = await api.getHotSearch();
-        self.hotSearch.forEach(element => {
-            self.hot.push(element.name);
-        });
+        if (self.hotSearch != null) {
+            self.hotSearch.forEach(element => {
+                self.hot.push(element.name);
+            });
+        }
 
         var history = wx.getStorageSync('history');
         if (history) {

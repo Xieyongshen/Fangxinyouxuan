@@ -239,7 +239,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" />
         <view class="index-content">
             <view class="index-header">
                 <navigator url="../shop/shop" hover-class="none" class="index-shop">
@@ -370,7 +370,6 @@ export default class Index extends wepy.page {
     components = {
         navBar: NavBar,
         product: Product
-        // spec: SpecChoose
     };
 
     data = {
@@ -398,6 +397,7 @@ export default class Index extends wepy.page {
         curProduct: {},
         specChoose: 0,
         count: 1,
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -482,11 +482,14 @@ export default class Index extends wepy.page {
             return count;
         },
 
-        addToCart() {
+        async addToCart() {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
-            if (shoppingCart.length > 0) {
+            if (shoppingCart != null) {
                 shoppingCart.forEach(element => {
                     if (element.id == self.curProduct.id) {
                         hasCur = true;
@@ -656,12 +659,14 @@ export default class Index extends wepy.page {
         self.banner = [];
         for (var i = 0; i < 5; i++) {
             var found = false;
-            banners.data.forEach(element => {
-                if (element.position == i) {
-                    self.banner.push(element.url);
-                    found = true;
-                }
-            });
+            if (banners.data != null) {
+                banners.data.forEach(element => {
+                    if (element.position == i) {
+                        self.banner.push(element.url);
+                        found = true;
+                    }
+                });
+            }
             if (found) continue;
             self.banner.push('');
         }
@@ -724,10 +729,11 @@ export default class Index extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
-        
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+
         wx.showLoading({
             title: '商品加载中'
-        })
+        });
 
         var latitude = 0.0;
         var longitude = 0.0;

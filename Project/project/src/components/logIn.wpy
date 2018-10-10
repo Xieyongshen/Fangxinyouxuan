@@ -1,0 +1,49 @@
+<style lang="less">
+.login-content{
+    padding: 100rpx 0;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-tip{
+    color: #999999;
+    font-size: 30rpx;
+    line-height: 90rpx;
+    text-align: center;
+}
+
+.login-button{
+    width: 150rpx;
+    height: 60rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    background: #ffffff;
+}
+</style>
+<template>
+    <view class="login-content">
+        <view class="login-tip">暂时还没有登录哦</view>
+        <button class="login-button" open-type="getUserInfo" bindtap="getUserInfoFun">登录</button>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class NavBar extends wepy.component {
+    props = {
+        hasUserInfo: {
+            type: Boolean,
+            default: false,
+            twoWay: true
+        }
+    };
+
+    methods = {
+        async getUserInfoFun(e) {
+            await this.$parent.$parent.getGlobalUserInfo();
+            this.hasUserInfo = this.$parent.$parent.globalData.hasUserInfo;
+            this.$apply();
+        }
+    };
+}
+</script>

@@ -23,7 +23,7 @@
 </style>
 <template>
     <view class="container">
-        <navBar navTitle="地图" isChildPage="y"></navBar>
+        <navBar navTitle="地图" isChildPage="y" />
         <view class="page-body">
             <map id="myMap" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" show-location="true"></map>
             <view class="btn-area">

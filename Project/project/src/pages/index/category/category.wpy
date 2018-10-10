@@ -135,7 +135,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" isChildPage="y" />
         <scroll-view scroll-y scroll-into-view="{{curType}}" scroll-with-animation="true" class="category-content">
             <view class="category-header">
                 <view class="category-shop">
@@ -148,7 +148,7 @@
             <swiper indicator-dots="true" indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#ffffff" autoplay="true" interval="5000" duration="1000" circular="true" class="category-banner">
                 <repeat for="{{banner}}" key="index">
                     <swiper-item class="category-banner-item">
-                        <image src="{{item.url}}" mode="aspectFill" class="category-banner-img"/>
+                        <image src="{{item.url}}" mode="aspectFill" class="category-banner-img" />
                     </swiper-item>
                 </repeat>
             </swiper>
@@ -259,6 +259,7 @@ export default class Category extends wepy.page {
         curProduct: {},
         specChoose: 0,
         count: 1,
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -331,11 +332,14 @@ export default class Category extends wepy.page {
             return count;
         },
 
-        addToCart() {
+        async addToCart() {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
-            if (shoppingCart.length > 0) {
+            if (shoppingCart != null) {
                 shoppingCart.forEach(element => {
                     if (element.id == self.id) {
                         hasCur = true;
@@ -385,6 +389,7 @@ export default class Category extends wepy.page {
         self.categoryID = options.id;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         var shop = wx.getStorageSync('shopChoose');
         if (shop != '') {
             self.shopChoose = shop;
@@ -406,9 +411,11 @@ export default class Category extends wepy.page {
         console.log(categoryBannners);
         self.banner = categoryBannners.data;
         self.type = res.data.type;
-        self.type.forEach((item, index) => {
-            item.scrollID = 'type' + index;
-        });
+        if (self.type != null) {
+            self.type.forEach((item, index) => {
+                item.scrollID = 'type' + index;
+            });
+        }
         self.product = res.data.product;
         self.$apply();
     }

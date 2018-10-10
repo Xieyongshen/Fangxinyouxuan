@@ -29,7 +29,7 @@ page {
     float: right;
 }
 
-.redPacket-empty{
+.redPacket-empty {
     color: #999999;
     font-size: 26rpx;
     line-height: 200rpx;
@@ -124,7 +124,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" isChildPage="y" />
         <view class="redPacket-content">
             <view wx:if="{{type == 1}}" class="redPacket-use">
                 <view class="redPacket-use-title">不使用红包</view>
@@ -220,25 +220,26 @@ export default class RedPacket extends wepy.page {
         let overTimeStr = '';
         var overTime;
 
-        self.redPacket.forEach((item, index) => {
-            if (item.overdue) {
-                overTimeStr = item.date;
-                overTime = new Date(overTimeStr).getTime();
-                console.log(overTime);
-                let time = (nowTime - overTime) / 1000;
-                console.log(time);
-                let day = parseInt(time / (60 * 60 * 24));
-                if (day >= 7) {
-                    self.redPacket.splice(index, 1);
-                } else {
-                    self.tipCount++;
+        if (self.redPackets != null) {
+            self.redPacket.forEach((item, index) => {
+                if (item.overdue) {
+                    overTimeStr = item.date;
+                    overTime = new Date(overTimeStr).getTime();
+                    console.log(overTime);
+                    let time = (nowTime - overTime) / 1000;
+                    console.log(time);
+                    let day = parseInt(time / (60 * 60 * 24));
+                    if (day >= 7) {
+                        self.redPacket.splice(index, 1);
+                    } else {
+                        self.tipCount++;
+                    }
                 }
-            }
-        });
-
-        self.redPacket.forEach(element => {
-            element.count = parseInt(element.count);
-        });
+            });
+            self.redPacket.forEach(element => {
+                element.count = parseInt(element.count);
+            });
+        }
 
         self.$apply();
     }

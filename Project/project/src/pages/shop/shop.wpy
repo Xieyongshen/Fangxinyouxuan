@@ -94,7 +94,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="选择门店" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="选择门店" isChildPage="y" />
         <view class="shop-content">
             <scroll-view scroll-x class="shop-area">
                 <repeat for="{{area}}" key="index">
@@ -202,25 +202,27 @@ export default class Shop extends wepy.page {
         self.$apply();
 
         var dis = 0;
-        self.shop.forEach(element => {
-            if (element.distance < 1000) {
-                element.distance += 'm';
-            } else if (element.distance < 10000) {
-                dis = element.distance / 10;
-                dis = parseInt(dis, 10);
-                dis = dis / 100;
-                dis++;
-                element.distance = dis + 'km';
-            } else if (element.distance < 100000) {
-                dis = element.distance / 1000;
-                dis = parseInt(dis, 10);
-                dis++;
-                element.distance = '<' + dis + 'km';
-            } else {
-                element.distance = '>100km';
-            }
-            self.$apply();
-        });
+        if (self.shop != null) {
+            self.shop.forEach(element => {
+                if (element.distance < 1000) {
+                    element.distance += 'm';
+                } else if (element.distance < 10000) {
+                    dis = element.distance / 10;
+                    dis = parseInt(dis, 10);
+                    dis = dis / 100;
+                    dis++;
+                    element.distance = dis + 'km';
+                } else if (element.distance < 100000) {
+                    dis = element.distance / 1000;
+                    dis = parseInt(dis, 10);
+                    dis++;
+                    element.distance = '<' + dis + 'km';
+                } else {
+                    element.distance = '>100km';
+                }
+                self.$apply();
+            });
+        }
     }
 }
 </script>

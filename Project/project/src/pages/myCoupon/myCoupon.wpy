@@ -24,7 +24,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="放心优选" isChildPage="y" />
         <view wx:if="{{coupon.length == 0}}" class="coupon-empty">暂无可使用优惠券</view>
     </view>
 </template>

@@ -160,7 +160,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="全部订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="全部订单" isChildPage="y" />
         <view class="orderList-type">
             <scroll-view scroll-x scroll-into-view="{{orderType[curType].id}}" scroll-with-animation="true" class="orderList-type-content">
                 <repeat for="{{orderType}}" key="index">

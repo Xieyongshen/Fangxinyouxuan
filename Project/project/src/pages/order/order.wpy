@@ -256,7 +256,7 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="填写订单" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="填写订单" isChildPage="y" />
         <image src="/icons/address-bg.png" class="order-header" />
         <view class="order-block order-info">
             <view wx:if="{{deliverChoose < 1}}" class="order-shop">
@@ -437,11 +437,13 @@ export default class Order extends wepy.page {
         var total = 0;
         var cur = 0;
         self.subtotal = 0;
-        self.product.forEach(element => {
-            cur = element.price * 100;
-            cur = cur * element.count;
-            total += cur;
-        });
+        if (self.product != null) {
+            self.product.forEach(element => {
+                cur = element.price * 100;
+                cur = cur * element.count;
+                total += cur;
+            });
+        }
         self.subtotal = parseInt(self.subtotal);
         self.subtotal = total / 100;
         self.$apply();
@@ -631,16 +633,16 @@ export default class Order extends wepy.page {
                                     'application/x-www-form-urlencoded'
                             }
                         });
-                        wx.showToast({
+                        await wx.showToast({
                             title: '支付成功！',
                             image: '/icons/select-yes.png',
-                            duration: 1000
+                            duration: 500
                         });
                         wx.redirectTo({
                             url: '/pages/me/orderList/orderList?index=0'
                         });
                     },
-                    fail: function(res1) {
+                    fail: async function(res1) {
                         console.log(res1);
                         console.log('支付失败');
                         var errMsg = '';
@@ -649,10 +651,10 @@ export default class Order extends wepy.page {
                         }else{
                             errMsg = '支付失败！';
                         }
-                        wx.showToast({
+                        await wx.showToast({
                             title: errMsg,
                             image: '/icons/cancel.png',
-                            duration: 1000
+                            duration: 500
                         });
                         wx.redirectTo({
                             url: '/pages/me/orderList/orderList?index=0'

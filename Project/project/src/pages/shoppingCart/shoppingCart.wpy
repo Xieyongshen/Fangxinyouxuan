@@ -386,8 +386,11 @@ page {
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="放心优选" :isIphoneX.sync="isIphoneX"></navBar>
-        <view wx:if="{{shoppingCart.length > 0}}" class="shoppingCart-content">
+        <navBar navTitle="放心优选" />
+        <view wx:if="{{hasUserInfo === false}}">
+            <login :hasUserInfo.sync="hasUserInfo" />
+        </view>
+        <view wx:elif="{{shoppingCart.length > 0}}" class="shoppingCart-content">
             <image src="/icons/address-bg.png" class="shoppingCart-header" />
             <view wx:if="{{deliverChoose < 1}}" class="shoppingCart-block shoppingCart-shop">
                 <image src="/icons/position.png" class="icon-position" />
@@ -531,12 +534,14 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import LogIn from '@/components/logIn';
 import Recommend from '@/components/recommendBlock';
 import api from '@/api/api';
 
 export default class ShoppingCart extends wepy.page {
     components = {
         navBar: NavBar,
+        login: LogIn,
         recommend: Recommend
     };
 
@@ -582,6 +587,7 @@ export default class ShoppingCart extends wepy.page {
         curProduct: {},
         specChoose: 0,
         count: 1,
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -699,11 +705,13 @@ export default class ShoppingCart extends wepy.page {
             var self = this;
             self.chooseAll = !self.chooseAll;
             self.isChoosen = [];
-            self.shoppingCart.forEach(element => {
-                self.isChoosen.push(self.chooseAll);
-                self.$apply();
-            });
-            self.updateTotal();
+            if (self.shoppingCart != null) {
+                self.shoppingCart.forEach(element => {
+                    self.isChoosen.push(self.chooseAll);
+                    self.$apply();
+                });
+                self.updateTotal();
+            }
             self.$apply();
         },
 
@@ -776,8 +784,11 @@ export default class ShoppingCart extends wepy.page {
             return count;
         },
 
-        addToCart() {
+        async addToCart() {
             var self = this;
+            if (self.hasUserInfo == false) {
+                await self.$parent.getGlobalUserInfo();
+            }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
             if (shoppingCart.length > 0) {
@@ -844,7 +855,7 @@ export default class ShoppingCart extends wepy.page {
     onShow() {
         var self = this;
         self.shoppingCart = wx.getStorageSync('shoppingCart');
-        if (self.shoppingCart.length == 0) {
+        if (self.shoppingCart == null) {
             return;
         }
         self.shoppingCart.forEach(element => {
@@ -880,6 +891,7 @@ export default class ShoppingCart extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         self.$apply();
         wx.setStorage({
             key: 'address',

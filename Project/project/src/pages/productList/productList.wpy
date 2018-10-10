@@ -58,7 +58,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="商品列表" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="商品列表" isChildPage="y" />
         <view class="productList-content">
             <repeat for="{{product}}" key="id">
                 <view class="productList-item">

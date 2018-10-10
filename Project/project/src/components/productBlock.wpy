@@ -238,7 +238,7 @@ export default class ProductBlock extends wepy.component {
     methods = {
         navToProduct(product, event) {
             wx.navigateTo({
-                url: '/pages/product/product?back=index&id=' + product
+                url: '/pages/product/product?id=' + product
             });
         }
     };

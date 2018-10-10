@@ -51,7 +51,7 @@
 </style>
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
-        <navBar navTitle="我的地址" isChildPage="y" :isIphoneX.sync="isIphoneX"></navBar>
+        <navBar navTitle="我的地址" isChildPage="y" />
         <view class="address-content">
             <repeat for="{{address}}" key="index">
                 <view class="address-item" @tap="chooseAddress({{item.id}}, {{item.name}}, {{item.phone}}, {{item.desc}})">
@@ -132,14 +132,21 @@ export default class Address extends wepy.page {
             console.log(res);
             self.address = res.data;
         }
-        self.address.forEach(element => {
-            element.desc = element.region.province + element.region.city + element.region.area + ' ' + element.desc;
-        });
+        if (self.address != null) {
+            self.address.forEach(element => {
+                element.desc =
+                    element.region.province +
+                    element.region.city +
+                    element.region.area +
+                    ' ' +
+                    element.desc;
+            });
+        }
         self.color = self.$parent.globalData.color;
         self.$apply();
     }
 
-    onLoad(){
+    onLoad() {
         let self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;

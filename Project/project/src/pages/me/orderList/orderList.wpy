@@ -170,7 +170,10 @@
                 </repeat>
             </scroll-view>
         </view>
-        <view class="orderList-content">
+        <view wx:if="{{hasUserInfo === false}}">
+            <login :hasUserInfo.sync="hasUserInfo" />
+        </view>
+        <view wx:else class="orderList-content">
             <repeat for="{{orderList}}" key="id">
                 <view wx:if="{{curType == 0 || (curType == item.status + 1)}}" class="orderList-item">
                     <view class="orderList-item-type">
@@ -223,11 +226,13 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import LogIn from '@/components/logIn';
 import api from '@/api/api';
 
 export default class OrderList extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        login: LogIn
     };
     data = {
         orderType: [
@@ -263,6 +268,7 @@ export default class OrderList extends wepy.page {
         //订单状态：待付款0，待成团1，待发货2，发货中（待收货）3, 售后中4, 已完成5
         curType: 0,
         orderList: [],
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -412,6 +418,7 @@ export default class OrderList extends wepy.page {
         self.curType = options.index;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         self.getOrderList();
         self.$apply();
     }

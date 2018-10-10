@@ -25,29 +25,34 @@ page {
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <navBar navTitle="放心优选" isChildPage="y" />
-        <view wx:if="{{coupon.length == 0}}" class="coupon-empty">暂无可使用优惠券</view>
+        <view wx:if="{{hasUserInfo === false}}">
+            <login :hasUserInfo.sync="hasUserInfo" />
+        </view>
+        <view wx:elif="{{coupon.length == 0}}" class="coupon-empty">暂无可使用优惠券</view>
+        <view wx:else></view>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
-import NavBar from '@/components/navBar';
+import NavBar from '@/components/navBar'
+import LogIn from '@/components/logIn'
 import api from '@/api/api'
 
 export default class MyCoupon extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        login: LogIn
     };
 
     data = {
         coupon: [],
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
 
-    methods = {
-
-    };
+    methods = {};
 
     events = {};
 
@@ -55,6 +60,7 @@ export default class MyCoupon extends wepy.page {
         var self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         self.$apply();
     }
 }

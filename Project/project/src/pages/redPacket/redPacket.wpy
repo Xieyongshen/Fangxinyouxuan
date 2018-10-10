@@ -68,7 +68,7 @@ page {
     display: inline-block;
     vertical-align: top;
     text {
-        font-size: 70rpx;
+        font-size: 60rpx;
     }
 }
 
@@ -125,33 +125,30 @@ page {
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <navBar navTitle="放心优选" isChildPage="y" />
-        <view class="redPacket-content">
+        <view wx:if="{{hasUserInfo === false}}">
+            <login :hasUserInfo.sync="hasUserInfo" />
+        </view>
+        <view wx:elif="{{redPacket.length == 0}}" class="redPacket-empty">暂无红包</view>
+        <view wx:else class="redPacket-content">
             <view wx:if="{{type == 1}}" class="redPacket-use">
                 <view class="redPacket-use-title">不使用红包</view>
                 <image src="/icons/select-{{use == false?'yes':'no'}}.png" class="redPacket-use-cancel" @tap="cancelUse" />
             </view>
-            <block wx:if="{{redPacket.length == 0}}">
-                <view wx:if="{{coupon.length == 0}}" class="redPacket-empty">当前暂无红包</view>
-            </block>
-            <block wx:else>
-                <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有
-                    <text style="color:{{color.red}}">{{tipCount}}</text>个红包已过期</view>
-                <repeat for="{{redPacket}}" key="id">
-                    <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
-                        <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
-                        <view class="redPacket-item-count" style="color:{{color.red}}">￥
-                            <text>{{item.count}}</text>
-                        </view>
-                        <view class="redPacket-item-content">
-                            <view class="redPacket-item-name">{{item.name}}</view>
-                            <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
-                            <view class="redPacket-item-date">有效期：{{item.date}}</view>
-                        </view>
-                        <view class="redPacket-item-use" @tap="redPacketChoose({{item.overdue}}, {{item.id}}, {{item.count}})">立即使用</view>
+            <view wx:if="{{tipCount > 0}}" class="redPacket-tip">您有
+                <text style="color:{{color.red}}">{{tipCount}}</text>个红包已过期</view>
+            <repeat for="{{redPacket}}" key="id">
+                <view class="redPacket-item {{item.overdue ? 'redPacket-overdue' : ''}}">
+                    <image src="{{item.overdue ? '/icons/redPacket-overdue.png' : '/icons/redPacket-bg.png'}}" class="redPacket-bg" />
+                    <view class="redPacket-item-count" style="color:{{color.red}}">￥<text>{{item.count}}</text></view>
+                    <view class="redPacket-item-content">
+                        <view class="redPacket-item-name">{{item.name}}</view>
+                        <view class="redPacket-item-satisfy">满{{item.satisfy}}可用</view>
+                        <view class="redPacket-item-date">有效期：{{item.date}}</view>
                     </view>
-                </repeat>
-                <view class="redPacket-more">没有更多了</view>
-            </block>
+                    <view class="redPacket-item-use" @tap="redPacketChoose({{item.overdue}}, {{item.id}}, {{item.count}})">立即使用</view>
+                </view>
+            </repeat>
+            <view class="redPacket-more">没有更多了</view>
         </view>
     </view>
 </template>
@@ -159,11 +156,13 @@ page {
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import LogIn from '@/components/logIn';
 import api from '@/api/api';
 
 export default class RedPacket extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        login: LogIn
     };
 
     data = {
@@ -171,6 +170,7 @@ export default class RedPacket extends wepy.page {
         use: false,
         tipCount: 0,
         redPacket: [],
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -252,11 +252,10 @@ export default class RedPacket extends wepy.page {
         }
     }
 
-    async onLoad(options) {
-        var self = this;
-        self.type = options.type;
-        self.color = self.$parent.globalData.color;
-        self.isIphoneX = self.$parent.globalData.isIphoneX;
+    async getRedPacket() {
+        wx.showLoading({
+            title: '红包加载中'
+        });
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -273,12 +272,20 @@ export default class RedPacket extends wepy.page {
         } catch (error) {
             console.log(error);
         }
-
         self.filterRedPacket();
         if (self.type == 1) {
             self.whetherUse();
         }
+        wx.hideLoading();
+    }
 
+    async onLoad(options) {
+        var self = this;
+        self.type = options.type;
+        self.color = self.$parent.globalData.color;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+        self.getRedPacket();
         self.$apply();
     }
 }

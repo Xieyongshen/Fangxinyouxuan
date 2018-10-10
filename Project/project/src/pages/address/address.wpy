@@ -52,35 +52,43 @@
 <template>
     <view class="container" style="padding-top:{{isIphoneX ? '87px' : '62px'}}">
         <navBar navTitle="我的地址" isChildPage="y" />
-        <view class="address-content">
-            <repeat for="{{address}}" key="index">
-                <view class="address-item" @tap="chooseAddress({{item.id}}, {{item.name}}, {{item.phone}}, {{item.desc}})">
-                    <view class="address-detail">
-                        <view>{{item.name}} {{item.phone}}</view>
-                        <view>{{item.desc}}</view>
-                    </view>
-                    <view class="address-edit" @tap.stop="addressEdit({{item.id}})">
-                        <image src="/icons/edit.png" class="address-edit-img" />
-                    </view>
-                </view>
-            </repeat>
+        <view wx:if="{{hasUserInfo === false}}">
+            <login :hasUserInfo.sync="hasUserInfo" />
         </view>
-        <view class="address-add" style="background:{{color.red}}" @tap="addressAdd">新增收货地址</view>
+        <view wx:else>
+            <view class="address-content">
+                <repeat for="{{address}}" key="index">
+                    <view class="address-item" @tap="chooseAddress({{item.id}}, {{item.name}}, {{item.phone}}, {{item.desc}})">
+                        <view class="address-detail">
+                            <view>{{item.name}} {{item.phone}}</view>
+                            <view>{{item.desc}}</view>
+                        </view>
+                        <view class="address-edit" @tap.stop="addressEdit({{item.id}})">
+                            <image src="/icons/edit.png" class="address-edit-img" />
+                        </view>
+                    </view>
+                </repeat>
+            </view>
+            <view class="address-add" style="background:{{color.red}}" @tap="addressAdd">新增收货地址</view>
+        </view>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
+import LogIn from '@/components/logIn';
 import api from '@/api/api';
 
 export default class Address extends wepy.page {
     components = {
-        navBar: NavBar
+        navBar: NavBar,
+        login: LogIn
     };
 
     data = {
         address: [],
+        hasUserInfo: false,
         isIphoneX: false,
         color: {}
     };
@@ -121,6 +129,9 @@ export default class Address extends wepy.page {
         var jwt = wx.getStorageSync('jwt');
         let self = this;
 
+        wx.showLoading({
+            title: '地址加载中'
+        });
         if (jwt.data.access_token != null) {
             let res = await api.getUserAddress({
                 query: {
@@ -142,6 +153,7 @@ export default class Address extends wepy.page {
                     element.desc;
             });
         }
+        wx.hideLoading();
         self.color = self.$parent.globalData.color;
         self.$apply();
     }
@@ -150,6 +162,7 @@ export default class Address extends wepy.page {
         let self = this;
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         self.$apply();
     }
 }

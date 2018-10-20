@@ -235,8 +235,11 @@ export default class Me extends wepy.page {
 
     data = {
         hasRegister: false,
+        isRegistering: false,
         hasUserInfo: false,
-        userInfo: {},
+        userInfo: {
+            point: 0
+        },
         globalData: {},
         isIphoneX: false
     };
@@ -248,35 +251,50 @@ export default class Me extends wepy.page {
             });
         },
 
-        getUserInfoFun(e) {
-            this.$parent.getGlobalUserInfo();
+        async getUserInfoFun() {
+            await this.$parent.getGlobalUserInfo();
+            this.userInfo = this.$parent.globalData.userInfo;
+            this.hasUserInfo = this.$parent.globalData.hasUserInfo;
+            this.getUserPoint();
+            this.$apply();
         },
 
         async registerNow() {
-            if (!this.hasRegister) {
-                // this.userInfo.point += 10;
-                // this.hasRegister = true;
+            if (!this.isRegistering && !this.hasRegister) {
+                this.isRegistering = true;
                 var jwt = wx.getStorageSync('jwt');
                 let self = this;
                 if (jwt.data.access_token != null) {
+                    wx.showLoading({
+                        title: '签到中'
+                    });
                     let res = await api.signToday({
                         query: {
                             access_token: jwt.data.access_token,
                             account_id: jwt.data.account_id
                         }
                     });
+                    wx.hideLoading();
                     console.log(res);
-                    self.userInfo.point = res.data.point;
-                    self.$parent.globalData.userInfo.point = res.data.point;
-                    self.$apply();
+                    if (res != null) {
+                        self.userInfo.point = res.data.point;
+                        self.$parent.globalData.userInfo.point = res.data.point;
+                        self.hasRegister = true;
+                        wx.showToast({
+                            title: '签到成功！',
+                            icon: 'success',
+                            duration: 1000
+                        });
+                    } else {
+                        wx.showToast({
+                            title: '签到失败！',
+                            icon: 'none',
+                            duration: 1000
+                        });
+                    }
                 }
-                self.hasRegister = true;
+                this.isRegistering = false;
                 self.$apply();
-                wx.showToast({
-                    title: '签到成功！',
-                    icon: 'success',
-                    duration: 1000
-                });
             }
         }
     };
@@ -290,38 +308,12 @@ export default class Me extends wepy.page {
         };
     }
 
-    async onLoad() {
-        let self = this;
-        self.isIphoneX = self.$parent.globalData.isIphoneX;
-        self.$apply();
-
-        var jwt = wx.getStorageSync('jwt');
-        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
-        if (self.hasUserInfo) {
-            self.userInfo = self.$parent.globalData.userInfo;
-        } else if (jwt.data.access_token != null) {
-            wx.showLoading({
-                title: '登录中'
-            });
-            let res = await api.login({
-                query: {
-                    access_token: jwt.data.access_token,
-                    account_id: jwt.data.account_id
-                }
-            });
-            self.userInfo = res.data;
-            self.hasUserInfo = true;
-            self.$parent.globalData.userInfo = res.data;
-            self.$parent.globalData.hasUserInfo = true;
-            console.log(self.userInfo);
-            console.log(self.$parent.globalData);
-            self.$apply();
-            wx.hideLoading();
-        }
-
+    async getUserPoint() {
         wx.showLoading({
             title: '获取用户积分'
         });
+        var self = this;
+        var jwt = wx.getStorageSync('jwt');
         if (jwt.data.access_token != null) {
             let hasRegistered = await api.getSignInfo({
                 query: {
@@ -336,6 +328,49 @@ export default class Me extends wepy.page {
             console.log(self.hasRegister);
         }
         wx.hideLoading();
+    }
+
+    onShow() {
+        this.userInfo = this.$parent.globalData.userInfo;
+        this.hasUserInfo = this.$parent.globalData.hasUserInfo;
+        this.$apply();
+        if (this.hasUserInfo) {
+            this.getUserPoint();
+        }
+    }
+
+    async onLoad() {
+        let self = this;
+        self.isIphoneX = self.$parent.globalData.isIphoneX;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+        self.$apply();
+
+        var jwt = wx.getStorageSync('jwt');
+        if (self.hasUserInfo) {
+            self.userInfo = self.$parent.globalData.userInfo;
+        } else if (jwt.data.access_token != null) {
+            wx.showLoading({
+                title: '登录中'
+            });
+            let res = await api.login({
+                query: {
+                    access_token: jwt.data.access_token,
+                    account_id: jwt.data.account_id
+                }
+            });
+            wx.hideLoading();
+            console.log(res.data);
+            if (res.data.nickName != '') {
+                self.userInfo = res.data;
+                self.hasUserInfo = true;
+                self.$parent.globalData.userInfo = res.data;
+                self.$parent.globalData.hasUserInfo = true;
+            }
+            self.$apply();
+        }
+        if (self.hasUserInfo) {
+            self.getUserPoint();
+        }
     }
 }
 </script>

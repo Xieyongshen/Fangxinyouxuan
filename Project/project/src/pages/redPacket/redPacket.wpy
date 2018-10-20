@@ -179,6 +179,15 @@ export default class RedPacket extends wepy.page {
         redPacketChoose(overdue, id, count, events) {
             if (overdue) return;
 
+            if (this.type == 0) {
+                wx.showToast({
+                    title: '请在购物车或订单页面使用红包',
+                    icon: 'none',
+                    duration: 1000
+                });
+                return;
+            }
+
             wx.setStorage({
                 key: 'redPacket',
                 data: {
@@ -256,6 +265,7 @@ export default class RedPacket extends wepy.page {
         wx.showLoading({
             title: '红包加载中'
         });
+        var self = this;
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {

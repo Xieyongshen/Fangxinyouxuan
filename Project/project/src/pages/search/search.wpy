@@ -351,6 +351,7 @@ export default class Search extends wepy.page {
         curProduct: {},
         specChoose: 0,
         count: 1,
+        isLogining: false,
         hasUserInfo: false,
         isIphoneX: false,
         color: {}
@@ -447,8 +448,11 @@ export default class Search extends wepy.page {
 
         async addToCart() {
             var self = this;
-            if (self.hasUserInfo == false) {
+            if (!self.isLogining && self.hasUserInfo == false) {
+                self.isLogining = true;
                 await self.$parent.getGlobalUserInfo();
+                self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+                self.isLogining = false;
             }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;

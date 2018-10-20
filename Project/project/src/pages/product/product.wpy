@@ -695,6 +695,7 @@ export default class Product extends wepy.page {
         priceShow: 0,
         restTimeList: [],
         operation: 0,
+        isLogining: false,
         hasUserInfo: false,
         isIphoneX: false,
         color: {},
@@ -733,8 +734,11 @@ export default class Product extends wepy.page {
 
         async buyNow(type) {
             var self = this;
-            if (self.hasUserInfo == false) {
+            if (!self.isLogining && self.hasUserInfo == false) {
+                self.isLogining = true;
                 await self.$parent.getGlobalUserInfo();
+                self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+                self.isLogining = false;
             }
             var orderProduct = [];
             var curProduct = {
@@ -788,8 +792,11 @@ export default class Product extends wepy.page {
 
         async addToCart() {
             var self = this;
-            if (self.hasUserInfo == false) {
+            if (!self.isLogining && self.hasUserInfo == false) {
+                self.isLogining = true;
                 await self.$parent.getGlobalUserInfo();
+                self.hasUserInfo = self.$parent.globalData.hasUserInfo;
+                self.isLogining = false;
             }
             var shoppingCart = wx.getStorageSync('shoppingCart');
             var hasCur = false;
@@ -1031,9 +1038,6 @@ export default class Product extends wepy.page {
         self.color = self.$parent.globalData.color;
         self.isIphoneX = self.$parent.globalData.isIphoneX;
         self.hasUserInfo = self.$parent.globalData.hasUserInfo;
-        console.log(self.$parent.globalData.userInfo);
-        console.log('options: ');
-        console.log(options);
         self.productID = options.id;
         if (options.back != '') {
             self.back = options.back;

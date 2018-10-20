@@ -310,7 +310,7 @@ page {
             <navigator url="../redPacket/redPacket?type=1" class="order-item order-total-redPacket">
                 <image src="/icons/redPacket.png" class="order-redPacket-icon" /> 红包
                 <image src="/icons/in.png" class="icon-in" />
-                <text style="color:{{redPacket.count ? '#bfbfbf' : color.red}}">
+                <text style="color:{{redPacket.id == '' ? '#bfbfbf' : color.red}}">
                     <block wx:if="{{redPacket.id == ''}}">请选择红包</block>
                     <block wx:else>{{redPacket.count}}元</block>
                 </text>

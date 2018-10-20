@@ -108,7 +108,7 @@
 <script>
 import wepy from 'wepy';
 import NavBar from '@/components/navBar';
-import api from "@/api/api"
+import api from '@/api/api';
 
 export default class Coupon extends wepy.page {
     components = {
@@ -136,17 +136,17 @@ export default class Coupon extends wepy.page {
             this.$apply();
         },
 
-        changeAddressName(e){
+        changeAddressName(e) {
             this.address.name = e.detail.value;
             this.$apply();
         },
 
-        changeAddressPhone(e){
+        changeAddressPhone(e) {
             this.address.phone = e.detail.value;
             this.$apply();
         },
 
-        changeAddressDesc(e){
+        changeAddressDesc(e) {
             this.address.desc = e.detail.value;
             this.$apply();
         }
@@ -154,10 +154,10 @@ export default class Coupon extends wepy.page {
 
     events = {};
 
-    async saveMyAddress(){
+    async saveMyAddress() {
         let self = this;
         var jwt = wx.getStorageSync('jwt');
-        console.log(self.address)
+        console.log(self.address);
         try {
             if (jwt.data.access_token != null) {
                 let res = await api.saveMyAddress({
@@ -175,17 +175,17 @@ export default class Coupon extends wepy.page {
                 self.$apply();
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             console.log('jwt is null');
         }
 
         wx.navigateBack({
             delta: 1
-        })
+        });
     }
 
-    async deleteMyAddress(){
-        let self = this
+    async deleteMyAddress() {
+        let self = this;
         var jwt = wx.getStorageSync('jwt');
         try {
             if (jwt.data.access_token != null) {
@@ -204,13 +204,13 @@ export default class Coupon extends wepy.page {
                 self.$apply();
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             console.log('jwt is null');
         }
 
         wx.navigateBack({
             delta: 1
-        })
+        });
     }
 
     async onLoad(options) {
@@ -234,17 +234,17 @@ export default class Coupon extends wepy.page {
                 }
             });
 
-            if(self.addressID != ''){
+            if (self.addressID != '') {
                 res.data.forEach(element => {
-                    if(element.id = self.addressID){
+                    if ((element.id = self.addressID)) {
                         self.address = element;
                         console.log(element);
                     }
                 });
+                self.curRegion[0] = self.address.region.province;
+                self.curRegion[1] = self.address.region.city;
+                self.curRegion[2] = self.address.region.area;
             }
-            self.curRegion[0] = self.address.region.province;
-            self.curRegion[1] = self.address.region.city;
-            self.curRegion[2] = self.address.region.area;
         }
 
         self.$apply();

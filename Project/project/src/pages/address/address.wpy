@@ -125,37 +125,49 @@ export default class Address extends wepy.page {
 
     events = {};
 
-    async onShow() {
-        var jwt = wx.getStorageSync('jwt');
-        let self = this;
+    watch = {
+        hasUserInfo(newValue, oldValue) {
+            this.getUserAddress();
+        }
+    };
 
-        wx.showLoading({
-            title: '地址加载中'
-        });
+    async getUserAddress() {
+        let self = this;
+        var jwt = wx.getStorageSync('jwt');
         if (jwt.data.access_token != null) {
+            wx.showLoading({
+                title: '地址加载中'
+            });
             let res = await api.getUserAddress({
                 query: {
                     access_token: jwt.data.access_token,
                     account_id: jwt.data.account_id
                 }
             });
-
             console.log(res);
+            wx.hideLoading();
             self.address = res.data;
+            if (self.address != null) {
+                self.address.forEach(element => {
+                    element.desc =
+                        element.region.province +
+                        element.region.city +
+                        element.region.area +
+                        ' ' +
+                        element.desc;
+                });
+            }
+            self.$apply();
         }
-        if (self.address != null) {
-            self.address.forEach(element => {
-                element.desc =
-                    element.region.province +
-                    element.region.city +
-                    element.region.area +
-                    ' ' +
-                    element.desc;
-            });
-        }
-        wx.hideLoading();
-        self.color = self.$parent.globalData.color;
+    }
+
+    async onShow() {
+        let self = this;
+        self.hasUserInfo = self.$parent.globalData.hasUserInfo;
         self.$apply();
+        if (!self.hasUserInfo) {
+            await this.getUserAddress();
+        }
     }
 
     onLoad() {

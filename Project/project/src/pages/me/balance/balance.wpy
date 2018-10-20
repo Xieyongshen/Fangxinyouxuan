@@ -48,7 +48,7 @@ import api from '@/api/api'
     }
 
     data = {
-        balance: 32.9,
+        balance: 0.00,
         hasUserInfo: false,
         isIphoneX: false,
         color: {}
